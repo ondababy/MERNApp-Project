@@ -67,8 +67,8 @@ class UserService extends Service {
     user.resetPasswordToken = undefined;
     user.resetPasswordExpire = undefined;
     await user.save();
-    const token = generateToken(user._id, this.authToken);
-    return { user, token };
+    const generatedToken = generateToken(user._id, this.authToken);
+    return { user, token: generatedToken };
   }
 }
 
