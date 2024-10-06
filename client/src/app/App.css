@@ -18,6 +18,7 @@
     --toastify-text-color-light: theme(colors.base-content);
     --toastify-text-color-dark: theme(colors.base-content);
     --toastify-font-family: theme(fontFamily.sans);
+    --radius: 0.5rem;
   }
 }
 
