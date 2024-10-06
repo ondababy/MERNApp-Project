@@ -52,7 +52,7 @@ function AuthOnboarding(props) {
         <div className="">form component here</div>
       </div>
       <div className="divider"></div>
-      <div className="flex justify-between w-full">
+      <div className="flex justify-between items-end w-full">
         {currentStep > 0 && (
           <button
             className="btn btn-secondary"

@@ -4,7 +4,6 @@ import { Hero } from 'react-daisyui';
 import AuthLogin from './AuthLogin';
 import AuthOnboarding from './AuthOnboarding';
 import AuthSignup from './AuthSignup';
-
 function Auth({ page = 'login' }) {
   const user = useCheckAuth();
   let pageComponent = <AuthLogin />;
