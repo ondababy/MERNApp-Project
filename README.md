@@ -53,11 +53,12 @@ Run `npm run server` to run `server` only
 
 ## Troubleshooting
 1. Legacy dependency errors
-_When encountering errors in dependencies,_ just run the command again with --force or --legacy-peer-deps
-Example: `npm i --force` or npm i `--legacy-peer-deps`
-![image](https://github.com/user-attachments/assets/97f0ccac-1348-4386-b9f5-af20f881107f)
 
-Or set the global config to true for all legacy peer dependencies
+  _When encountering errors in dependencies,_ just run the command again with --force or --legacy-peer-deps
+  Example: `npm i --force` or npm i `--legacy-peer-deps`
+  ![image](https://github.com/user-attachments/assets/97f0ccac-1348-4386-b9f5-af20f881107f)
 
-`npm -g config set legacy-peer-deps=true`
+  Or set the global config to true for all legacy peer dependencies
+
+  `npm -g config set legacy-peer-deps=true`
 
