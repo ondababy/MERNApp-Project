@@ -52,7 +52,7 @@ _From server folder_
 Run `npm run server` to run `server` only
 
 ## Troubleshooting
-1. Legacy dependency errors
+**Legacy dependency errors**
 
   _When encountering errors in dependencies,_ just run the command again with --force or --legacy-peer-deps
   Example: `npm i --force` or npm i `--legacy-peer-deps`
