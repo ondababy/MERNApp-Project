@@ -21,7 +21,7 @@ const _ExampleForm = ({ title = '_Example Form', action = 'create' }) => {
   const [_example, set_Example] = useState(null);
   const [_exampleSchema, set_ExampleSchema] = useState(fields);
   const [create_Example, { isLoading: isCreating }] = _exampleApi.useCreate_ExampleMutation();
-  const [update_Example, { isLoading: isUpdating }] = _exampleApi.tuseUpdate_ExampleMutation();
+  const [update_Example, { isLoading: isUpdating }] = _exampleApi.useUpdate_ExampleMutation();
   const [get_Example, { isLoading: isFetching }] = _exampleApi.useGet_ExampleMutation();
   const { slug, setSlug } = useSlug();
 
