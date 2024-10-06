@@ -40,14 +40,16 @@ cp .env.example .env
 ```
 
 ## Running APP
+1. Run at the same time
 _From project folder_
 Run `npm run dev` to run both `client` and `server` at the same time.
 
+2. Run separately
 _From client folder_
-RUn `npm run dev` to run `client` only
+Run `npm run dev` to run `client` only
 
 _From server folder_
-RUn `npm run server` to run `server` only
+Run `npm run server` to run `server` only
 
 ## Troubleshooting
 1. Legacy dependency errors
