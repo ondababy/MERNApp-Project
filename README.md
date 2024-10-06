@@ -55,6 +55,7 @@ Run `npm run server` to run `server` only
 **Legacy dependency errors**
 
   _When encountering errors in dependencies,_ just run the command again with `--force` or `--legacy-peer-deps`
+  
   Example: `npm i --force` or `npm i --legacy-peer-deps`
   ![image](https://github.com/user-attachments/assets/97f0ccac-1348-4386-b9f5-af20f881107f)
 
