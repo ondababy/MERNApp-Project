@@ -22,7 +22,7 @@ function Auth({ page = 'login' }) {
     !user?.id && (
       <>
         <Hero className="container max-w-5xl h-full ">
-          <Hero.Content className="flex-col lg:flex-row-reverse h-full">{pageComponent}</Hero.Content>
+          <Hero.Content className="flex-col lg:flex-row-reverse h-full w-full">{pageComponent}</Hero.Content>
         </Hero>
       </>
     )
