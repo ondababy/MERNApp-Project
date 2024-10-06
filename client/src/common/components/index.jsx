@@ -10,4 +10,4 @@ export { default as Table } from './Table';
 export { default as TextRainbow } from './TextDecoration';
 export { default as ThemeToggler } from './ThemeToggler';
 export { Errors };
-
+export { default as Steps } from './Steps';
