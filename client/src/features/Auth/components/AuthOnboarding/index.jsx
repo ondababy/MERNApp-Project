@@ -1,6 +1,8 @@
 import { Steps } from '@common';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
+import AccountInformation from './AccountInformation';
+import EmailVerificaiton from './EmailVerification';
 
 const initialSteps = [
   {
@@ -13,15 +15,11 @@ const initialSteps = [
     isDone: false,
     isActive: true,
   },
-  {
-    label: 'Account Setup',
-    isDone: false,
-    isActive: false,
-  },
 ];
 
 function AuthOnboarding(props) {
   const [currentStep, setCurrentStep] = useState(0);
+  const pageComponents = [<EmailVerificaiton />, <AccountInformation />];
 
   const steps = initialSteps.map((step, index) => ({
     ...step,
@@ -33,7 +31,6 @@ function AuthOnboarding(props) {
     if (currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1);
     } else {
-      // Handle form submission here
       console.log('Form submitted');
     }
   };
@@ -49,7 +46,7 @@ function AuthOnboarding(props) {
       <Steps content={steps} />
       <div className="divider"></div>
       <div className="border p-4 my-8 w-full">
-        <div className="">form component here</div>
+        <div className="">{pageComponents[currentStep]}</div>
       </div>
       <div className="divider"></div>
       <div className="flex justify-between items-end w-full">

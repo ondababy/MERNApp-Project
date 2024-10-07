@@ -5,7 +5,6 @@ import Step from './Step';
 function Steps({ content, componentClass, addClass }) {
   const steps = content?.length
     ? content.map((step, index) => {
-        console.log(step);
         return Step({
           index: index + 1,
           label: step.label,

@@ -1,13 +1,11 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
+import React from 'react';
 
 function EmailVerificaiton(props) {
-  return (
-    <div></div>
-  )
+  return <>Verify Email</>;
 }
 
-EmailVerificaiton(props).propTypes = {}
+EmailVerificaiton.propTypes = {};
 
 export default EmailVerificaiton;
 
