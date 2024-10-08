@@ -1,5 +1,4 @@
 import { Card } from 'react-daisyui';
-import { Link } from 'react-router-dom';
 import LoginForm from './LoginForm';
 
 function AuthLogin() {
@@ -15,17 +14,6 @@ function AuthLogin() {
       <Card className="flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
         <Card.Body>
           <LoginForm />
-
-          <div className="divider">or</div>
-          <div className="flex justify-center gap-2">
-            Doesn&apos;t have an account?
-            <Link
-              to="/signup"
-              className="link link-secondary"
-            >
-              Sign Up
-            </Link>
-          </div>
         </Card.Body>
       </Card>
     </>

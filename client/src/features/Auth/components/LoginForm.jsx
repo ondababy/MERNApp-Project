@@ -1,7 +1,8 @@
 import { FormikForm } from '@common/components';
 import { Button } from 'react-daisyui';
+import { FaFacebook, FaGoogle } from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { authApi } from '../auth.api';
 import { setCredentials } from '../auth.slice';
@@ -45,14 +46,35 @@ function LoginForm() {
       formSchema={loginSchema}
       element={({ isSubmitting }) => {
         return (
-          <Button
-            variant="outline"
-            color="primary"
-            disabled={isSubmitting || isLoading}
-            type="submit"
-          >
-            Log In
-          </Button>
+          <>
+            <Button
+              variant="outline"
+              color="primary"
+              disabled={isSubmitting || isLoading}
+              type="submit"
+            >
+              Log In
+            </Button>
+
+            <div className="divider my-0">or</div>
+            <div className="social-media login flex gap-2 justify-center">
+              <Button onClick={() => {}}>
+                <FaGoogle />
+              </Button>
+              <Button onClick={() => {}}>
+                <FaFacebook />
+              </Button>
+            </div>
+            <div className="flex justify-center gap-2">
+              Doesn&apos;t have an account?
+              <Link
+                to="/signup"
+                className="link link-secondary"
+              >
+                Sign Up
+              </Link>
+            </div>
+          </>
         );
       }}
     />
