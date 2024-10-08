@@ -19,7 +19,7 @@ const initialSteps = [
 
 function AuthOnboarding(props) {
   const [currentStep, setCurrentStep] = useState(0);
-  const pageComponents = [<EmailVerificaiton />, <AccountInformation />];
+  const pageComponents = [<AccountInformation />, <EmailVerificaiton />];
 
   const steps = initialSteps.map((step, index) => ({
     ...step,
@@ -45,9 +45,7 @@ function AuthOnboarding(props) {
     <div className="flex flex-col items-start h-full w-full">
       <Steps content={steps} />
       <div className="divider"></div>
-      <div className="border p-4 my-8 w-full">
-        <div className="">{pageComponents[currentStep]}</div>
-      </div>
+      <div className="container">{pageComponents[currentStep]}</div>
       <div className="divider"></div>
       <div className="flex justify-between items-end w-full">
         {currentStep > 0 && (
@@ -68,8 +66,6 @@ function AuthOnboarding(props) {
     </div>
   );
 }
-
-AuthOnboarding.propTypes = {};
 
 export default AuthOnboarding;
 
