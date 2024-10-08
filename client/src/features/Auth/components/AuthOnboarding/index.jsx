@@ -19,7 +19,7 @@ const initialSteps = [
 
 function AuthOnboarding(props) {
   const [currentStep, setCurrentStep] = useState(0);
-  const pageComponents = [<AccountInformation />, <EmailVerificaiton />];
+  const pageComponents = [<EmailVerificaiton />, <AccountInformation />];
 
   const steps = initialSteps.map((step, index) => ({
     ...step,
