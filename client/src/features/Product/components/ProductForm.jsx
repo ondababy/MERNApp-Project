@@ -89,14 +89,14 @@ const ProductForm = ({ title = 'Product Form', action = 'create' }) => {
           onSubmit: onSubmit,
           enableReinitialize: true,
         }}
-        className="flex flex-wrap gap-8"
+        className="grid grid-cols-3 gap-8"
         element={({ isSubmitting, values }) => {
           const isFormChanged = !isEqual(initialValues, values);
           const isProcessing = isSubmitting || isCreating || isUpdating;
           const isButtonDisabled = isProcessing || isFetching || !isFormChanged;
 
           return (
-            <div className="flex w-full">
+            <div className="flex w-full col-span-3">
               <Button
                 variant="outline"
                 type="submit"
