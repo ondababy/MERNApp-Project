@@ -12,3 +12,4 @@
 - [ ] CRUD
 - [ ] Charts
 - [ ] Formik and yup validation
+- [ ] Order Table
