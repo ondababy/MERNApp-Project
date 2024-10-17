@@ -1,29 +1,21 @@
-export const imageSchema = {
-  type: 'object',
-  properties: {
-    folder: {
-      type: 'string',
-    },
-    public_id: {
-      type: 'string',
-    },
-    resource_type: {
-      type: 'string',
-    },
-    secure_url: {
-      type: 'string',
-    },
-    tags: {
-      type: 'array',
-      items: {
-        type: 'string',
-      },
-    },
-    allowed_formats: {
-      type: 'array',
-      items: {
-        type: 'string',
-      },
-    },
+import mongoose from 'mongoose';
+export const ImageSchema = new mongoose.Schema({
+  folder: {
+    type: String,
   },
-};
+  public_id: {
+    type: String,
+  },
+  secure_url: {
+    type: String,
+  },
+  resource_type: {
+    type: [String],
+  },
+  tags: {
+    type: [String],
+  },
+  allowed_formats: {
+    type: [String],
+  },
+});

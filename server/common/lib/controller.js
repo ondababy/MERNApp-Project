@@ -29,8 +29,23 @@ export class Controller {
 
   store = async (req, res) => {
     const validData = await this.validator(req, res, this.rules.create);
-    const data = await this.service?.create(validData);
+    let data = await this.service?.create(validData);
     if (!data._id) return this.error({ res, message: 'Invalid data!' });
+
+    if (req.file || req.files || this.service.hasField('images')) {
+      const files = Array.isArray(req.files) ? req.files : [req.file];
+      const images = files.map((file) => ({
+        folder: file.folder || '',
+        public_id: file.public_id || '',
+        resource_type: file.resource_type || '',
+        secure_url: file.secure_url || '',
+        tags: file.tags || [],
+        allowed_formats: file.allowed_formats || [],
+      }));
+      data.images = [...(data.images || []), ...images];
+    }
+
+    await data.save();
 
     const resource = this.resource?.make(data) || data;
     this.success({ res, message: 'Data created!', resource });

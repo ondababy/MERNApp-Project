@@ -14,7 +14,7 @@ const commonRules = () => {
     check('stock').notEmpty().withMessage('Stock is required!').isNumeric().withMessage('Stock must be a number!'),
     check('description')
       .isString()
-      .matches(/^[a-zA-Z0-9\-_]+$/),
+      .matches(/^[a-zA-Z0-9\-_ ]+$/),
   ];
 };
 

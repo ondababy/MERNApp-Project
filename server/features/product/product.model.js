@@ -1,5 +1,5 @@
 import { Schema } from '#lib';
-import { imageSchema } from '#utils';
+import { ImageSchema } from '#utils';
 
 const Product = new Schema({
   name: 'Product',
@@ -25,7 +25,7 @@ const Product = new Schema({
         required: [true, 'Product price is required!'],
       },
 
-      image: [{ imageSchema }],
+      images: [ImageSchema],
     },
     { timestamps: true },
   ],
