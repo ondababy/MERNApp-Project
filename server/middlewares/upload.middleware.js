@@ -51,9 +51,5 @@ export const upload = multer({
       cb(new Error('Invalid file format!'));
     }
   },
-  onError: (err, next) => {
-    console.error(err);
-    next(err);
-  },
 });
 

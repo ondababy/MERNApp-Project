@@ -85,7 +85,9 @@ export class Controller {
         const publicIds = data.images.map((image) => image.public_id);
         await utils.deleteFiles(publicIds);
       }
-    } catch (error) {}
+    } catch (error) {
+      return this.error({ res, message: 'Failed to delete images!' });
+    }
 
     this.success({ res, message: 'Data deleted!' });
     next();
