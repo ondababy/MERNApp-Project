@@ -1,7 +1,12 @@
 import { cloudinary } from '#common';
 
 const deleteFiles = async (publicIds) => {
-  await cloudinary.api.delete_resources(publicIds);
+  try {
+    await cloudinary.api.delete_resources(publicIds);
+    console.log('Files deleted from Cloudinary:', publicIds);
+  } catch (deleteError) {
+    console.error('Error deleting files from Cloudinary:', deleteError);
+  }
 };
 
 const deleteFile = async (publicId) => {
@@ -18,4 +23,3 @@ const deleteFileOnError = async (req, res, next) => {
 };
 
 export { deleteFile, deleteFileOnError, deleteFiles };
-

@@ -53,7 +53,6 @@ export class Controller {
 
     const resource = this.resource?.make(data) || data;
     this.success({ res, message: 'Data created!', resource });
-    next();
   };
 
   update = async (req, res, next) => {
@@ -73,7 +72,6 @@ export class Controller {
 
     const resource = this.resource?.make(data) || data;
     this.success({ res, message: 'Data updated!', resource });
-    next();
   };
 
   delete = async (req, res, next) => {
@@ -82,7 +80,9 @@ export class Controller {
 
     try {
       if (data.images) {
-        const publicIds = data.images.map((image) => image.public_id);
+        const publicIds = data.images.map(
+          (image) => `${image.folder}/${image.public_id}`
+        );
         await utils.deleteFiles(publicIds);
       }
     } catch (error) {
@@ -90,6 +90,5 @@ export class Controller {
     }
 
     this.success({ res, message: 'Data deleted!' });
-    next();
   };
 }
