@@ -1,3 +1,4 @@
+export * from './cloudinary.utils.js';
 export { sendEmail } from './email.utils.js';
 export { default as Errors } from './errors.utils.js';
 export * from './response.utils.js';
