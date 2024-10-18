@@ -10,6 +10,7 @@ const makeMenu = () => [
   },
   // NEW ROUTE HERE ->
   ...features._exampleMenus,
+  ...features.brandMenus,
   ...features.productMenus,
   ...features.courierMenus,
   ...features.supplierMenus,

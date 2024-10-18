@@ -12,6 +12,7 @@ const privateRoutes = [
       },
       // NEW ROUTE HERE ->
       ...features._exampleRoutes,
+      ...features.brandRoutes,
       ...features.productRoutes,
       ...features.courierRoutes,
       ...features.supplierRoutes,
