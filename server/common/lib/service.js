@@ -80,7 +80,7 @@ export class Service {
 
   async getAll() {
     this._checkModel();
-    return this.paginate();
+    return this.model.find();
   }
 
   async getById(id) {

@@ -20,20 +20,37 @@ export class Controller {
     const message = data.length ? 'Data collection fetched!' : 'No data found!';
 
     const resource = this.resource?.collection(data) || data;
-    this.success({ res, message, resource });
+    this.success({
+      res,
+      message,
+      resource,
+      meta: {
+        total: data.length,
+        limit,
+        page,
+      },
+    });
   };
 
   // controller functions
   getAll = async (req, res) => {
     const data = await this.service
-      ?.getAll()
       .paginate(req.query)
       .filter(req.query.filters || {})
       .exec();
     const message = data.length ? 'Data collection fetched!' : 'No data found!';
 
     const resource = this.resource?.collection(data) || data;
-    this.success({ res, message, resource });
+    this.success({
+      res,
+      message,
+      resource,
+      meta: {
+        total: data.length,
+        limit: req.query.limit || 10,
+        page: req.query.page || 1,
+      },
+    });
   };
 
   getById = async (req, res) => {
