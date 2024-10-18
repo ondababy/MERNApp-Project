@@ -1,7 +1,6 @@
 import * as features from '@features';
 import { PrivateLayout } from '@layouts';
 import { Dashboard } from '@screens';
-console.log(features);
 const privateRoutes = [
   {
     path: '/',
