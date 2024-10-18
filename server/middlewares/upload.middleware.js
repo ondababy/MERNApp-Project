@@ -13,7 +13,7 @@ const storage = new CloudinaryStorage({
     const folder = req?.headers?.resource || 'uploads';
     const sanitizedFilename = file?.originalname.replace(/[^a-zA-Z0-9]/g, '_');
     const public_id = `${sanitizedFilename}_${uuidv4()}`;
-    const secure_url = cloudinary.url(public_id, { secure: true });
+    const secure_url = cloudinary.url(`${folder}/${public_id}`, { secure: true });
 
     cloudinary.api.create_folder(folder, (error) => {
       if (error) {
@@ -26,6 +26,7 @@ const storage = new CloudinaryStorage({
     const cloudinaryOptions = {
       folder,
       public_id,
+      url: cloudinary.url(`${folder}/${public_id}`),
       resource_type: 'auto',
       secure_url,
       tags,

@@ -1,6 +1,7 @@
 import { useSlug } from '@common';
 import { FormikForm } from '@common/components';
 import { confirmSave, requestError, toFormData } from '@custom';
+import { CarouselComponent } from '@custom/components';
 import isEqual from 'lodash/isEqual';
 import PropTypes from 'prop-types';
 import { useEffect, useMemo, useState } from 'react';
@@ -15,10 +16,18 @@ import ProductWrapper from './ProductWrapper';
 const fields = typeof getFields === 'function' ? getFields() : getFields || [];
 const altFields = typeof getAltFields === 'function' ? getAltFields() : getAltFields || [];
 
+const images = [
+  {
+    src: "https://placehold.co/600",
+    alt: "n/a",
+  },
+]
+
 const ProductForm = ({ title = 'Product Form', action = 'create' }) => {
   /* DECLARATIONS #################################################### */
   const navigate = useNavigate();
   const [product, setProduct] = useState(null);
+  const [previewImages, setPreviewImages] = useState([]);
   const [productSchema, setProductSchema] = useState(fields);
   const [createProduct, { isLoading: isCreating }] = productApi.useCreateProductMutation();
   const [updateProduct, { isLoading: isUpdating }] = productApi.useUpdateProductMutation();
@@ -34,6 +43,12 @@ const ProductForm = ({ title = 'Product Form', action = 'create' }) => {
     [product, productSchema, action]
   );
   /* END DECLARATIONS ################################################ */
+
+  const handleImageInput = (e) => {
+    const files = e.target.files;
+    const images = Array.from(files).map((file) => URL.createObjectURL(file));
+    setPreviewImages(images);
+  }
 
   const handleCreate = async (values) => {
     await createProduct(values).unwrap();
@@ -69,6 +84,8 @@ const ProductForm = ({ title = 'Product Form', action = 'create' }) => {
           toast.error(res.error.data.message);
           navigate('/dashboard/products/table');
         } else if (res.data) setProduct(res.data.resource);
+        console.log(res.data.resource);
+
       });
     };
 
@@ -81,36 +98,48 @@ const ProductForm = ({ title = 'Product Form', action = 'create' }) => {
       title={title}
       prevUrl="/dashboard/products/table"
     >
-      <FormikForm
-        formSchema={productSchema}
-        formikProps={{
-          initialValues,
-          validationSchema: productValidation,
-          onSubmit: onSubmit,
-          enableReinitialize: true,
-        }}
-        className="grid grid-cols-3 gap-8"
-        element={({ isSubmitting, values }) => {
-          const isFormChanged = !isEqual(initialValues, values);
-          const isProcessing = isSubmitting || isCreating || isUpdating;
-          const isButtonDisabled = isProcessing || isFetching || !isFormChanged;
+      <div className="flex flex-col gap-4 lg:flex-row items-center lg:items-start">
 
-          return (
-            <div className="flex w-full col-span-3">
-              <Button
-                variant="outline"
-                type="submit"
-                color="primary"
-                className="max-w-md"
-                disabled={isButtonDisabled}
-              >
-                {isProcessing && <span className="loading loading-spinner"></span>}
-                {action === 'create' ? 'Create Product' : 'Update Product'}
-              </Button>
-            </div>
-          );
-        }}
-      />
+        <div className="container lg:w-1/3 w-96">
+          <CarouselComponent images={
+            product?.images?.length ?
+              product?.images.map((image) => ({ src: image.url, alt: image.alt }))
+              : images} />
+        </div>
+        <div className="container w-2/3">
+
+          <FormikForm
+            formSchema={productSchema}
+            formikProps={{
+              initialValues,
+              validationSchema: productValidation,
+              onSubmit: onSubmit,
+              enableReinitialize: true,
+            }}
+            className="grid grid-cols-3 gap-8"
+            element={({ isSubmitting, values }) => {
+              const isFormChanged = !isEqual(initialValues, values);
+              const isProcessing = isSubmitting || isCreating || isUpdating;
+              const isButtonDisabled = isProcessing || isFetching || !isFormChanged;
+
+              return (
+                <div className="flex w-full col-span-3">
+                  <Button
+                    variant="outline"
+                    type="submit"
+                    color="primary"
+                    className="max-w-md"
+                    disabled={isButtonDisabled}
+                  >
+                    {isProcessing && <span className="loading loading-spinner"></span>}
+                    {action === 'create' ? 'Create Product' : 'Update Product'}
+                  </Button>
+                </div>
+              );
+            }}
+          />
+        </div>
+      </div>
     </ProductWrapper>
   );
 };

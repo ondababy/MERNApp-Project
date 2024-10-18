@@ -1,7 +1,22 @@
 const getFields = () => [
-  { label: 'Name', name: 'name', type: 'text' },
-  { label: 'Price', name: 'price', type: 'number' },
-  { label: 'Stock', name: 'stock', type: 'number' },
+  {
+    label: 'Name',
+    name: 'name',
+    type: 'text',
+    outerStyle: 'w-full col-span-3 row-span-2 md:col-span-1',
+  },
+  {
+    label: 'Price',
+    name: 'price',
+    type: 'number',
+    outerStyle: 'w-full col-span-3 row-span-2 md:col-span-1',
+  },
+  {
+    label: 'Stock',
+    name: 'stock',
+    type: 'number',
+    outerStyle: 'w-full col-span-3 row-span-2 md:col-span-1',
+  },
   {
     label: 'Description',
     name: 'description',
@@ -9,7 +24,14 @@ const getFields = () => [
     outerStyle: 'w-full col-span-3 row-span-2',
     placeholder: 'Enter your product description.',
   },
-  { label: 'Image', name: 'image', type: 'image', accept: 'image/*', multiple: true },
+  {
+    label: 'Image',
+    name: 'image',
+    type: 'image',
+    accept: 'image/*',
+    multiple: true,
+    outerStyle: 'w-full col-span-3 row-span-2',
+  },
   // More getFields can be added here
 ];
 

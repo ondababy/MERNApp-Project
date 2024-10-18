@@ -33,6 +33,7 @@ export class Controller {
       folder: file.folder || '',
       public_id: file.public_id || '',
       resource_type: file.resource_type || '',
+      url: file.url || '',
       secure_url: file.secure_url || '',
       tags: file.tags || [],
       allowed_formats: file.allowed_formats || [],
@@ -63,9 +64,7 @@ export class Controller {
     if (req.file || req.files || this.service.hasField('images')) {
       const images = this.addImage(req);
       const oldImages = new Set(data.images.map((image) => image.public_id));
-      const newImages = images.filter(
-        (image) => !oldImages.has(image.public_id)
-      );
+      const newImages = images.filter((image) => !oldImages.has(image.public_id));
       data.images = [...(data.images || []), ...newImages];
       await data.save();
     }
@@ -80,9 +79,7 @@ export class Controller {
 
     try {
       if (data.images) {
-        const publicIds = data.images.map(
-          (image) => `${image.folder}/${image.public_id}`
-        );
+        const publicIds = data.images.map((image) => `${image.folder}/${image.public_id}`);
         await utils.deleteFiles(publicIds);
       }
     } catch (error) {

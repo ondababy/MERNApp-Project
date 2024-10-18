@@ -6,6 +6,9 @@ export const ImageSchema = new mongoose.Schema({
   public_id: {
     type: String,
   },
+  url: {
+    type: String,
+  },
   secure_url: {
     type: String,
   },
@@ -19,3 +22,4 @@ export const ImageSchema = new mongoose.Schema({
     type: [String],
   },
 });
+
