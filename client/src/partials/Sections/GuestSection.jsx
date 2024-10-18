@@ -1,25 +1,39 @@
-import { TextRainbow } from '@common/components';
-import { Button, Hero } from 'react-daisyui';
-import { Link } from 'react-router-dom';
 
+import {SelectComponent} from '@common';
 function GuestSection() {
   return (
-    <Hero>
-      <Hero.Content className="text-center">
-        <div className="max-w-md">
-          <h1 className="text-5xl font-bold font-display">
-            <span>Vite + React +</span>
-            <Link to="https://daisyui.com/">
-              <TextRainbow className="font-display" text="daisyUI" />
-            </Link>
-          </h1>
-          <p className="py-6">A simple starter boilerplate for REACT client using daisyUI theme.</p>
-          <Link to="/signup">
-            <Button color="primary">Get Started</Button>
-          </Link>
+    <div className="w-full">
+      {/* BANNER */}
+      <div className='border border-blue-400 min-h-56'>
+      </div>
+
+      {/* CONTENT */}
+      <div className='flex border border-red-400 h-screen'>
+        {/* Filters */}
+        <div className="container max-w-sm border border-red-400 h-full">
+          <div className="divider"></div>
+
         </div>
-      </Hero.Content>
-    </Hero>
+
+
+        {/* Products */}
+        <div className="mx-8 py-4 w-full border border-green-400 h-full">
+          <div className="flex justify-between items-center">
+            <h1 className="text-5xl font-display">
+              Our Products
+            </h1>
+
+            <SelectComponent />
+
+
+          </div>
+
+
+        </div>
+
+
+      </div>
+    </div>
   );
 }
 
