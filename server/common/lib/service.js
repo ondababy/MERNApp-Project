@@ -4,12 +4,6 @@ export class Service {
   fieldToSlugify = null;
   slugField = 'slug';
 
-  constructor() {
-    this.model = this.model || null;
-    this.fieldToSlugify = this.fieldToSlugify || null;
-    this.slugField = this.slugField;
-  }
-
   _checkModel() {
     if (!this.model) throw new Error('Resource not set.');
   }
