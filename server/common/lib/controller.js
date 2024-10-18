@@ -10,9 +10,26 @@ export class Controller {
     update: [],
   };
 
+  search = async (req, res) => {
+    const { limit = 10, page = 1, sort = '-createdAt' } = req.query;
+    const data = await this.service
+      ?.search(req.query.q)
+      .paginate({ limit, page, sort })
+      .filter(req.query.filters || {})
+      .exec();
+    const message = data.length ? 'Data collection fetched!' : 'No data found!';
+
+    const resource = this.resource?.collection(data) || data;
+    this.success({ res, message, resource });
+  };
+
   // controller functions
-  getALl = async (req, res) => {
-    const data = await this.service?.getAll();
+  getAll = async (req, res) => {
+    const data = await this.service
+      ?.getAll()
+      .paginate(req.query)
+      .filter(req.query.filters || {})
+      .exec();
     const message = data.length ? 'Data collection fetched!' : 'No data found!';
 
     const resource = this.resource?.collection(data) || data;

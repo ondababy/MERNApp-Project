@@ -3,6 +3,7 @@ export class Service {
   model = null;
   fieldToSlugify = null;
   slugField = 'slug';
+  query = null;
 
   _checkModel() {
     if (!this.model) throw new Error('Resource not set.');
@@ -36,25 +37,38 @@ export class Service {
     return slugify(...this.slugParams(field));
   }
 
-  search(str, field = 'name') {
-    return this.model.find({
-      [field]: {
-        $regex: new RegExp(str, 'i'),
-        $options: 'i',
-      },
-    });
+  exec() {
+    return this.query.exec();
   }
 
-  paginate({ page = 1, limit = 10, sort = '-createdAt', filter = {} }) {
+  search(str = '', field = 'name') {
+    this._checkModel();
+
+    if (!this.query) this.query = this.model.find();
+
+    this.query = this.query.find({
+      [field]: {
+        $regex: new RegExp(str, 'i'),
+      },
+    });
+    return this;
+  }
+
+  paginate(params = {}) {
+    const { limit = 10, page = 1, sort = '-createdAt', filter = {} } = params;
+    this._checkModel();
+
     const skip = (page - 1) * limit;
-    const query = this.model.find(filter).sort(sort).skip(skip).limit(limit);
-    return query;
+    if (!this.query) this.query = this.model.find();
+    this.query = this.query.find(filter).sort(sort).skip(skip).limit(limit);
+    return this;
   }
 
   filter(params = {}) {
     this._checkModel();
-    const query = this.model.find(params);
-    return query;
+    if (!this.query) this.query = this.model.find();
+    this.query = this.query.find(params);
+    return this;
   }
 
   async checkIfExists(filter) {
@@ -66,7 +80,7 @@ export class Service {
 
   async getAll() {
     this._checkModel();
-    return this.model.find();
+    return this.paginate();
   }
 
   async getById(id) {
