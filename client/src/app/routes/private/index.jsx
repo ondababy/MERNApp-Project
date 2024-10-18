@@ -13,7 +13,6 @@ const privateRoutes = [
       // NEW ROUTE HERE ->
       ...features._exampleRoutes,
       ...features.productRoutes,
-      ...features.brandRoutes,
       ...features.courierRoutes,
       ...features.supplierRoutes,
       ...features.categoryRoutes,

@@ -11,7 +11,6 @@ const makeMenu = () => [
   // NEW ROUTE HERE ->
   ...features._exampleMenus,
   ...features.productMenus,
-  ...features.brandMenus,
   ...features.courierMenus,
   ...features.supplierMenus,
   ...features.categoryMenus,
