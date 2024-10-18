@@ -38,7 +38,9 @@ export class Service {
   }
 
   exec() {
-    return this.query.exec();
+    const query = this.query.exec();
+    this.query = null;
+    return query;
   }
 
   search(str = '', field = 'name') {
