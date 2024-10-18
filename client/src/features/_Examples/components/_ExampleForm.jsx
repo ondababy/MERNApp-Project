@@ -16,6 +16,12 @@ import _ExampleWrapper from './_ExampleWrapper';
 
 const fields = typeof getFields === 'function' ? getFields() : getFields || [];
 const altFields = typeof getAltFields === 'function' ? getAltFields() : getAltFields || [];
+const images = [
+  {
+    src: "https://placehold.co/600",
+    alt: "n/a",
+  },
+]
 
 const _ExampleForm = ({ title = '_Example Form', action = 'create' }) => {
   /* DECLARATIONS #################################################### */
@@ -85,10 +91,11 @@ const _ExampleForm = ({ title = '_Example Form', action = 'create' }) => {
     >
 
       <div className="flex flex-col gap-4 lg:flex-row items-center lg:items-start">
+
         <div className="container lg:w-1/3 w-96">
           <CarouselComponent images={
-            product?.images?.length ?
-              product?.images.map((image) => ({ src: image.url, alt: image.alt }))
+            _example?.images?.length ?
+              _example?.images.map((image) => ({ src: image.url, alt: image.alt }))
               : images} />
         </div>
 

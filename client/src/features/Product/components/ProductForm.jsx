@@ -106,6 +106,8 @@ const ProductForm = ({ title = 'Product Form', action = 'create' }) => {
               product?.images.map((image) => ({ src: image.url, alt: image.alt }))
               : images} />
         </div>
+
+
         <div className="container w-2/3">
 
           <FormikForm
