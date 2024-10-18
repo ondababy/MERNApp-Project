@@ -17,7 +17,7 @@ const Brand = new Schema({
         type: String,
         required: [true, 'Brand description is required'],
       },
-      image: [{ ImageSchema }],
+      images: [ImageSchema],
     },
     { timestamps: true },
   ],

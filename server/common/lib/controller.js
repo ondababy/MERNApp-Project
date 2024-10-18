@@ -63,7 +63,7 @@ export class Controller {
 
     if (req.file || req.files || this.service.hasField('images')) {
       const images = this.addImage(req);
-      const oldImages = new Set(data.images.map((image) => image.public_id));
+      const oldImages = new Set((data.images || []).map((image) => image.public_id));
       const newImages = images.filter((image) => !oldImages.has(image.public_id));
       data.images = [...(data.images || []), ...newImages];
       await data.save();
