@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { useSlug } from '@common';
 import { FormikForm } from '@common/components';
 import { confirmSave, requestError, toFormData } from '@custom';
-import { CarouselComponent } from '@custom/components';
+import { CarouselComponent } from '@custom/components'; // CAROUSEL
 import { useEffect, useMemo, useState } from 'react';
 import { Button } from 'react-daisyui';
 import { useNavigate } from 'react-router-dom';
@@ -16,6 +16,7 @@ import _ExampleWrapper from './_ExampleWrapper';
 
 const fields = typeof getFields === 'function' ? getFields() : getFields || [];
 const altFields = typeof getAltFields === 'function' ? getAltFields() : getAltFields || [];
+// CAROUSEL
 const images = [
   {
     src: "https://placehold.co/600",
@@ -92,6 +93,7 @@ const _ExampleForm = ({ title = '_Example Form', action = 'create' }) => {
 
       <div className="flex flex-col gap-4 lg:flex-row items-center lg:items-start">
 
+        {/* CAROUSEL */}
         <div className="container lg:w-1/3 w-96">
           <CarouselComponent images={
             _example?.images?.length ?
