@@ -12,11 +12,13 @@ const privateRoutes = [
         element: <Dashboard />,
       },
       // NEW ROUTE HERE ->
-    ...features.brandRoutes,
-    ...features.courierRoutes,
-    ...features.supplierRoutes,
-    ...features.categoryRoutes,
-    ...features.userRoutes,
+      ...features.productRoutes,
+      ...features.brandRoutes,
+      ...features.courierRoutes,
+      ...features.supplierRoutes,
+      ...features.categoryRoutes,
+      ...features.userRoutes,
+      ...features._exampleRoutes,
     ],
   },
 ];
