@@ -7,10 +7,10 @@ function GuestSection() {
     <Hero>
       <Hero.Content className="text-center">
         <div className="max-w-md">
-          <h1 className="text-5xl font-bold">
+          <h1 className="text-5xl font-bold font-display">
             <span>Vite + React +</span>
             <Link to="https://daisyui.com/">
-              <TextRainbow text="daisyUI" />
+              <TextRainbow className="font-display" text="daisyUI" />
             </Link>
           </h1>
           <p className="py-6">A simple starter boilerplate for REACT client using daisyUI theme.</p>

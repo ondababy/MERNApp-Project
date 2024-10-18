@@ -47,7 +47,7 @@ function Header({ clickLogo }) {
           </Dropdown>
           <TextRainbow
             text="ShoeShable"
-            className="text-xl font-extrabold btn btn-ghost "
+            className="text-xl font-extrabold font-display btn btn-ghost "
             onClick={clickLogo}
           />
           <span className='hidden lg:flex'>

@@ -5,6 +5,17 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'ABC Diatype';
+  src: url('../assets/fonts/abc-diatype-regular.otf');
+  font-style: normal;
+  font-weight: 400;
+}
+@font-face {
+  font-family: 'Migrain';
+  src: url('../assets/fonts/migrain.otf');
+}
+
 @layer base {
   :root {
     --toastify-color-light: theme(colors.base-200);
