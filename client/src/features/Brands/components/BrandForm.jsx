@@ -120,10 +120,11 @@ const BrandForm = ({ title = 'Brand Form', action = 'create' }) => {
                 <div className="flex w-full">
                   <Button
                     variant="outline"
-                    type="submit"
                     color="primary"
                     className="max-w-md"
                     disabled={isButtonDisabled}
+                    type="submit"
+                    onClick={() => { console.log("clicked") }}
                   >
                     {isProcessing && <span className="loading loading-spinner"></span>}
                     {action === 'create' ? 'Create Brand' : 'Update Brand'}
