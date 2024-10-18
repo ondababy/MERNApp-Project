@@ -33,6 +33,7 @@ const _ExampleForm = ({ title = '_Example Form', action = 'create' }) => {
   const [update_Example, { isLoading: isUpdating }] = _exampleApi.useUpdate_ExampleMutation();
   const [get_Example, { isLoading: isFetching }] = _exampleApi.useGet_ExampleMutation();
   const { slug, setSlug } = useSlug();
+  /* END DECLARATIONS ################################################ */
 
   const initialValues = useMemo(
     () =>
@@ -42,7 +43,6 @@ const _ExampleForm = ({ title = '_Example Form', action = 'create' }) => {
       }, {}),
     [_example, _exampleSchema, action]
   );
-  /* END DECLARATIONS ################################################ */
 
   const handleCreate = async (values) => {
     await create_Example(values).unwrap();

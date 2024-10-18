@@ -24,6 +24,7 @@ const BrandForm = ({ title = 'Brand Form', action = 'create' }) => {
   const [updateBrand, { isLoading: isUpdating }] = brandApi.useUpdateBrandMutation();
   const [getBrand, { isLoading: isFetching }] = brandApi.useGetBrandMutation();
   const { slug, setSlug } = useSlug();
+  /* END DECLARATIONS ################################################ */
 
   const initialValues = useMemo(
     () =>
@@ -33,7 +34,6 @@ const BrandForm = ({ title = 'Brand Form', action = 'create' }) => {
       }, {}),
     [brand, brandSchema, action]
   );
-  /* END DECLARATIONS ################################################ */
 
   const handleCreate = async (values) => {
     await createBrand(values).unwrap();
