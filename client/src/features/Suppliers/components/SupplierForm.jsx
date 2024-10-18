@@ -15,7 +15,13 @@ import { supplierValidation } from '../supplier.validation';
 import SupplierWrapper from './SupplierWrapper';
 
 const fields = typeof getFields === 'function' ? getFields() : getFields || [];
-const altFields = typeof getAltFields === 'function' ? getAltFields() : getAltFields || [];
+const altFields = typeof getAltFields === 'function' ? getAltFields() : getAltFields || [];// CAROUSEL
+const images = [
+  {
+    src: "https://placehold.co/600",
+    alt: "n/a",
+  },
+]
 
 const SupplierForm = ({ title = 'Supplier Form', action = 'create' }) => {
   /* DECLARATIONS #################################################### */
