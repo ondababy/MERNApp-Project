@@ -78,6 +78,7 @@ const CourierForm = ({ title = 'Courier Form', action = 'create' }) => {
           toast.error(res.error.data.message);
           navigate('/dashboard/couriers/table');
         } else if (res.data) setCourier(res.data.resource);
+        console.log(res.data.resource);
       });
     };
 
