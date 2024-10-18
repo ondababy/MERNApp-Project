@@ -10,8 +10,7 @@ export class Service {
 
   hasSlugField() {
     const hasSlug = this.slugField && this.model.schema.paths[this.slugField];
-    const hasFieldToSlugify =
-      this.fieldToSlugify && this.model.schema.paths[this.fieldToSlugify];
+    const hasFieldToSlugify = this.fieldToSlugify && this.model.schema.paths[this.fieldToSlugify];
     return hasSlug && hasFieldToSlugify;
   }
 
@@ -37,6 +36,27 @@ export class Service {
     return slugify(...this.slugParams(field));
   }
 
+  search(str, field = 'name') {
+    return this.model.find({
+      [field]: {
+        $regex: new RegExp(str, 'i'),
+        $options: 'i',
+      },
+    });
+  }
+
+  paginate({ page = 1, limit = 10, sort = '-createdAt', filter = {} }) {
+    const skip = (page - 1) * limit;
+    const query = this.model.find(filter).sort(sort).skip(skip).limit(limit);
+    return query;
+  }
+
+  filter(params = {}) {
+    this._checkModel();
+    const query = this.model.find(params);
+    return query;
+  }
+
   async checkIfExists(filter) {
     this._checkModel();
     const record = await this.model.exists(filter);
@@ -57,11 +77,6 @@ export class Service {
   async getOne(filter) {
     this._checkModel();
     return this.model.findOne(filter);
-  }
-
-  async filter(filter) {
-    this._checkModel();
-    return this.model.find(filter);
   }
 
   async create(body) {
