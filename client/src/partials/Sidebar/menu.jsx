@@ -16,7 +16,7 @@ const makeMenu = () => [
   ...features.supplierMenus,
   ...features.categoryMenus,
   ...features.userMenus,
-];
+].sort((a, b) => a.label.localeCompare(b.label));
 
 export default makeMenu;
 
