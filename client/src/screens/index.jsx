@@ -1,5 +1,5 @@
 // export all here
 export { default as Dashboard } from './Dashboard';
 export { About, default as Home } from './Home';
-export { default as ShopScreen } from './Shop';
+export * from './Shop';
 

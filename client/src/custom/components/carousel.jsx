@@ -15,6 +15,10 @@ const defaults = [
         src: "https://placehold.co/400",
         alt: "n/a",
     },
+    {
+        src: "https://placehold.co/900x900",
+        alt: "n/a",
+    },
 ]
 
 export function CarouselComponent({ images = defaults }) {
@@ -24,37 +28,29 @@ export function CarouselComponent({ images = defaults }) {
     )
 
     return (
-        <div className="mx-12">
-            <Carousel
-                plugins={[plugin.current]}
-                className="w-full"
-                onMouseEnter={plugin.current.stop}
-                onMouseLeave={plugin.current.reset}
-            >
-                <CarouselContent>
-                    {images.map((image, index) => (
-                        <CarouselItem key={index}>
-                            <div className="p-1">
-                                <Card>
-                                    <CardContent className="flex aspect-square items-center justify-center p-2 ">
-                                        <img className="rounded  aspect-square object-contain" src={image.src} alt={image.alt} />
-                                    </CardContent>
-                                </Card>
-                            </div>
-                        </CarouselItem>
-                    ))}
-                </CarouselContent>
-                {
-                    images.length > 1 && <>
-                        <CarouselPrevious
-                            className="text-black"
-                        />
-                        <CarouselNext
-                            className="text-black"
-                        />
-                    </>
-                }
-            </Carousel>
-        </div>
+        <Carousel
+            plugins={[plugin.current]}
+            className="h-full mx-16"
+            onMouseEnter={plugin.current.stop}
+            onMouseLeave={plugin.current.reset}
+        >
+            <CarouselContent className="h-full">
+                {images.map((image, index) => (
+                    <CarouselItem key={index} className="h-full flex justify-center">
+                        <img className="max-h-full object-contain" src={image.src} alt={image.alt} />
+                    </CarouselItem>
+                ))}
+            </CarouselContent>
+            {
+                images.length > 1 && <>
+                    <CarouselPrevious
+                        className="h-full bg-transparent rounded hover:bg-base-content/20 text-base-content border-none"
+                    />
+                    <CarouselNext
+                        className="h-full bg-transparent rounded hover:bg-base-content/20 text-base-content border-none"
+                    />
+                </>
+            }
+        </Carousel>
     )
 }

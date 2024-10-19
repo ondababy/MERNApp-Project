@@ -1,6 +1,6 @@
 import { authRoutes } from '@features';
 import { DefaultLayout } from '@layouts';
-import { About, Home, ShopScreen } from '@screens';
+import * as Screen from '@screens';
 
 const defaultRoutes = [
   {
@@ -9,15 +9,19 @@ const defaultRoutes = [
     children: [
       {
         path: '/',
-        element: <Home />,
+        element: <Screen.Home />,
       },
       {
         path: '/shop',
-        element: <ShopScreen />,
+        element: <Screen.Shop />,
+      },
+      {
+        path: '/shop/:product',
+        element: <Screen.ProductDisplay />,
       },
       {
         path: '/about',
-        element: <About />,
+        element: <Screen.About />,
       },
 
       ...authRoutes,

@@ -4,7 +4,7 @@ import { SelectComponent } from '@common'
 import { ProductFilters, ProductGrid } from '@features'
 import { Banner } from '@partials'
 
-export default function ShopScreen() {
+export function Shop() {
   return (
     <div className="w-full">
       {/* BANNER */}
@@ -36,5 +36,7 @@ export default function ShopScreen() {
     </div>
   )
 }
+
+export { default as ProductDisplay } from './Product'
 
 
