@@ -9,7 +9,8 @@ const defaultRoutes = [
     children: [
       {
         path: '/',
-        element: <Screen.Home />,
+        element: <Screen.Shop />,
+        // element: <Screen.Home />,
       },
       {
         path: '/shop',

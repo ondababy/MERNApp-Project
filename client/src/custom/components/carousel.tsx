@@ -17,7 +17,7 @@ const defaults = [
   },
 ];
 
-export function CarouselComponent({ imageList = null, currentIndex = 0, className, ...props }) {
+export function CarouselComponent({ imageList = defaults, currentIndex = 0, className, ...props }) {
   const plugin = React.useRef(Autoplay({ delay: 3000, stopOnInteraction: true }));
 
   return (
@@ -30,7 +30,7 @@ export function CarouselComponent({ imageList = null, currentIndex = 0, classNam
         {...props}
       >
         <CarouselContent className="h-full">
-          {(imageList || defaults).map((image, index) => (
+          {imageList.map((image, index) => (
             <CarouselItem
               key={index}
               className="h-full flex justify-center"
