@@ -17,22 +17,8 @@ const defaults = [
   },
 ];
 
-export function CarouselComponent({ imageList = null, currentIndex = 0, className }) {
-  const [api, setApi] = React.useState<CarouselApi>();
-  const [current, setCurrent] = React.useState(currentIndex);
+export function CarouselComponent({ imageList = null, currentIndex = 0, className, ...props }) {
   const plugin = React.useRef(Autoplay({ delay: 3000, stopOnInteraction: true }));
-
-  React.useEffect(() => {
-    if (!api) {
-      return;
-    }
-  }, [api]);
-
-  const handleThumbClick = (index) => {
-    setCurrent(index);
-    api.scrollTo(index);
-    console.log(api);
-  };
 
   return (
     <>
@@ -41,7 +27,7 @@ export function CarouselComponent({ imageList = null, currentIndex = 0, classNam
         className={cn('h-full mx-16', className)}
         onMouseEnter={plugin.current.stop}
         onMouseLeave={plugin.current.reset}
-        setApi={setApi}
+        {...props}
       >
         <CarouselContent className="h-full">
           {(imageList || defaults).map((image, index) => (
@@ -64,7 +50,32 @@ export function CarouselComponent({ imageList = null, currentIndex = 0, classNam
           </>
         )}
       </Carousel>
+    </>
+  );
+}
 
+export function Gallery({ imageList = null, currentIndex = 0, className }) {
+  const [api, setApi] = React.useState<CarouselApi>();
+  const [current, setCurrent] = React.useState(currentIndex);
+
+  React.useEffect(() => {
+    if (!api) {
+      return;
+    }
+  }, [api]);
+
+  const handleThumbClick = (index) => {
+    setCurrent(index);
+    api.scrollTo(index);
+  };
+  return (
+    <>
+      <CarouselComponent
+        imageList={imageList}
+        currentIndex={currentIndex}
+        className={className}
+        setApi={setApi}
+      />
       {/* mini images */}
       <div className="flex gap-2 mt-2 justify-center">
         {imageList.map((img, i) => (

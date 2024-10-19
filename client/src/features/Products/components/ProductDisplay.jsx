@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { CarouselComponent } from '@custom'
+import { Gallery } from '@custom'
 import { Breadcrumbs } from '@partials'
 
 const productExample = {
@@ -43,7 +43,7 @@ export default function ProductDisplay({ data = productExample, children }) {
                 <div className="overflow-hidden max-h-[42rem] bg-base-200/30 border-y border-base-content/10 p-1">
 
                     <Breadcrumbs />
-                    <CarouselComponent
+                    <Gallery
                         imageList={product.images}
                         className="h-[30rem] max-h-[42rem]" />
                 </div>
