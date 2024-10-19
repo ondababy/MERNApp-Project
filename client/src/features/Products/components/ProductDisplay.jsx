@@ -46,13 +46,6 @@ export default function ProductDisplay({ data = productExample, children }) {
                     <CarouselComponent
                         imageList={product.images}
                         className="h-[30rem] max-h-[42rem]" />
-                    {/* mini images */}
-
-                    <div className="flex gap-2 mt-2 justify-center">
-                        {product.images.map((img, i) => (
-                            <img key={i} src={img.src} alt={img.alt} className="w-16 h-16 object-contain" />
-                        ))}
-                    </div>
                 </div>
 
                 {children}

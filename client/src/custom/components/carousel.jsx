@@ -24,36 +24,45 @@ export function CarouselComponent({ imageList = null, currentIndex = 0, classNam
     )
 
     return (
-        <Carousel
-            plugins={[plugin.current]}
-            className={cn('h-full mx-16', className)}
-            onMouseEnter={plugin.current.stop}
-            onMouseLeave={plugin.current.reset}
-        >
-            <CarouselContent className="h-full">
-                {(imageList || defaults).map((image, index) => (
-                    <CarouselItem key={index} className="h-full flex justify-center">
-                        <img className="max-h-full object-contain" src={image.src} alt={image.alt} />
-                    </CarouselItem>
+        <>
+            <Carousel
+                plugins={[plugin.current]}
+                className={cn('h-full mx-16', className)}
+                onMouseEnter={plugin.current.stop}
+                onMouseLeave={plugin.current.reset}
+            >
+                <CarouselContent className="h-full">
+                    {(imageList || defaults).map((image, index) => (
+                        <CarouselItem key={index} className="h-full flex justify-center">
+                            <img className="max-h-full object-contain" src={image.src} alt={image.alt} />
+                        </CarouselItem>
+                    ))}
+                </CarouselContent>
+                {
+                    imageList.length > 1 && <>
+                        <CarouselPrevious
+                            className="h-full bg-transparent rounded hover:bg-base-content/20 text-base-content border-none"
+                        />
+                        <CarouselNext
+                            className="h-full bg-transparent rounded hover:bg-base-content/20 text-base-content border-none"
+                        />
+                    </>
+                }
+            </Carousel>
+
+            {/* mini images */}
+            <div className="flex gap-2 mt-2 justify-center">
+                {imageList.map((img, i) => (
+                    <img key={i} src={img.src} alt={img.alt} className="w-16 h-16 object-contain" />
                 ))}
-            </CarouselContent>
-            {
-                imageList.length > 1 && <>
-                    <CarouselPrevious
-                        className="h-full bg-transparent rounded hover:bg-base-content/20 text-base-content border-none"
-                    />
-                    <CarouselNext
-                        className="h-full bg-transparent rounded hover:bg-base-content/20 text-base-content border-none"
-                    />
-                </>
-            }
-        </Carousel>
+            </div>
+        </>
     )
 }
 
 
 export function CarouselGroup({ imageList = null, className }) {
-    <Carousel className="w-full max-w-sm">
+    return <Carousel className="w-full max-w-sm">
         <CarouselContent className="-ml-1">
             {(imageList || defaults).map((image, index) => (
                 <CarouselItem key={index} className="pl-1 md:basis-1/2 lg:basis-1/3">
