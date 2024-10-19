@@ -9,22 +9,6 @@ export default function ProductDisplay({ children }) {
 
                 <div className="overflow-hidden max-h-[30rem] bg-base-200/30 border-y border-base-content/10 p-1">
                     {/* Breads */}
-                    <div className="container mx-8">
-                        <nav className="breadcrumbs">
-                            <ol>
-                                <li>
-                                    <a href="#">Home</a>
-                                </li>
-                                <li>
-                                    <a href="#">Shop</a>
-                                </li>
-                                <li>
-                                    <a href="#">Product</a>
-                                </li>
-                            </ol>
-                        </nav>
-                    </div>
-
                     {/* Carousel */}
                     <div className="h-96 max-h-[30rem]">
                         <CarouselComponent />

@@ -17,7 +17,7 @@ function AccountInformation(props) {
       <div className="divider"></div>
       <div className="form-wrapper">
         <FormikForm
-          formikProps={{ ...accFormik, onSubmit: () => {} }}
+          formikProps={{ ...accFormik, onSubmit: () => { } }}
           formSchema={accSchema}
           element={({ isSubmitting, ...rest }) => {
             return (

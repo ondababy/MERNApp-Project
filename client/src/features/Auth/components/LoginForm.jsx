@@ -58,10 +58,10 @@ function LoginForm() {
 
             <div className="divider my-0">or</div>
             <div className="social-media login flex gap-2 justify-center">
-              <Button onClick={() => {}}>
+              <Button onClick={() => { }}>
                 <FaGoogle />
               </Button>
-              <Button onClick={() => {}}>
+              <Button onClick={() => { }}>
                 <FaFacebook />
               </Button>
             </div>
