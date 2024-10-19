@@ -95,7 +95,7 @@ const SupplierForm = ({ title = 'Supplier Form', action = 'create' }) => {
 
         {/* CAROUSEL */}
         <div className="container lg:w-1/3 w-96">
-          <CarouselComponent images={
+          <CarouselComponent imageList={
             supplier?.images?.length ?
               supplier?.images.map((image) => ({ src: image.url, alt: image.alt }))
               : images} />

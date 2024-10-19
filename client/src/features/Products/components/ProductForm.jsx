@@ -101,7 +101,7 @@ const ProductForm = ({ title = 'Product Form', action = 'create' }) => {
       <div className="flex flex-col gap-4 lg:flex-row items-center lg:items-start">
 
         <div className="container lg:w-1/3 w-96 aspect-square">
-          <CarouselComponent images={
+          <CarouselComponent imageList={
             product?.images?.length ?
               product?.images.map((image) => ({ src: image.url, alt: image.alt }))
               : images} />

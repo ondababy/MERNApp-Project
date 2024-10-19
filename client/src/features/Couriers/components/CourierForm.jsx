@@ -95,7 +95,7 @@ const CourierForm = ({ title = 'Courier Form', action = 'create' }) => {
 
         {/* CAROUSEL */}
         <div className="container lg:w-1/3 w-96">
-          <CarouselComponent images={
+          <CarouselComponent imageList={
             courier?.images?.length ?
               courier?.images.map((image) => ({ src: image.url, alt: image.alt }))
               : images} />

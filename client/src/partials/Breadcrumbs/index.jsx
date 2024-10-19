@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function Breadcrumbs({
+export function Breadcrumbs({
   breads = []
 }) {
   return breads.length ? (
@@ -8,8 +8,12 @@ export default function Breadcrumbs({
       <nav className="breadcrumbs">
         <ol>
           {
+            breads.map((bread, index) => (
+              <li key={index}>
+                <a href={bread.href}>{bread.label}</a>
+              </li>
+            ))
           }
-
         </ol>
       </nav>
     </div>

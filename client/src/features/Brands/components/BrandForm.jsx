@@ -95,7 +95,7 @@ const BrandForm = ({ title = 'Brand Form', action = 'create' }) => {
 
         {/* CAROUSEL */}
         <div className="container lg:w-1/3 w-96">
-          <CarouselComponent images={
+          <CarouselComponent imageList={
             brand?.images?.length ?
               brand?.images.map((image) => ({ src: image.url, alt: image.alt }))
               : images} />

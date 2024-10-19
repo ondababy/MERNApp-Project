@@ -1,28 +1,25 @@
-import Autoplay from "embla-carousel-autoplay"
-import * as React from "react"
+import Autoplay from "embla-carousel-autoplay";
+import * as React from "react";
 
-import { Card, CardContent } from "@common/components/ui/card"
+import { Card, CardContent } from "@common/components/ui/card";
 import {
     Carousel,
     CarouselContent,
     CarouselItem,
     CarouselNext,
     CarouselPrevious,
-} from "@common/components/ui/carousel"
+} from "@common/components/ui/carousel";
+import { cn } from '@common/lib/utils';
 
 const defaults = [
     {
         src: "https://placehold.co/400",
         alt: "n/a",
     },
-    {
-        src: "https://placehold.co/900x900",
-        alt: "n/a",
-    },
 ]
 
-export function CarouselComponent({ images = defaults }) {
-    images = images.length ? images : defaults
+export function CarouselComponent({ imageList = null, className }) {
+    const [images, setImages] = React.useState(imageList || defaults)
     const plugin = React.useRef(
         Autoplay({ delay: 3000, stopOnInteraction: true })
     )
@@ -30,7 +27,7 @@ export function CarouselComponent({ images = defaults }) {
     return (
         <Carousel
             plugins={[plugin.current]}
-            className="h-full mx-16"
+            className={cn('h-full mx-16', className)}
             onMouseEnter={plugin.current.stop}
             onMouseLeave={plugin.current.reset}
         >
