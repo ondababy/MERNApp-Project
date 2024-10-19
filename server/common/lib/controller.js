@@ -30,6 +30,7 @@ export class Controller {
         count: data.length,
         limit: req.query.limit || 10,
         page: req.query.page || 1,
+        last_page: Math.ceil(documentCount / (parseInt(req.query.limit) || 10)),
       },
     });
   };
@@ -51,8 +52,9 @@ export class Controller {
       meta: {
         total: documentCount,
         count: data.length,
-        limit: req.query.limit || 10,
-        page: req.query.page || 1,
+        limit: parseInt(req.query.limit) || 10,
+        page: parsInt(req.query.page) || 1,
+        last_page: Math.ceil(documentCount / (parseInt(req.query.limit) || 10)),
       },
     });
   };
