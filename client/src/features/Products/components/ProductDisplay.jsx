@@ -26,7 +26,7 @@ const productExample = {
             alt: "n/a",
         },
         {
-            src: "https://placehold.co/600x400",
+            src: "https://placehold.co/900x900",
             alt: "n/a",
         },
     ]

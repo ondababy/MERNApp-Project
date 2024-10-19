@@ -18,7 +18,7 @@ const defaults = [
     },
 ]
 
-export function CarouselComponent({ imageList = null, className }) {
+export function CarouselComponent({ imageList = null, currentIndex = 0, className }) {
     const plugin = React.useRef(
         Autoplay({ delay: 3000, stopOnInteraction: true })
     )
