@@ -30,14 +30,12 @@ function ProductCard({ product = defaultProduct, ...props }) {
     <Card className="overflow-clip">
       <CardContent className="p-0 overflow-clip relative">
         <CarouselComponent imageList={product.images} className="overflow-clip w-full aspect-square m-0" />
-
-        {/* hidden buy now button only visibleon hover */}
         <div className="absolute bottom-0 w-full h-full bg-black flex items-end bg-opacity-50 opacity-0 hover:opacity-100 transition-all ease-in">
           <button className="flex justify-center item-center gap-2 bg-primary text-white text-sm py-2 px-4 w-full">
             <span className="flex items-center">
               <IoBagCheckSharp width={20} height={20} />
             </span>
-            Buy Now
+            View Product
           </button>
         </div>
 
