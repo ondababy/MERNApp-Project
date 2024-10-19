@@ -11,8 +11,7 @@ export class Service {
 
   hasSlugField() {
     const hasSlug = this.slugField && this.model.schema.paths[this.slugField];
-    const hasFieldToSlugify =
-      this.fieldToSlugify && this.model.schema.paths[this.fieldToSlugify];
+    const hasFieldToSlugify = this.fieldToSlugify && this.model.schema.paths[this.fieldToSlugify];
     return hasSlug && hasFieldToSlugify;
   }
 
@@ -58,8 +57,11 @@ export class Service {
   }
 
   paginate(params = {}) {
-    const { limit = 10, page = 1, sort = '-createdAt', filter = {} } = params;
     this._checkModel();
+    let { limit = 10, page = 1, sort = '-createdAt', filter = {} } = params;
+
+    if (limit < 1) limit = 10;
+    if (page < 1) page = 1;
 
     const skip = (page - 1) * limit;
     if (!this.query) this.query = this.model.find();

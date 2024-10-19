@@ -11,7 +11,11 @@ export class Controller {
   };
 
   search = async (req, res) => {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
     const documentCount = await this.service?.model.countDocuments();
+    const last_page = Math.ceil(documentCount / limit);
+    if (page > last_page) req.query.page = last_page;
 
     const data = await this.service
       ?.search(req.query.q)
@@ -28,8 +32,8 @@ export class Controller {
       meta: {
         total: documentCount,
         count: data.length,
-        limit: req.query.limit || 10,
-        page: req.query.page || 1,
+        limit: limit,
+        page: parseInt(req.query.page) || 1,
         last_page: Math.ceil(documentCount / (parseInt(req.query.limit) || 10)),
       },
     });
@@ -37,7 +41,12 @@ export class Controller {
 
   // controller functions
   getAll = async (req, res) => {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
     const documentCount = await this.service?.model.countDocuments();
+    const last_page = Math.ceil(documentCount / limit);
+    if (page > last_page) req.query.page = last_page;
+
     const data = await this.service
       .paginate(req.query)
       .filter(req.query.filters || {})
@@ -52,8 +61,8 @@ export class Controller {
       meta: {
         total: documentCount,
         count: data.length,
-        limit: parseInt(req.query.limit) || 10,
-        page: parsInt(req.query.page) || 1,
+        limit: limit,
+        page: parseInt(req.query.page) || 1,
         last_page: Math.ceil(documentCount / (parseInt(req.query.limit) || 10)),
       },
     });
