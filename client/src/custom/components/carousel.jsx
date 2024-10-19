@@ -19,7 +19,6 @@ const defaults = [
 ]
 
 export function CarouselComponent({ imageList = null, className }) {
-    const [images, setImages] = React.useState(imageList || defaults)
     const plugin = React.useRef(
         Autoplay({ delay: 3000, stopOnInteraction: true })
     )
@@ -32,7 +31,7 @@ export function CarouselComponent({ imageList = null, className }) {
             onMouseLeave={plugin.current.reset}
         >
             <CarouselContent className="h-full">
-                {images.map((image, index) => (
+                {(imageList || defaults).map((image, index) => (
                     <CarouselItem key={index} className="h-full flex justify-center">
                         <img className="max-h-full object-contain" src={image.src} alt={image.alt} />
                     </CarouselItem>
