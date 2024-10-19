@@ -2,16 +2,16 @@ import { Counter } from '@custom';
 import React from 'react';
 
 const itemDefault = {
-  id: 1,
+  id: -1,
   name: "Lorem ipsum dolor sit amet consectetur adipisicing elit. ",
   currency: "PHP",
-  price: 1990.00,
-  quantity: 10,
-  total: 19900.00,
-  image: "https://via.placeholder.com/600",
+  price: 0,
+  quantity: 0,
+  total: 0,
+  image: "https://via.placeholder.com/600/",
 }
 
-export function CartCard({ item = null, ...props }) {
+export function CartCard({ item = itemDefault, ...props }) {
 
   const handleQuantity = (value) => { };
   const handleRemove = () => { };
