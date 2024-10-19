@@ -1,6 +1,6 @@
 import { authRoutes } from '@features';
 import { DefaultLayout } from '@layouts';
-import { About, Home } from '@screens';
+import { About, Home, ShopScreen } from '@screens';
 
 const defaultRoutes = [
   {
@@ -12,8 +12,8 @@ const defaultRoutes = [
         element: <Home />,
       },
       {
-        path: '/home',
-        element: <Home />,
+        path: '/shop',
+        element: <ShopScreen />,
       },
       {
         path: '/about',

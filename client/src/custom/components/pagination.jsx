@@ -105,7 +105,7 @@ export function PaginationComponent({
                 {last > 1 && <PaginationItem>
                     <PaginationLink
                         className={`text-base-content hover:bg-secondary ${page === last ? 'bg-primary' : ''}`}
-                        onClick={handleClick(last)} active={page === last}>{last}
+                        onClick={handleClick(last)} >{last}
                     </PaginationLink>
                 </PaginationItem>}
 
