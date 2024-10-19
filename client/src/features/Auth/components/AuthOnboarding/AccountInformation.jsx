@@ -26,7 +26,7 @@ function AccountInformation(props) {
                   <div className="right w-1/3 shadow-2xl p-4 py-8">
                     <div className="image-preview flex flex-col items-center gap-4">
                       <img
-                        src="https://via.placeholder.com/150"
+                        src="https://placehold.co/150"
                         alt="profile"
                         className="rounded-full w-2/3 aspect-square"
                       />

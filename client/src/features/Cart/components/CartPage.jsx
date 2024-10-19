@@ -11,7 +11,7 @@ const cartItems = Array(3).fill(
   //   price: 1990.00,
   //   quantity: 10,
   //   total: 19900.00,
-  //   image: "https://via.placeholder.com/600",
+  //   image: "https://placehold.co/600",
   // }
 )
 
