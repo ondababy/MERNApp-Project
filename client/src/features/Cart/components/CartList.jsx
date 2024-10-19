@@ -16,10 +16,10 @@ export default function CartList({ cartItems = [] }) {
       </h1>}
       <div className="flex flex-col gap-4">
         {
-          cartItems?.length &&
-          cartItems.map((item, index) => (
-            <CartCard key={index} item={item} />
-          ))
+          cartItems?.length ?
+            cartItems.map((item, index) => (
+              <CartCard key={index} item={item} />
+            )) : ''
         }
       </div>
     </div >

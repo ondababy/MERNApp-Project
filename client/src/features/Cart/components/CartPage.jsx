@@ -3,17 +3,7 @@ import React from 'react'
 import { FaArrowRight } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 import CartList from './CartList'
-const cartItems = Array(3).fill(
-  // {
-  //   id: 1,
-  //   name: "Lorem ipsum dolor sit amet consectetur adipisicing elit. ",
-  //   currency: "PHP",
-  //   price: 1990.00,
-  //   quantity: 10,
-  //   total: 19900.00,
-  //   image: "https://placehold.co/600",
-  // }
-)
+const cartItems = []
 
 export function CartPage() {
   const [subTotal, setSubTotal] = React.useState(0);
@@ -43,7 +33,9 @@ export function CartPage() {
           </span>
         </div>
 
-        <button className="btn btn-outline btn-primary w-full">Proceed to Checkout</button>
+        <button className={`${!cartItems?.length ? 'btn-disabled' : ''} btn btn-outline btn-primary w-full`}>
+          Proceed to Checkout
+        </button>
         <Link to="/" className="group flex gap-2 items-center my-4 hover:text-primary  transition-all ease-in">
           Continue Shopping
           <span className="group-hover:ml-8 transition-all ease-in">

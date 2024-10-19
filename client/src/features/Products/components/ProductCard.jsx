@@ -12,6 +12,7 @@ import { FiShoppingCart } from "react-icons/fi";
 import { IoBagCheckSharp } from "react-icons/io5";
 
 const defaultProduct = {
+  id: -1,
   name: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
   description: "Doloremque quae optio sint quam quos fugit et maiores tenetur? Voluptatibus ipsum veritatis a eum, impedit non minima provident explicabo sint similique!",
   price: 100.0,
@@ -26,8 +27,8 @@ const defaultProduct = {
 
 function ProductCard({ product = defaultProduct, ...props }) {
 
-  return (
-    <Card className="overflow-clip">
+  return product.id != -1 ? (
+    <Card className="overflow-clip" {...props}>
       <CardContent className="p-0 overflow-clip relative">
         <CarouselComponent imageList={product.images} className="overflow-clip w-full aspect-square m-0" />
         <div className="absolute bottom-0 w-full h-full bg-black flex items-end bg-opacity-50 opacity-0 hover:opacity-100 transition-all ease-in">
@@ -70,7 +71,7 @@ function ProductCard({ product = defaultProduct, ...props }) {
       </CardFooter>
     </Card>
 
-  );
+  ) : '';
 }
 
 ProductCard.propTypes = {};

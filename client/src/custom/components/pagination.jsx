@@ -13,38 +13,36 @@ import React from 'react'
 export function PaginationComponent({
     last = 10,
     current = 1,
-    onClick = () => { },
-    onPrevious = () => { },
-    onNext = () => { },
+    onChange = (page) => { },
     ...props
 }) {
     const [page, setPage] = React.useState(current)
 
     const handleClick = (page) => () => {
-        onClick(page)
         setPage(page)
+        onChange(page)
     }
     const handlePrevious = () => {
         if (page <= 1) return
         setPage(page - 1)
-        onPrevious()
+        onChange(page)
     }
     const handleNext = () => {
         if (page >= last) return
         setPage(page + 1)
-        onNext()
+        onChange(page)
     }
 
     const handleSkipNext = () => {
         if (page >= last) return
         setPage(page + 3)
-        onNext()
+        onChange(page)
     }
 
     const handleSkipPrevious = () => {
         if (page <= 1) return
         setPage(page - 3)
-        onPrevious()
+        onChange(page)
     }
 
 
