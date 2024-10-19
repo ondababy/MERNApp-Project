@@ -12,7 +12,7 @@ const headers = {
 const productApi = apiSlice.injectEndpoints({
   endpoints: (build) => ({
     getProducts: build.mutation({
-      query: () => ({
+      query: (query) => ({
         url: apiUrl,
         method: 'GET',
         headers,

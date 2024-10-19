@@ -11,10 +11,11 @@ export class Controller {
   };
 
   search = async (req, res) => {
-    const { limit = 10, page = 1, sort = '-createdAt' } = req.query;
+    const documentCount = await this.service?.model.countDocuments();
+
     const data = await this.service
       ?.search(req.query.q)
-      .paginate({ limit, page, sort })
+      .paginate(req.query)
       .filter(req.query.filters || {})
       .exec();
     const message = data.length ? 'Data collection fetched!' : 'No data found!';
@@ -25,15 +26,17 @@ export class Controller {
       message,
       resource,
       meta: {
-        total: data.length,
-        limit,
-        page,
+        total: documentCount,
+        count: data.length,
+        limit: req.query.limit || 10,
+        page: req.query.page || 1,
       },
     });
   };
 
   // controller functions
   getAll = async (req, res) => {
+    const documentCount = await this.service?.model.countDocuments();
     const data = await this.service
       .paginate(req.query)
       .filter(req.query.filters || {})
@@ -46,7 +49,8 @@ export class Controller {
       message,
       resource,
       meta: {
-        total: data.length,
+        total: documentCount,
+        count: data.length,
         limit: req.query.limit || 10,
         page: req.query.page || 1,
       },
