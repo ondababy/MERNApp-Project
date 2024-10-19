@@ -47,10 +47,7 @@ export class Controller {
     const last_page = Math.ceil(documentCount / limit);
     if (page > last_page) req.query.page = last_page;
 
-    const data = await this.service
-      .paginate(req.query)
-      .filter(req.query.filters || {})
-      .exec();
+    const data = await this.service.paginate(req.query).exec();
     const message = data.length ? 'Data collection fetched!' : 'No data found!';
 
     const resource = this.resource?.collection(data) || data;

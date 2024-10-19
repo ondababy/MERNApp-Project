@@ -65,7 +65,7 @@ export class Service {
 
     const skip = (page - 1) * limit;
     if (!this.query) this.query = this.model.find();
-    this.query = this.query.find(filter).sort(sort).skip(skip).limit(limit);
+    this.query = this.query.skip(skip).limit(limit);
     return this;
   }
 

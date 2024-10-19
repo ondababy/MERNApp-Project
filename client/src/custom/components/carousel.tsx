@@ -12,13 +12,14 @@ import * as React from 'react';
 
 const defaults = [
   {
-    src: 'https://placehold.co/400',
+    src: 'https://placehold.co/400?text=no image',
     alt: 'n/a',
   },
 ];
 
 export function CarouselComponent({ imageList = defaults, currentIndex = 0, className, ...props }) {
   const plugin = React.useRef(Autoplay({ delay: 3000, stopOnInteraction: true }));
+  imageList = imageList.length ? imageList : defaults;
 
   return (
     <>
