@@ -54,11 +54,11 @@ const SideContent = (props) => {
           </div>
           <div className="mt-auto">
             <div className="divider"></div>
-            <div className="p-4 ">
+            <div className="p-4">
               <AuthLogout
                 color="error"
                 variant="outline"
-                className="w-full "
+                className="w-full justify-center items-center"
               />
             </div>
           </div>
