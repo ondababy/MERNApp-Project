@@ -36,7 +36,7 @@ function ProductCard({ product = defaultProduct, ...props }) {
   }
 
   return product.id != -1 ? (
-    <Card className="overflow-clip" {...props}>
+    <Card className="overflow-clip" onDoubleClick={handleViewProduct(product.slug)} {...props}>
       <CardContent className="p-0 overflow-clip relative">
         <CarouselComponent imageList={product.images} className="overflow-clip w-full aspect-square m-0" />
         <div className="absolute bottom-0 w-full h-full bg-black flex items-end bg-opacity-50 opacity-0 hover:opacity-100 transition-all ease-in">

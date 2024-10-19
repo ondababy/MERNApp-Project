@@ -21,7 +21,7 @@ const defaultRoutes = [
         element: <Screen.Cart />,
       },
       {
-        path: '/shop/:product',
+        path: '/shop/:slug',
         element: <Screen.ProductDisplay />,
       },
       {
