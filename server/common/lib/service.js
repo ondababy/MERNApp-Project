@@ -11,7 +11,8 @@ export class Service {
 
   hasSlugField() {
     const hasSlug = this.slugField && this.model.schema.paths[this.slugField];
-    const hasFieldToSlugify = this.fieldToSlugify && this.model.schema.paths[this.fieldToSlugify];
+    const hasFieldToSlugify =
+      this.fieldToSlugify && this.model.schema.paths[this.fieldToSlugify];
     return hasSlug && hasFieldToSlugify;
   }
 
@@ -94,18 +95,6 @@ export class Service {
     this._checkModel();
     return this.model.findOne(filter);
   }
-
-  async insertMany(bodies, ignoreErrors = true) {
-    this._checkModel();
-    const data = bodies.map((body) => {
-      const filteredData = this.model.filterFillables(body);
-      const slug = this.makeSlug(filteredData[this.fieldToSlugify]);
-      if (slug) filteredData[this.slugField] = slug;
-      return filteredData;
-    });
-    return this.model.insertMany(data, { ordered: !ignoreErrors });
-  }
-
   async create(body) {
     this._checkModel();
     const data = Array.isArray(body)
@@ -129,5 +118,21 @@ export class Service {
   async delete(id) {
     this._checkModel();
     return this.model.findByIdAndDelete(id);
+  }
+
+  async insertMany(bodies, ignoreErrors = true) {
+    this._checkModel();
+    const data = bodies.map((body) => {
+      const filteredData = this.model.filterFillables(body);
+      const slug = this.makeSlug(filteredData[this.fieldToSlugify]);
+      if (slug) filteredData[this.slugField] = slug;
+      return filteredData;
+    });
+    return this.model.insertMany(data, { ordered: !ignoreErrors });
+  }
+
+  async deleteMany(body) {
+    this._checkModel();
+    return this.model.deleteMany(body);
   }
 }

@@ -11,7 +11,7 @@ class ProductSeeder extends Seeder {
         faker.string.alpha({ length: 6, casing: 'upper', exclude: ['A'] }),
       description: faker.commerce.productDescription,
       price: () => faker.commerce.price({ min: 1000 }),
-      stock: () => faker.number.int({ min: 64 }),
+      stock: () => faker.number.int({ min: 64, max: 100 }),
     };
   }
 }

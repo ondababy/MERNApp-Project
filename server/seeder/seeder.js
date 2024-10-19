@@ -13,15 +13,15 @@ export class Seeder {
   async run() {
     try {
       await this.service.deleteMany({});
-      console.log(`Cleared existing data from ${this.service.modelName}`);
+      console.log(`Cleared existing data from ${this.service.model.modelName}`);
 
       const schema = this.schema();
       const fakeData = Array.from({ length: this.count }, () => this.generate(schema));
 
       await this.service.insertMany(fakeData, { ordered: false });
-      console.log(`Inserted ${this.count} fake records into ${this.service.modelName}`);
+      console.log(`Inserted ${this.count} fake records into ${this.service.model.modelName}`);
     } catch (error) {
-      console.error(`Error seeding data for ${this.service.modelName}:`, error);
+      console.error(`Error seeding data for ${this.service.model.modelName}:`, error);
     }
   }
 
