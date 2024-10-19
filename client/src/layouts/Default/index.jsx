@@ -1,6 +1,5 @@
 import { FooterWrapper, Header } from '@partials';
 import { Outlet } from 'react-router-dom';
-
 function DefaultLayout() {
   return (
     <div id="default-layout">
