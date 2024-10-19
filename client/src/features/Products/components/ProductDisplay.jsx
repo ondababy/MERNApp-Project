@@ -18,15 +18,15 @@ const productExample = {
             alt: "n/a",
         },
         {
-            src: "https://placehold.co/900x900",
+            src: "https://placehold.co/600x900",
             alt: "n/a",
         },
         {
-            src: "https://placehold.co/900x900",
+            src: "https://placehold.co/900x600",
             alt: "n/a",
         },
         {
-            src: "https://placehold.co/900x900",
+            src: "https://placehold.co/600x400",
             alt: "n/a",
         },
     ]
@@ -40,13 +40,19 @@ export default function ProductDisplay({ data = productExample, children }) {
     return (
         <div className='w-screen min-h-screen h-screen flex lg:flex-row items-start'>
             <div className='w-full'>
-                <div className="overflow-hidden max-h-[30rem] bg-base-200/30 border-y border-base-content/10 p-1">
+                <div className="overflow-hidden max-h-[42rem] bg-base-200/30 border-y border-base-content/10 p-1">
 
                     <Breadcrumbs />
                     <CarouselComponent
                         imageList={product.images}
                         className="h-[30rem] max-h-[42rem]" />
+                    {/* mini images */}
 
+                    <div className="flex gap-2 mt-2 justify-center">
+                        {product.images.map((img, i) => (
+                            <img key={i} src={img.src} alt={img.alt} className="w-16 h-16 object-contain" />
+                        ))}
+                    </div>
                 </div>
 
                 {children}

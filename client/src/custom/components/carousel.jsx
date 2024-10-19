@@ -38,7 +38,7 @@ export function CarouselComponent({ imageList = null, className }) {
                 ))}
             </CarouselContent>
             {
-                images.length > 1 && <>
+                imageList.length > 1 && <>
                     <CarouselPrevious
                         className="h-full bg-transparent rounded hover:bg-base-content/20 text-base-content border-none"
                     />
@@ -49,4 +49,19 @@ export function CarouselComponent({ imageList = null, className }) {
             }
         </Carousel>
     )
+}
+
+
+export function CarouselGroup({ imageList = null, className }) {
+    <Carousel className="w-full max-w-sm">
+        <CarouselContent className="-ml-1">
+            {(imageList || defaults).map((image, index) => (
+                <CarouselItem key={index} className="pl-1 md:basis-1/2 lg:basis-1/3">
+                    <img className="max-h-full object-contain" src={image.src} alt={image.alt} />
+                </CarouselItem>
+            ))}
+        </CarouselContent>
+        <CarouselPrevious />
+        <CarouselNext />
+    </Carousel>
 }
