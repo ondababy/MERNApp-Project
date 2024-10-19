@@ -7,3 +7,4 @@ export * from './Products/index.js';
 export * from './Suppliers/index.js';
 export * from './Users/index.js';
 
+export * from './Transactions/index.js';

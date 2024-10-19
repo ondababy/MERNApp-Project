@@ -1,10 +1,10 @@
 import { METHODS, PATHS, READ_WRITE } from '#constants';
 import { protectAndPermit } from '#middlewares/auth.middleware';
 import { upload } from '#middlewares/upload.middleware';
-import controller from './_example.controller.js';
+import controller from './transaction.controller.js';
 export default [
   {
-    url: '/_examples',
+    url: '/transactions',
     router: [
       {
         path: PATHS.ALL,
@@ -14,12 +14,20 @@ export default [
       {
         path: PATHS.EDIT,
         method: METHODS.PATCH,
-        controller: [...protectAndPermit(READ_WRITE), upload.array('image'), controller.update],
+        controller: [
+          ...protectAndPermit(READ_WRITE),
+          upload.array('image'),
+          controller.update,
+        ],
       },
       {
         path: PATHS.STORE,
         method: METHODS.POST,
-        controller: [...protectAndPermit(READ_WRITE), upload.array('image'), controller.store],
+        controller: [
+          ...protectAndPermit(READ_WRITE),
+          upload.array('image'),
+          controller.store,
+        ],
       },
       {
         path: PATHS.DELETE,
