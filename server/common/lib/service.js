@@ -95,6 +95,17 @@ export class Service {
     return this.model.findOne(filter);
   }
 
+  async insertMany(bodies, ignoreErrors = true) {
+    this._checkModel();
+    const data = bodies.map((body) => {
+      const filteredData = this.model.filterFillables(body);
+      const slug = this.makeSlug(filteredData[this.fieldToSlugify]);
+      if (slug) filteredData[this.slugField] = slug;
+      return filteredData;
+    });
+    return this.model.insertMany(data, { ordered: !ignoreErrors });
+  }
+
   async create(body) {
     this._checkModel();
     const data = Array.isArray(body)
