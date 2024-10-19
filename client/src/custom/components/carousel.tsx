@@ -85,7 +85,7 @@ export function Gallery({ imageList = null, currentIndex = 0, className }) {
             alt={img.alt}
             onClick={() => handleThumbClick(i)}
             className={cn(
-              'w-12 h-12 object-cover border border-base-content/10 rounded-md cursor-pointer',
+              'w-12 h-12 object-contain border border-base-content/10 rounded-md cursor-pointer',
               i === current ? 'border-primary' : 'opacity-20'
             )}
           />
