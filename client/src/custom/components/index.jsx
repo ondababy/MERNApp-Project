@@ -1,3 +1,4 @@
 export { CarouselComponent } from './carousel.jsx';
-export { default as InputOTPForm } from './otp-component.jsx';
+export { InputOTPForm } from './otp-component.jsx';
+export { PaginationComponent } from './pagination.jsx';
 

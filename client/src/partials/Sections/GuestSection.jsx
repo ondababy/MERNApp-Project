@@ -1,6 +1,7 @@
 
 
 import { SelectComponent } from '@common';
+import { PaginationComponent } from '@custom';
 import Autoplay from "embla-carousel-autoplay";
 import * as React from "react";
 import { FaMinus } from "react-icons/fa";
@@ -144,7 +145,7 @@ function GuestSection({ images = defaults }) {
             }
 
           </div>
-
+          <PaginationComponent />
 
         </div>
 
