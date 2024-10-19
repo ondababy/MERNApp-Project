@@ -1,6 +1,6 @@
 import { apiSlice } from '@app/config';
 
-const resource = 'transactions';
+const resource = 'carts';
 const apiUrl = `/${resource}`;
 export const dashUrl = `/dashboard/${resource}`;
 const tags = [resource];
@@ -9,46 +9,46 @@ const headers = {
   tags,
 };
 
-const transactionApi = apiSlice.injectEndpoints({
+const cartApi = apiSlice.injectEndpoints({
   endpoints: (build) => ({
-    getTransactions: build.mutation({
+    getCarts: build.mutation({
       query: () => ({
         url: apiUrl,
         method: 'GET',
         headers,
       }),
     }),
-    getTransaction: build.mutation({
+    getCart: build.mutation({
       query: (slug) => ({
         url: `${apiUrl}/slug/${slug}`,
         method: 'GET',
         headers,
       }),
     }),
-    deleteTransaction: build.mutation({
+    deleteCart: build.mutation({
       query: (id) => ({
         url: `${apiUrl}/delete/${id}`,
         method: 'DELETE',
         headers,
       }),
     }),
-    createTransaction: build.mutation({
-      query: (transaction) => ({
+    createCart: build.mutation({
+      query: (cart) => ({
         url: apiUrl,
         method: 'POST',
-        body: transaction,
+        body: cart,
         headers,
       }),
     }),
-    updateTransaction: build.mutation({
-      query: ({ id, transaction }) => ({
+    updateCart: build.mutation({
+      query: ({ id, cart }) => ({
         url: `${apiUrl}/edit/${id}`,
         method: 'PATCH',
-        body: transaction,
+        body: cart,
         headers,
       }),
     }),
   }),
 });
 
-export { transactionApi };
+export { cartApi };

@@ -1,6 +1,6 @@
 import { unique } from '#utils';
 import { check } from 'express-validator';
-import TransactionModel from './transaction.model.js';
+import CartModel from './cart.model.js';
 
 const commonRules = () => {
   return [
@@ -12,27 +12,27 @@ const commonRules = () => {
   ];
 };
 
-const transactionCreateRules = () => {
+const cartCreateRules = () => {
   // METHOD CHAINING
   return [
     ...commonRules(),
     check('name')
-      .custom((value) => unique(TransactionModel, 'name', value))
+      .custom((value) => unique(CartModel, 'name', value))
       .withMessage('Name must be unique!'),
   ];
 };
 
-const transactionUpdateRules = () => {
+const cartUpdateRules = () => {
   return [
     ...commonRules(),
     check('name')
       .custom((value, { req }) =>
-        unique(TransactionModel, 'name', value, req?.params?.id, { slug: { $ne: req?.params?.slug } })
+        unique(CartModel, 'name', value, req?.params?.id, { slug: { $ne: req?.params?.slug } })
       )
       .withMessage('Name must be unique!'),
   ];
 };
-export { transactionCreateRules, transactionUpdateRules };
+export { cartCreateRules, cartUpdateRules };
 
 // // USING SCHEMA: BUT i don't like it
 // return checkSchema({
