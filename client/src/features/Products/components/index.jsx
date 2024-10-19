@@ -1,4 +1,5 @@
 export { default as ProductCard } from './ProductCard';
+export { default as ProductDisplay } from './ProductDisplay';
 export { default as ProductFilters } from './ProductFilters';
 export { default as ProductForm } from './ProductForm';
 export { default as ProductGrid } from './ProductGrid';
