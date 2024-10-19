@@ -1,3 +1,6 @@
+import React from "react";
+
+
 import {
   Card,
   CardContent,
@@ -7,9 +10,9 @@ import {
   CardTitle,
 } from "@common/components/ui/card";
 import { CarouselComponent } from "@custom";
-import React from "react";
 import { FiShoppingCart } from "react-icons/fi";
 import { IoBagCheckSharp } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
 
 const defaultProduct = {
   id: -1,
@@ -26,13 +29,20 @@ const defaultProduct = {
 }
 
 function ProductCard({ product = defaultProduct, ...props }) {
+  const navigate = useNavigate();
+
+  const handleViewProduct = (slug) => () => {
+    navigate(`/shop/${slug}`);
+  }
 
   return product.id != -1 ? (
     <Card className="overflow-clip" {...props}>
       <CardContent className="p-0 overflow-clip relative">
         <CarouselComponent imageList={product.images} className="overflow-clip w-full aspect-square m-0" />
         <div className="absolute bottom-0 w-full h-full bg-black flex items-end bg-opacity-50 opacity-0 hover:opacity-100 transition-all ease-in">
-          <button className="flex justify-center item-center gap-2 bg-primary text-white text-sm py-2 px-4 w-full">
+          <button
+            onClick={handleViewProduct(product.slug)}
+            className="flex justify-center item-center gap-2 bg-primary text-white text-sm py-2 px-4 w-full">
             <span className="flex items-center">
               <IoBagCheckSharp width={20} height={20} />
             </span>
