@@ -3,12 +3,10 @@ import { dashUrl as mainUrl } from './transaction.api';
 
 const TransactionForm = React.lazy(() => import('./components/TransactionForm'));
 const TransactionPage = React.lazy(() => import('./components/TransactionPage'));
-const TransactionList = React.lazy(() => import('./components/TransactionList'));
 const TransactionTable = React.lazy(() => import('./components/TransactionTable'));
 
 export const transactionRoutes = [
   { path: `${mainUrl}/table`, element: <TransactionTable /> },
-  { path: `${mainUrl}/list`, element: <TransactionList /> },
   { path: mainUrl, element: <TransactionPage /> },
   {
     path: `${mainUrl}/create`,
