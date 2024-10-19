@@ -3,12 +3,12 @@ import React from 'react';
 
 const itemDefault = {
   id: 1,
-  name: "JBL Charge 5 Portable with Built-in Power bank Waterproof Speaker",
+  name: "Lorem ipsum dolor sit amet consectetur adipisicing elit. ",
   currency: "PHP",
   price: 1990.00,
   quantity: 10,
   total: 19900.00,
-  image: "https://via.placeholder.com/150",
+  image: "https://via.placeholder.com/600",
 }
 
 export function CartCard({ item = itemDefault }) {
@@ -16,18 +16,17 @@ export function CartCard({ item = itemDefault }) {
   const handleQuantity = (value) => { };
   const handleRemove = () => { };
 
-
-
-
   return <>
-    <div className=" flex flex-col lg:min-h-96 lg:h-96 lg:flex-row items-center justify-between p-4 border border-gray-400">
-      <div className="container flex flex-col lg:flex-row items-start">
+    <div className="flex flex-col lg:min-h-64 lg:h-64 lg:flex-row items-center justify-between border border-gray-400">
+
+      <div className="container flex flex-col lg:flex-row lg:items-start items-center ">
         <img
-          className="lg:w-2/5 aspect-square object-contain"
+          className="w-1/2 lg:max-w-64 lg:w-2/5 aspect-square object-contain"
           src={item.image || "https://via.placeholder.com/150"}
           alt="product"
         />
-        <div className="lg:w-2/5 flex flex-col">
+
+        <div className="p-4 flex  lg:flex-1 flex-col">
           <div className="ml-4 my-8 text-lg">
             <h1 className="font-bold text-primary">
               {item.name}
