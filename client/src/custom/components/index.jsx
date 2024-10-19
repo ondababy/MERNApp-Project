@@ -1,4 +1,4 @@
-export * from './carousel.jsx';
-export { InputOTPForm } from './otp-component.jsx';
-export { PaginationComponent } from './pagination.jsx';
+export * from './carousel';
+export { InputOTPForm } from './otp-component';
+export { PaginationComponent } from './pagination';
 
