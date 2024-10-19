@@ -1,9 +1,10 @@
+import isEqual from 'lodash/isEqual';
+import PropTypes from 'prop-types';
+
 import { useSlug } from '@common';
 import { FormikForm } from '@common/components';
 import { confirmSave, requestError, toFormData } from '@custom';
 import { CarouselComponent } from '@custom/components';
-import isEqual from 'lodash/isEqual';
-import PropTypes from 'prop-types';
 import { useEffect, useMemo, useState } from 'react';
 import { Button } from 'react-daisyui';
 import { useNavigate } from 'react-router-dom';

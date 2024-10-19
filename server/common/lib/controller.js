@@ -88,7 +88,10 @@ export class Controller {
   };
 
   store = async (req, res, next) => {
-    const validData = await this.validator(req, res, this.rules.create);
+    let validData = req.body;
+    if (!this.rules.create.length)
+      validData = await this.validator(req, res, this.rules.create);
+
     let data = await this.service?.create(validData);
     if (!data._id) return this.error({ res, message: 'Invalid data!' });
 
@@ -103,14 +106,21 @@ export class Controller {
   };
 
   update = async (req, res, next) => {
-    const validData = await this.validator(req, res, this.rules.update);
+    let validData = req.body;
+    if (!this.rules.create.length)
+      validData = await this.validator(req, res, this.rules.update);
+
     const data = await this.service?.update(req.params.id, validData);
     if (!data._id) return this.error({ res, message: 'Invalid data!' });
 
     if (req.file || req.files || this.service.hasField('images')) {
       const images = this.addImage(req);
-      const oldImages = new Set((data.images || []).map((image) => image.public_id));
-      const newImages = images.filter((image) => !oldImages.has(image.public_id));
+      const oldImages = new Set(
+        (data.images || []).map((image) => image.public_id)
+      );
+      const newImages = images.filter(
+        (image) => !oldImages.has(image.public_id)
+      );
       data.images = [...(data.images || []), ...newImages];
       await data.save();
     }
@@ -125,7 +135,9 @@ export class Controller {
 
     try {
       if (data.images) {
-        const publicIds = data.images.map((image) => `${image.folder}/${image.public_id}`);
+        const publicIds = data.images.map(
+          (image) => `${image.folder}/${image.public_id}`
+        );
         await utils.deleteFiles(publicIds);
       }
     } catch (error) {

@@ -11,28 +11,21 @@ const headers = {
 
 const cartApi = apiSlice.injectEndpoints({
   endpoints: (build) => ({
-    getCarts: build.mutation({
+    getItems: build.mutation({
       query: () => ({
         url: apiUrl,
         method: 'GET',
         headers,
       }),
     }),
-    getCart: build.mutation({
-      query: (slug) => ({
-        url: `${apiUrl}/slug/${slug}`,
-        method: 'GET',
-        headers,
-      }),
-    }),
-    deleteCart: build.mutation({
+    deleteItem: build.mutation({
       query: (id) => ({
         url: `${apiUrl}/delete/${id}`,
         method: 'DELETE',
         headers,
       }),
     }),
-    createCart: build.mutation({
+    createItem: build.mutation({
       query: (cart) => ({
         url: apiUrl,
         method: 'POST',
@@ -40,7 +33,7 @@ const cartApi = apiSlice.injectEndpoints({
         headers,
       }),
     }),
-    updateCart: build.mutation({
+    updateItem: build.mutation({
       query: ({ id, cart }) => ({
         url: `${apiUrl}/edit/${id}`,
         method: 'PATCH',

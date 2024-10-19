@@ -1,19 +1,31 @@
 import { Schema } from '#lib';
 import { ImageSchema } from '#utils';
+import mongoose from 'mongoose';
 
 const Cart = new Schema({
   name: 'Cart',
   schema: [
     {
-      name: {
-        type: String,
-        unique: [true, 'Cart name must be unique'],
-        required: [true, 'Cart name is required'],
+      user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
       },
-      slug: {
-        type: String,
+      products: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Products',
       },
-      images: [ImageSchema],
+      quantity: {
+        type: Number,
+        default: 1,
+      },
+      price: {
+        type: Number,
+        required: true,
+      },
+      total: {
+        type: Number,
+        required: true,
+      },
     },
     { timestamps: true },
   ],

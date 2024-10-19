@@ -5,19 +5,31 @@ export class Seeder {
     this.service = service;
     this.count = count;
   }
-
+  custom() {
+    return [];
+  }
   schema() {
     return {};
   }
 
   async run() {
     try {
+      const schema = this.schema();
+      const custom = this.custom();
+
+      console.log('Generating fake data for', this.service.model.modelName);
+      let fakeData = Array.from({ length: this.count }, () => {
+        const data = this.generate(schema);
+        return data;
+      });
+
+      if (custom.length) {
+        fakeData = [...fakeData, ...custom];
+      }
+      console.log('Data: ', fakeData);
+
       await this.service.deleteMany({});
       console.log(`Cleared existing data from ${this.service.model.modelName}`);
-
-      const schema = this.schema();
-      const fakeData = Array.from({ length: this.count }, () => this.generate(schema));
-
       await this.service.insertMany(fakeData, { ordered: false });
       console.log(`Inserted ${this.count} fake records into ${this.service.model.modelName}`);
     } catch (error) {

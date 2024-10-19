@@ -3,12 +3,12 @@ import CartModel from './cart.model.js';
 
 class CartService extends Service {
   model = CartModel;
-  fieldToSlugify = 'name';
+  fieldToSlugify = null;
+  forceFilter = {};
 
-  async getBySlug(slug) {
-    this._checkModel();
-    return this.model.findOne({ slug });
-  }
+  setUserId = (userId) => {
+    this.forceFilter = { user: userId };
+  };
 }
 
 export default new CartService();
