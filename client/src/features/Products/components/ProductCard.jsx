@@ -1,3 +1,6 @@
+import Autoplay from "embla-carousel-autoplay";
+import * as React from "react";
+
 import {
   Card,
   CardContent,
@@ -13,12 +16,22 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@common/components/ui/carousel";
+const defaults = [
+  {
+    src: "https://placehold.co/400",
+    alt: "n/a",
+  },
+]
 
+function ProductCard({ images = defaults, ...props }) {
+  images = images.length ? images : defaults
+  const plugin = React.useRef(
+    Autoplay({ delay: 3000, stopOnInteraction: true })
+  )
 
-function ProductCard(props) {
   return (
 
-    <Card >
+    <Card {...props}>
       <CardContent className="p-4">
 
         <Carousel
