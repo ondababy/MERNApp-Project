@@ -11,12 +11,12 @@ const itemDefault = {
   image: "https://via.placeholder.com/600",
 }
 
-export function CartCard({ item = itemDefault, ...props}) {
+export function CartCard({ item = null, ...props }) {
 
   const handleQuantity = (value) => { };
   const handleRemove = () => { };
 
-  return (
+  return item && (
     <div {...props} className="flex flex-col lg:min-h-64 lg:h-64 lg:flex-row items-center justify-between border border-gray-400">
       <div className="container flex flex-col lg:flex-row lg:items-start items-center ">
         <img

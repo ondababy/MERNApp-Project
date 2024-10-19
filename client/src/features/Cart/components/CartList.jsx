@@ -11,14 +11,18 @@ export default function CartList({ cartItems = [] }) {
       </h1>
       <div className="divider"></div>
 
+      {!(cartItems?.length && cartItems[0]?.id) && <h1 className="text-center w-full font-bold uppercase">
+        No items in cart.
+      </h1>}
       <div className="flex flex-col gap-4">
         {
-          cartItems?.length && cartItems.map((item, index) => (
+          cartItems?.length &&
+          cartItems.map((item, index) => (
             <CartCard key={index} item={item} />
           ))
         }
       </div>
-    </div>
+    </div >
 
   )
 }
