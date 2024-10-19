@@ -74,8 +74,7 @@ export default function ProductDisplay({ data = productExample, children }) {
                     </div>
                 </div>
                 <p className='text-xs italic font-light'>
-                    Pickup available at out nearest branch.
-                    Usually ready in 24 hours
+                    {product?.footerMessage || ''}
                 </p>
 
             </div>
