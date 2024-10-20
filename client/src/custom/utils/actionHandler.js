@@ -1,6 +1,6 @@
 import Swal from 'sweetalert2';
 
-export const confirmAction = ({ message, icon = 'warning', onConfirm = () => {}, onCancel = () => {} }) =>
+export const confirmAction = (message, icon = 'warning', onConfirm = () => {}, onCancel = () => {}) =>
   Swal.fire({
     title: 'Are you sure?',
     text: message || ' This action cannot be undone.',
@@ -49,11 +49,7 @@ export const warning = (message) => {
 };
 
 export const confirmDelete = (...rest) => {
-  confirmAction({
-    message: 'You are about to delete this item.',
-    icon: 'warning',
-    ...rest,
-  });
+  confirmAction('You are about to delete this record.', 'error', ...rest);
 };
 
 export const infoDelete = () => {
@@ -61,11 +57,7 @@ export const infoDelete = () => {
 };
 
 export const confirmSave = (...rest) => {
-  confirmAction({
-    message: 'You are about to save changes.',
-    icon: 'info',
-    ...rest,
-  });
+  confirmAction('You are about to save changes.', 'info', ...rest);
 };
 
 export const successSave = () => {
@@ -73,18 +65,10 @@ export const successSave = () => {
 };
 
 export const confirmLogout = (...rest) => {
-  confirmAction({
-    message: 'You are about to logout.',
-    icon: 'info',
-    ...rest,
-  });
+  confirmAction('Leaving so soon?', 'info', ...rest);
 };
 
 export const confirmReset = (...rest) => {
-  confirmAction({
-    message: 'You are about to reset changes.',
-    icon: 'info',
-    ...rest,
-  });
+  confirmAction('Resetting will clear all data.', 'info', ...rest);
 };
 
