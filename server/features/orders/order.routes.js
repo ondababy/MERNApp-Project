@@ -22,11 +22,11 @@ export default [
         controller: [...protectAndPermit(READ_WRITE), controller.store],
       },
       /* Dont */
-      // {
-      //   path: PATHS.DELETE,
-      //   method: METHODS.DELETE,
-      //   controller: [...protectAndPermit(READ_WRITE), controller.delete],
-      // },
+      {
+        path: PATHS.DELETE,
+        method: METHODS.DELETE,
+        controller: [...protectAndPermit(READ_WRITE), controller.delete],
+      },
       {
         path: PATHS.ID,
         method: METHODS.GET,

@@ -9,7 +9,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Button } from 'react-daisyui';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { orderApi } from '../order.api';
+import { orderAspi } from '../order.api';
 import { getAltFields, getFields } from '../order.fields';
 import { orderValidation } from '../order.validation';
 import OrderWrapper from './OrderWrapper';
