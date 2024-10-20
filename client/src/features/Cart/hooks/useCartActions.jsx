@@ -28,7 +28,10 @@ export function useCartActions() {
   }, [dispatch, createCartItem]);
 
   const updateCartItemInCart = React.useCallback((item) => {
-    return updateCartItem(item.id, item).unwrap().then((data) => {
+    return updateCartItem({
+      id: item.id,
+      item,
+    }).unwrap().then((data) => {
       dispatch(updateItem(data?.resource || {}));
     });
   }, [dispatch, updateCartItem]);
