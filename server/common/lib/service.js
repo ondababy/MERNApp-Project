@@ -39,28 +39,13 @@ export class Service {
     return slugify(...this.slugParams(field));
   }
 
-  _getMeta = async (query) => {
-    this._checkModel();
-    const page = parseInt(query.page) || 1;
-    const limit = parseInt(query.limit) || 10;
-    const documentCount = await this.model.countDocuments();
-    const last_page = Math.ceil(documentCount / limit);
-    if (page > last_page) {
-      page = last_page;
-    }
-    return {
-      total: documentCount,
-      limit,
-      page,
-      last_page,
-    };
-  };
   exec() {
     const query = this.query.exec();
     this.query = null;
     this.forceFilterApplied = false;
     return query;
   }
+
   applyForceFilter() {
     this._checkModel();
     console.log('Applying force filter: ', this.forceFilter);
@@ -104,6 +89,22 @@ export class Service {
     return this;
   }
 
+  async _getMeta(query) {
+    this._checkModel();
+    const page = parseInt(query.page) || 1;
+    const limit = parseInt(query.limit) || 10;
+    const documentCount = await this.model.find(this.forceFilter).countDocuments();
+    const last_page = Math.ceil(documentCount / limit);
+    if (page > last_page) {
+      page = last_page;
+    }
+    return {
+      total: documentCount,
+      limit,
+      page,
+      last_page,
+    };
+  }
   async checkIfExists(filter) {
     this._checkModel();
     const record = await this.model.exists(filter);

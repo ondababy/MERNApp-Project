@@ -7,10 +7,10 @@ class CartController extends Controller {
   resource = CartResource;
 
   getAll = async (req, res) => {
-    const meta = await this.service._getMeta(req.query);
-
     const { user } = req;
     this.service.setUserId(user._id);
+
+    const meta = await this.service._getMeta(req.query);
     const data = await this.service.paginate(meta).exec();
     const message = data.length ? 'Data collection fetched!' : 'No data found!';
 
