@@ -1,12 +1,12 @@
 import React from 'react';
-import { toast } from 'react-toastify';
-import { productApi } from '../product.api';
 
 import { BackButton } from '@common';
 import { Counter, Gallery } from '@custom';
 import { useCartActions } from '@features';
 import { Breadcrumbs } from '@partials';
 import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { productApi } from '../product.api';
 
 const productExample = {
   name: 'Lorem ipsum dolor sit amet.',

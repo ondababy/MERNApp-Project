@@ -1,6 +1,3 @@
-import React from "react";
-
-
 import {
   Card,
   CardContent,
@@ -10,9 +7,12 @@ import {
   CardTitle,
 } from "@common/components/ui/card";
 import { CarouselComponent } from "@custom";
+import { useCartActions } from '@features';
+import React from "react";
 import { FiShoppingCart } from "react-icons/fi";
 import { IoBagCheckSharp } from "react-icons/io5";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const defaultProduct = {
   id: -1,
@@ -30,6 +30,34 @@ const defaultProduct = {
 
 function ProductCard({ product = defaultProduct, ...props }) {
   const navigate = useNavigate();
+  const { addItem } = useCartActions();
+  const ToastContent = () => (
+    <div>
+      <p>
+        <span className='font-bold text-primary'>
+          {product.name}
+        </span>
+        <span className='italic'>
+          has been added to cart!
+        </span>
+      </p>
+      <button
+        onClick={() => navigate('/cart')}
+        className="btn btn-sm btn-outline btn-primary mt-4">
+        View Cart
+      </button>
+    </div>
+  );
+  const handleAddToCart = () => {
+    addItem({
+      quantity: 0,
+      incrementBy: 1,
+      total: product.price,
+      product: product.id,
+    }).then(() => {
+      toast.success(<ToastContent />);
+    })
+  }
 
   const handleViewProduct = (slug) => () => {
     navigate(`/shop/${slug}`);
@@ -75,9 +103,11 @@ function ProductCard({ product = defaultProduct, ...props }) {
             each
           </p>
         </div>
-        <div className="btn btn-outline btn-primary">
+        <button
+          onClick={handleAddToCart}
+          className="btn btn-outline btn-primary">
           <FiShoppingCart />
-        </div>
+        </button>
       </CardFooter>
     </Card>
 
