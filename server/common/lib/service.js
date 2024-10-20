@@ -13,7 +13,8 @@ export class Service {
 
   hasSlugField() {
     const hasSlug = this.slugField && this.model.schema.paths[this.slugField];
-    const hasFieldToSlugify = this.fieldToSlugify && this.model.schema.paths[this.fieldToSlugify];
+    const hasFieldToSlugify =
+      this.fieldToSlugify && this.model.schema.paths[this.fieldToSlugify];
     return hasSlug && hasFieldToSlugify;
   }
 
@@ -91,9 +92,11 @@ export class Service {
 
   async _getMeta(query) {
     this._checkModel();
-    const page = parseInt(query.page) || 1;
+    let page = parseInt(query.page) || 1;
     const limit = parseInt(query.limit) || 10;
-    const documentCount = await this.model.find(this.forceFilter).countDocuments();
+    const documentCount = await this.model
+      .find(this.forceFilter)
+      .countDocuments();
     const last_page = Math.ceil(documentCount / limit);
     if (page > last_page) {
       page = last_page;

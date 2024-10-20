@@ -13,7 +13,7 @@ export default [
       {
         path: PATHS.EDIT,
         method: METHODS.PATCH,
-        controller: [...protectAndPermit(READ_WRITE), controller.update],
+        controller: [...protectAndPermit(READ_WRITE), controller.store],
       },
       {
         path: PATHS.STORE,

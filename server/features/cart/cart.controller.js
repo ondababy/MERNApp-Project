@@ -19,19 +19,14 @@ class CartController extends Controller {
   };
 
   store = async (req, res) => {
-    let data = await this.service?.create(req.body);
+    const validData = await this.service.validate(req.body);
+    if (validData.error) return this.error({ res, message: 'Invalid data! ' + validData.error });
+
+    let data = await this.service.updateOrCreate(validData, req.user);
     if (!data._id) return this.error({ res, message: 'Invalid data!' });
 
     const resource = this.resource?.make(data) || data;
-    this.success({ res, message: 'Data created!', resource });
-  };
-
-  update = async (req, res) => {
-    const data = await this.service?.update(req.params.id, validData);
-    if (!data._id) return this.error({ res, message: 'Invalid data!' });
-
-    const resource = this.resource?.make(data) || data;
-    this.success({ res, message: 'Data updated!', resource });
+    this.success({ res, message: 'Request successful!', resource: data });
   };
 
   delete = async (req, res) => {
