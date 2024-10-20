@@ -28,6 +28,7 @@ function LoginForm() {
   const handleLogin = async (values) => {
     try {
       const res = await login(values).unwrap();
+      console.log(res)
       dispatch(
         setCredentials({
           userInfo: res.user,

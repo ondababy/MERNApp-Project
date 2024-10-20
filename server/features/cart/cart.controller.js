@@ -14,24 +14,26 @@ class CartController extends Controller {
     const data = await this.service.paginate(meta).exec();
     const message = data.length ? 'Data collection fetched!' : 'No data found!';
 
-    const resource = this.resource?.collection(data) || data;
+    const resource = (await this.resource?.collection(data)) || data;
     this.success({ res, message, resource, meta: { ...meta, count: data.length } });
   };
 
   store = async (req, res) => {
     const validData = await this.service.validate(req.body);
-    if (validData.error) return this.error({ res, message: 'Invalid data! ' + validData.error });
+    if (validData.error) return this.error({ res, message: validData.error });
 
     let data = await this.service.updateOrCreate(validData, req.user);
-    if (!data._id) return this.error({ res, message: 'Invalid data!' });
+    console.log(data);
+    if (!data?._id) return this.error({ res, message: 'Invalid data!' });
 
-    const resource = this.resource?.make(data) || data;
-    this.success({ res, message: 'Request successful!', resource: data });
+    const resource = await this.resource?.make(data);
+    this.success({ res, message: 'Request successful!', resource });
   };
 
   delete = async (req, res) => {
+    console.log('req.params.id', req.params.id);
     const data = await this.service?.delete(req.params.id);
-    if (!data?._id) return this.error({ res, message: 'Data not found!' });
+    if (!data?._id) return this.error({ res, message: `Data with ID: ${req.params.id} not found.` });
 
     this.success({ res, message: 'Data deleted!' });
   };

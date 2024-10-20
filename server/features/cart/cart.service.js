@@ -10,11 +10,12 @@ class CartService extends Service {
 
   async validate(data) {
     let { product = null, quantity = 0, incrementBy = 0 } = data;
+    console.log(data);
     incrementBy = parseInt(incrementBy) || 0;
     quantity = (parseInt(quantity) || 0) + incrementBy;
     const productData = await ProductModel.findById(product);
 
-    if (!product || !quantity) return { error: 'Invalid data!' };
+    if (!product || !quantity) return { error: 'Invalid data: ' + JSON.stringify(data) };
     if (!productData?._id) return { error: 'Product not found!' };
     if (productData.stock < 1) return { error: 'Product out of stock!' };
     if (productData.stock < quantity) return { error: 'Product stock not enough!' };
@@ -45,7 +46,6 @@ class CartService extends Service {
     }
     const newData = await this.model.create({ ...validData, user: user._id });
     return newData;
-    // return { cartData, data };
   }
 }
 

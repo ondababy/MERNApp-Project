@@ -1,10 +1,12 @@
-import React from 'react'
-import { productApi } from '../product.api'
+import React from 'react';
+import { toast } from 'react-toastify';
+import { productApi } from '../product.api';
 
-import { BackButton } from '@common'
-import { Counter, Gallery } from '@custom'
-import { Breadcrumbs } from '@partials'
-import { useParams } from 'react-router-dom'
+import { BackButton } from '@common';
+import { Counter, Gallery } from '@custom';
+import { useCartActions } from '@features';
+import { Breadcrumbs } from '@partials';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const productExample = {
   name: 'Lorem ipsum dolor sit amet.',
@@ -15,13 +17,15 @@ const productExample = {
 
 export default function ProductDisplay({ data = productExample, children }) {
   /* DECLARATIONS #################################################### */
+  const nav = useNavigate();
   const slugParam = useParams().slug;
   const [getProduct, { isLoading }] = productApi.useGetProductMutation();
+  const { addItem } = useCartActions();
   const [product, setProduct] = React.useState(data)
   const [cartItem, setCartItem] = React.useState({
     quantity: 1,
     total: product.price,
-    productId: product.id,
+    product: product.id,
   })
   /* END DECLARATIONS ################################################ */
 
@@ -37,11 +41,37 @@ export default function ProductDisplay({ data = productExample, children }) {
       setProduct(res?.resource);
       setCartItem({
         ...cartItem,
-        productId: res?.resource?.id,
+        product: res?.resource?.id,
         total: res?.resource?.price
       })
     })
   });
+  const ToastContent = () => (
+    <div>
+      <p>
+        <span className='font-bold text-primary'>
+          {product.name}
+        </span>
+        <span className='italic'>
+          has been added to cart!
+        </span>
+      </p>
+      <button
+        onClick={() => nav('/cart')}
+        className="btn btn-sm btn-outline btn-primary mt-4">
+        View Cart
+      </button>
+    </div>
+  );
+  const handleAddToCart = () => {
+    addItem({
+      ...cartItem,
+      incrementBy: cartItem.quantity,
+      quantity: 0,
+    }).then(() => {
+      toast.success(<ToastContent />);
+    })
+  }
 
 
   React.useEffect(() => {
@@ -92,12 +122,14 @@ export default function ProductDisplay({ data = productExample, children }) {
 
 
         <div className="flex gap-2 items-center my-8">
-          <div className="w-1/2 btn btn-primary btn-outline">
+          <button
+            onClick={handleAddToCart}
+            className="w-1/2 btn btn-primary btn-outline">
             Add To Cart
-          </div>
-          <div className="w-1/2 btn btn-primary">
+          </button>
+          <button className="w-1/2 btn btn-primary">
             Buy Now
-          </div>
+          </button>
         </div>
         <p className='text-xs italic font-light'>
           {product?.footerMessage || 'We ship nationwide!'}

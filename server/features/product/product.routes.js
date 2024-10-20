@@ -1,4 +1,4 @@
-import { METHODS, PATHS, READ_WRITE } from '#constants';
+import { DASHBOARD_PERMISSIONS, METHODS, PATHS, READ_WRITE } from '#constants';
 import { protectAndPermit } from '#middlewares/auth.middleware';
 import { upload } from '#middlewares/upload.middleware';
 import controller from './product.controller.js';

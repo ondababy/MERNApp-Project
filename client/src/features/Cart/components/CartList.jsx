@@ -3,7 +3,7 @@ import React from 'react'
 import { CartCard } from './CartCard'
 
 
-export default function CartList({ cartItems = [] }) {
+export default function CartList({ cartItems = [], onRemove = () => { } }) {
   return (
     <div className="bg-base-200/50 p-8 container mx-auto">
       <h1 className='font-extrabold tracking-wider text-2xl uppercase'>
@@ -17,8 +17,11 @@ export default function CartList({ cartItems = [] }) {
       <div className="flex flex-col gap-4">
         {
           cartItems?.length ?
-            cartItems.map((item, index) => (
-              <CartCard key={index} item={item} />
+            cartItems.map((item) => (
+              <CartCard
+                key={item.id} item={item}
+                onRemove={onRemove}
+              />
             )) : ''
         }
       </div>

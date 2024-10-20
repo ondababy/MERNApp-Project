@@ -34,10 +34,10 @@ const cartApi = apiSlice.injectEndpoints({
       }),
     }),
     updateItem: build.mutation({
-      query: ({ id, cart }) => ({
+      query: (id, item) => ({
         url: `${apiUrl}/edit/${id}`,
         method: 'PATCH',
-        body: cart,
+        body: item,
         headers,
       }),
     }),

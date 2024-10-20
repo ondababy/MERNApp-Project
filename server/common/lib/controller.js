@@ -20,7 +20,7 @@ export class Controller {
       .exec();
     const message = data.length ? 'Data collection fetched!' : 'No data found!';
 
-    const resource = this.resource?.collection(data) || data;
+    const resource = (await this.resource?.collection(data)) || data;
     this.success({ res, message, resource, meta: { ...meta, count: data.length } });
   };
 
@@ -29,7 +29,7 @@ export class Controller {
     const data = await this.service.paginate(meta).exec();
     const message = data.length ? 'Data collection fetched!' : 'No data found!';
 
-    const resource = this.resource?.collection(data) || data;
+    const resource = (await this.resource?.collection(data)) || data;
     this.success({ res, message, resource, meta: { ...meta, count: data.length } });
   };
 
@@ -37,7 +37,7 @@ export class Controller {
     const data = await this.service?.getById(req.params.id);
     if (!data?._id) return this.error({ res, message: 'Data not found!' });
 
-    const resource = this.resource?.make(data) || data;
+    const resource = (await this.resource?.make(data)) || data;
     this.success({ res, message: 'Data fetched!', resource });
   };
 
@@ -68,7 +68,7 @@ export class Controller {
       await data.save();
     }
 
-    const resource = this.resource?.make(data) || data;
+    const resource = (await this.resource?.make(data)) || data;
     this.success({ res, message: 'Data created!', resource });
   };
 
@@ -87,7 +87,7 @@ export class Controller {
       await data.save();
     }
 
-    const resource = this.resource?.make(data) || data;
+    const resource = (await this.resource?.make(data)) || data;
     this.success({ res, message: 'Data updated!', resource });
   };
 

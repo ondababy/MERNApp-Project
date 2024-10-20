@@ -1,63 +1,85 @@
 import { Counter } from '@custom';
 import React from 'react';
+import { Link } from 'react-router-dom';
+import { useCartActions } from '../hooks/useCartActions';
 
 const itemDefault = {
   id: -1,
-  name: "Lorem ipsum dolor sit amet consectetur adipisicing elit. ",
-  currency: "PHP",
-  price: 0,
+  product: {
+    name: "Lorem ipsum dolor sit amet consectetur adipisicing elit. ",
+    currency: "PHP",
+    price: 0,
+  },
   quantity: 0,
   total: 0,
-  image: "https://placehold.co/600?text=N/A",
 }
 
-export function CartCard({ item = itemDefault, ...props }) {
+export function CartCard({ item = itemDefault, onRemove = () => { }, ...props }) {
+  const [product, setProduct] = React.useState(item?.product || itemDefault.product);
+  const [cartItem, setCartItem] = React.useState(item || itemDefault);
+  const { updateItem } = useCartActions();
 
-  const handleQuantity = (value) => { };
-  const handleRemove = () => { };
+  const handleQuantity = (value) => {
+    const payload = {
+      id: cartItem.id,
+      product: product.id,
+      quantity: value,
+      total: product.price * value,
+    }
+    updateItem(payload);
 
-  return item && item.id != -1 && (
+  };
+
+  const handlRemove = () => {
+    onRemove(cartItem)
+  }
+
+
+  return cartItem && cartItem.id != -1 && (
     <div {...props} className="flex flex-col lg:min-h-64 lg:h-64 lg:flex-row items-center justify-between border border-gray-400">
       <div className="container flex flex-col lg:flex-row lg:items-start items-center ">
         <img
           className="w-1/2 lg:max-w-64 lg:w-2/5 aspect-square object-contain"
-          src={item.image || "https://placehold.co/150"}
+          src={product.image || "https://placehold.co/150"}
           alt="product"
         />
 
         <div className="p-4 flex  lg:flex-1 flex-col">
           <div className="ml-4 my-8 text-lg">
-            <h1 className="font-bold text-primary">
-              {item.name}
-            </h1>
+            <Link to={`/shop/${product.slug}`} className="group">
+              <h1 className="font-bold text-primary group-hover:link transition-all ease-in">
+                {product.name}
+              </h1>
+            </Link>
             <div className="flex text-sm gap-2">
               <span className="text-gray-600">Price: </span>
               <span className=" font-semibold">
-                {item.currency} {item.price}
+                {product.currency || 'PHP'} {product.price}
               </span>
             </div>
             <div className="flex text-sm gap-2">
               <span className="text-gray-600">Quantity: </span>
               <span className=" font-semibold">
-                {item.quantity}
+                {cartItem.quantity}
               </span>
             </div>
             <div className="flex text-sm gap-2">
               <span className="text-gray-600">Item total: </span>
               <span className=" font-semibold">
-                {item.currency} {item.total}
+                {product.currency || 'PHP'} {cartItem.total}
               </span>
             </div>
           </div>
 
           <Counter
-            onClick={handleQuantity}
+            count={cartItem.quantity}
+            onChange={handleQuantity}
           />
         </div>
       </div>
 
       <button
-        onClick={handleRemove}
+        onClick={handlRemove}
         className="lg:h-full btn btn-ghost text-red-500 flex-1">
         Remove
       </button>
