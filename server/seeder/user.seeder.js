@@ -1,6 +1,6 @@
 import { UserService } from '#features';
 import { faker } from '@faker-js/faker';
-import { Seeder } from './seeder';
+import { Seeder } from './seeder.js';
 
 class UserSeeder extends Seeder {
   constructor(service, count) {

@@ -1,6 +1,6 @@
 import { ProductService } from '#features';
 import { faker } from '@faker-js/faker';
-import { Seeder } from './seeder';
+import { Seeder } from './seeder.js';
 
 class ProductSeeder extends Seeder {
   schema() {
