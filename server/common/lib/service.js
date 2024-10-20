@@ -98,7 +98,7 @@ export class Service {
   async getAll() {
     this._checkModel();
     this.applyForceFilter();
-    return this.query;
+    return this.exec();
   }
 
   async getById(id) {
