@@ -1,8 +1,7 @@
+import { confirmDelete } from '@custom';
 import React from 'react';
-
 import { FaArrowRight } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import Swal from 'sweetalert2';
 import { useCartActions } from '../hooks/useCartActions';
 import CartList from './CartList';
 
@@ -20,25 +19,17 @@ export function CartPage() {
   }, []);
 
   const handleRemove = async (cartItem) => {
-    Swal.fire({
-      title: 'Are you sure?',
-      text: `Are you sure you want to remove ${cartItem.product.name}? This action cannot be undone.`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Yes',
-      cancelButtonText: 'No',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        removeItem(cartItem).then(() => {
-          Swal.fire({
-            title: 'Success',
-            text: 'Item removed successfully.',
-            icon: 'success',
-          });
-          getItems();
+    confirmDelete(() => {
+      removeItem(cartItem).then(() => {
+        Swal.fire({
+          title: 'Success',
+          text: 'Item removed successfully.',
+          icon: 'success',
         });
-      }
+        getItems();
+      })
     });
+
   }
 
 
