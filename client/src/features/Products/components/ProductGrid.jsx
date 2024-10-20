@@ -31,7 +31,6 @@ function ProductGrid() {
         current: res?.meta.page,
         last: res?.meta.last_page,
       });
-      console.log(res?.resource)
     })
   });
 

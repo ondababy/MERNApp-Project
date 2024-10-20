@@ -26,7 +26,13 @@ export function CartCard({ item = itemDefault, onRemove = () => { }, ...props })
       quantity: value,
       total: product.price * value,
     }
-    updateItem(payload);
+    updateItem(payload).then((updatedItem) => {
+      setCartItem((prev) => ({
+        ...prev,
+        quantity: updatedItem.quantity,
+        total: updatedItem.total,
+      }));
+    });
 
   };
 
@@ -74,6 +80,7 @@ export function CartCard({ item = itemDefault, onRemove = () => { }, ...props })
           <Counter
             count={cartItem.quantity}
             onChange={handleQuantity}
+            max={product.stock}
           />
         </div>
       </div>

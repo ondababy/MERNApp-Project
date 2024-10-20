@@ -101,6 +101,13 @@ export default function ProductDisplay({ data = productExample, children }) {
         <p className='text-sm my-2'>
           {product.description.split('.')[0]}
         </p>
+        <p className='text-md my-2 flex gap-4 items-center'>
+          Stock:
+          <span>
+            {product.stock}
+          </span>
+        </p>
+
         <div className="divider"></div>
         <span className='text-3xl font-light'>
           {product.currency || 'PHP'} {product.price}
@@ -109,7 +116,12 @@ export default function ProductDisplay({ data = productExample, children }) {
           {product.description.split('.').slice(1).join('.')}
         </p>
 
-        <Counter onChange={(count) => handleQuantity(count)} />
+        <Counter
+          onChange={(count) => handleQuantity(count)}
+          max={product.stock}
+        />
+
+
         <div className="divider"></div>
         <div className="flex items-center justify-between text-xl font-light">
           <span>
@@ -136,6 +148,6 @@ export default function ProductDisplay({ data = productExample, children }) {
         </p>
 
       </div>
-    </div>
+    </div >
   )
 }

@@ -24,6 +24,7 @@ export function useCartActions() {
   const addItemToCart = React.useCallback((item) => {
     return createCartItem(item).unwrap().then((data) => {
       dispatch(addItem(data?.resource || {}));
+      return data?.resource || {};
     });
   }, [dispatch, createCartItem]);
 
@@ -33,6 +34,7 @@ export function useCartActions() {
       item,
     }).unwrap().then((data) => {
       dispatch(updateItem(data?.resource || {}));
+      return data?.resource || {};
     });
   }, [dispatch, updateCartItem]);
 
