@@ -5,15 +5,26 @@ const Order = new Schema({
   name: 'Order',
   schema: [
     {
-      name: {
-        type: String,
-        unique: [true, 'Order name must be unique'],
-        required: [true, 'Order name is required'],
+      user: { type: Schema.Types.ObjectId, ref: 'User' },
+      status: { type: String, default: 'pending' },
+      total: { type: Number, default: 0 },
+      note: { type: String, default: '' },
+
+      products: [
+        {
+          product: { type: Schema.Types.ObjectId, ref: 'Product' },
+          quantity: { type: Number, default: 1 },
+        },
+      ],
+      payment: {
+        method: { type: String, default: 'cash' },
+        status: { type: String, default: 'pending' },
       },
-      slug: {
-        type: String,
+      delivery: {
+        address: { type: String, default: '' },
+        date: { type: Date, default: Date.now },
       },
-      images: [ImageSchema],
+      // images: [ImageSchema], // ?? think about it
     },
     { timestamps: true },
   ],

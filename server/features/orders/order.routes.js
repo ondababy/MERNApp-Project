@@ -9,32 +9,28 @@ export default [
       {
         path: PATHS.ALL,
         method: METHODS.GET,
-        controller: controller.getAll,
+        controller: [...protectAndPermit(READ_WRITE), controller.getAll],
       },
       {
         path: PATHS.EDIT,
         method: METHODS.PATCH,
-        controller: [...protectAndPermit(READ_WRITE), upload.array('image'), controller.update],
+        controller: [...protectAndPermit(READ_WRITE), controller.update],
       },
       {
         path: PATHS.STORE,
         method: METHODS.POST,
-        controller: [...protectAndPermit(READ_WRITE), upload.array('image'), controller.store],
+        controller: [...protectAndPermit(READ_WRITE), controller.store],
       },
-      {
-        path: PATHS.DELETE,
-        method: METHODS.DELETE,
-        controller: controller.delete,
-      },
+      /* Dont */
+      // {
+      //   path: PATHS.DELETE,
+      //   method: METHODS.DELETE,
+      //   controller: [...protectAndPermit(READ_WRITE), controller.delete],
+      // },
       {
         path: PATHS.ID,
         method: METHODS.GET,
         controller: controller.getById,
-      },
-      {
-        path: PATHS.SLUG,
-        method: METHODS.GET,
-        controller: controller.getBySlug,
       },
     ],
   },

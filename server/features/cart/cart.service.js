@@ -4,9 +4,6 @@ import CartModel from './cart.model.js';
 
 class CartService extends Service {
   model = CartModel;
-  fieldToSlugify = null;
-  forceFilter = {};
-
   setUserId(userId) {
     this.forceFilter = { user: userId };
   }

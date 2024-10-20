@@ -25,13 +25,14 @@ const orderApi = apiSlice.injectEndpoints({
         headers,
       }),
     }),
-    deleteOrder: build.mutation({
-      query: (id) => ({
-        url: `${apiUrl}/delete/${id}`,
-        method: 'DELETE',
-        headers,
-      }),
-    }),
+    /* Dont */
+    // deleteOrder: build.mutation({
+    //   query: (id) => ({
+    //     url: `${apiUrl}/delete/${id}`,
+    //     method: 'DELETE',
+    //     headers,
+    //   }),
+    // }),
     createOrder: build.mutation({
       query: (order) => ({
         url: apiUrl,

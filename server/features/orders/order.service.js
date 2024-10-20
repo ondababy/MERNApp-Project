@@ -1,14 +1,17 @@
+import { CartModel, ProductModel, UserModel } from '#features';
+
 import { Service } from '#lib';
 import OrderModel from './order.model.js';
 
 class OrderService extends Service {
   model = OrderModel;
-  fieldToSlugify = 'name';
-
-  async getBySlug(slug) {
-    this._checkModel();
-    return this.model.findOne({ slug });
+  setUserId(userId) {
+    this.forceFilter = { user: userId };
   }
+
+  validate(data) {}
+  checkout() {}
+  update() {}
 }
 
 export default new OrderService();
