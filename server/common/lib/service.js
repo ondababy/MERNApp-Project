@@ -39,6 +39,22 @@ export class Service {
     return slugify(...this.slugParams(field));
   }
 
+  _getMeta = async (query) => {
+    this._checkModel();
+    const page = parseInt(query.page) || 1;
+    const limit = parseInt(query.limit) || 10;
+    const documentCount = await this.model.countDocuments();
+    const last_page = Math.ceil(documentCount / limit);
+    if (page > last_page) {
+      page = last_page;
+    }
+    return {
+      total: documentCount,
+      limit: limit,
+      page: page,
+      last_page: last_page,
+    };
+  };
   exec() {
     const query = this.query.exec();
     this.query = null;
@@ -71,7 +87,7 @@ export class Service {
 
   paginate(params = {}) {
     this._checkModel();
-    let { limit = 10, page = 1, sort = '-createdAt', filter = {} } = params;
+    let { limit = 10, page = 1 } = params;
     if (limit < 1) limit = 10;
     if (page < 1) page = 1;
     const skip = (page - 1) * limit;

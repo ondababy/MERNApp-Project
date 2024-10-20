@@ -7,17 +7,14 @@ class CartController extends Controller {
   resource = CartResource;
 
   getAll = async (req, res) => {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const documentCount = await this.service?.model.countDocuments();
+    const last_page = Math.ceil(documentCount / limit);
+    if (page > last_page) req.query.page = last_page;
+
     const { user } = req;
     this.service.setUserId(user._id);
-    const data = await this.service.getAll();
-    this.success({
-      res,
-      message: 'Data collection fetched!',
-      data: {
-        user,
-        data,
-      },
-    });
   };
   getById = async (req, res) => {};
   store = async (req, res) => {};

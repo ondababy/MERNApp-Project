@@ -10,16 +10,12 @@ export class Controller {
     update: [],
   };
 
+  // controller functions
   search = async (req, res) => {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
-    const documentCount = await this.service?.model.countDocuments();
-    const last_page = Math.ceil(documentCount / limit);
-    if (page > last_page) req.query.page = last_page;
-
+    let meta = await this.service._getMeta(req, res);
     const data = await this.service
       ?.search(req.query.q)
-      .paginate(req.query)
+      .paginate(meta)
       .filter(req.query.filters || {})
       .exec();
     const message = data.length ? 'Data collection fetched!' : 'No data found!';
@@ -29,25 +25,13 @@ export class Controller {
       res,
       message,
       resource,
-      meta: {
-        total: documentCount,
-        count: data.length,
-        limit: limit,
-        page: parseInt(req.query.page) || 1,
-        last_page: Math.ceil(documentCount / (parseInt(req.query.limit) || 10)),
-      },
+      meta: { ...meta, count: data.length },
     });
   };
 
-  // controller functions
   getAll = async (req, res) => {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
-    const documentCount = await this.service?.model.countDocuments();
-    const last_page = Math.ceil(documentCount / limit);
-    if (page > last_page) req.query.page = last_page;
-
-    const data = await this.service.paginate(req.query).exec();
+    let meta = await this.service._getMeta(req);
+    const data = await this.service.paginate(meta).exec();
     const message = data.length ? 'Data collection fetched!' : 'No data found!';
 
     const resource = this.resource?.collection(data) || data;
@@ -55,13 +39,7 @@ export class Controller {
       res,
       message,
       resource,
-      meta: {
-        total: documentCount,
-        count: data.length,
-        limit: limit,
-        page: parseInt(req.query.page) || 1,
-        last_page: Math.ceil(documentCount / (parseInt(req.query.limit) || 10)),
-      },
+      meta: { ...meta, count: data.length },
     });
   };
 
@@ -89,8 +67,7 @@ export class Controller {
 
   store = async (req, res, next) => {
     let validData = req.body;
-    if (!this.rules.create.length)
-      validData = await this.validator(req, res, this.rules.create);
+    if (!this.rules.create.length) validData = await this.validator(req, res, this.rules.create);
 
     let data = await this.service?.create(validData);
     if (!data._id) return this.error({ res, message: 'Invalid data!' });
@@ -107,20 +84,15 @@ export class Controller {
 
   update = async (req, res, next) => {
     let validData = req.body;
-    if (!this.rules.create.length)
-      validData = await this.validator(req, res, this.rules.update);
+    if (!this.rules.create.length) validData = await this.validator(req, res, this.rules.update);
 
     const data = await this.service?.update(req.params.id, validData);
     if (!data._id) return this.error({ res, message: 'Invalid data!' });
 
     if (req.file || req.files || this.service.hasField('images')) {
       const images = this.addImage(req);
-      const oldImages = new Set(
-        (data.images || []).map((image) => image.public_id)
-      );
-      const newImages = images.filter(
-        (image) => !oldImages.has(image.public_id)
-      );
+      const oldImages = new Set((data.images || []).map((image) => image.public_id));
+      const newImages = images.filter((image) => !oldImages.has(image.public_id));
       data.images = [...(data.images || []), ...newImages];
       await data.save();
     }
@@ -135,9 +107,7 @@ export class Controller {
 
     try {
       if (data.images) {
-        const publicIds = data.images.map(
-          (image) => `${image.folder}/${image.public_id}`
-        );
+        const publicIds = data.images.map((image) => `${image.folder}/${image.public_id}`);
         await utils.deleteFiles(publicIds);
       }
     } catch (error) {
