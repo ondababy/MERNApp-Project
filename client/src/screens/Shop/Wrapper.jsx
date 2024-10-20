@@ -7,7 +7,7 @@ export default function ShopWrapper({ bannerText, children, childClass, bgImage 
     <div className="w-full">
       {/* BANNER */}
       <Banner label={bannerText} noLabel={!bannerText} bgImage={bgImage} />
-      <div className={cn('flex min-h-screen ', childClass)} >
+      <div className={cn('flex ', childClass)} >
         {children}
       </div>
     </div>

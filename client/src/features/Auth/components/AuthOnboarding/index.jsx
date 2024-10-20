@@ -21,14 +21,9 @@ function AuthOnboarding(props) {
   const [currentStep, setCurrentStep] = useState(0);
   const pageComponents = [<EmailVerificaiton />, <AccountInformation />];
 
-  const steps = initialSteps.map((step, index) => ({
-    ...step,
-    isDone: index < currentStep,
-    isActive: index === currentStep,
-  }));
 
   const handleContinue = () => {
-    if (currentStep < steps.length - 1) {
+    if (currentStep < initialSteps.length - 1) {
       setCurrentStep(currentStep + 1);
     } else {
       console.log('Form submitted');
@@ -43,7 +38,11 @@ function AuthOnboarding(props) {
 
   return (
     <div className="flex flex-col items-start h-full w-full">
-      <Steps content={steps} />
+      <Steps
+        stepList={initialSteps}
+        onChange={(index) => setCurrentStep(index - 1)}
+        current={currentStep}
+      />
       <div className="divider"></div>
       <div className="container">{pageComponents[currentStep]}</div>
       <div className="divider"></div>
@@ -60,7 +59,7 @@ function AuthOnboarding(props) {
           className="btn btn-primary"
           onClick={handleContinue}
         >
-          {currentStep < steps.length - 1 ? 'Continue' : 'Submit'}
+          {currentStep < initialSteps.length - 1 ? 'Continue' : 'Submit'}
         </button>
       </div>
     </div>

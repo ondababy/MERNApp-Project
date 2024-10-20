@@ -39,7 +39,7 @@ export function CartPage() {
     <>
       <CartList cartItems={items} onRemove={handleRemove} />
 
-      <div className="bg-base-200 min-h-96 p-8 container mx-auto md:max-w-sm border-l">
+      <div className="bg-base-200 lg:min-h-96 p-8 container mx-auto md:max-w-sm border-l">
         <h1 className='font-extrabold tracking-wider text-2xl uppercase'>
           Subtotal
         </h1>

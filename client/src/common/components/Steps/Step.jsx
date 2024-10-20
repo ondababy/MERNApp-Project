@@ -1,3 +1,4 @@
+import { cn } from '@common/lib/utils';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -41,18 +42,28 @@ const checkMark = () => {
   );
 };
 
-function Step({ index, label = 'No label', isLast = false, isActive = false, isDone = false }) {
+function Step({
+  index,
+  label = 'No label',
+  isLast = false,
+  isActive = false,
+  isDone = false,
+  onClick = () => { } },
+  doneIcon = checkMark,
+  icon = arrowNext,
+
+) {
   const activeClass = isActive || isDone ? 'font-extrabold text-primary' : '';
-  const isDoneClass = isDone && !isActive ? 'font-normal' : '';
+  const isDoneClass = isDone && !isActive ? 'font-normal text-primary' : '';
   return (
     <li
-      className={`flex items-center ${activeClass} ${isDoneClass} `}
+      onClick={() => onClick(index)}
+      className={cn("cursor-pointer select-none flex items-center", activeClass, isDoneClass)}
       key={index}
     >
       <span
-        className={`flex items-center justify-center w-5 h-5 me-2 text-xs border rounded-full shrink-0 ${
-          isActive || isDone ? 'border-primary' : ''
-        } `}
+        className={`flex items-center justify-center w-5 h-5 me-2 text-xs border rounded-full shrink-0 ${isActive || isDone ? 'border-primary' : ''
+          } `}
       >
         {isDone ? checkMark() : index}
       </span>

@@ -10,7 +10,6 @@ export const _exampleMenus = [
     subLinks: [
       { to: `${mainUrl}/table`, label: '_Examples Table', icon: <FaTable /> },
       { to: `${mainUrl}/create`, label: 'Create _Examples', icon: <FaPlus /> },
-      { to: `${mainUrl}/list`, label: '_Examples List', icon: <FaUsers /> },
     ],
   },
 ];

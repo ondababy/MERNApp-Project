@@ -3,12 +3,10 @@ import { dashUrl as mainUrl } from './order.api';
 
 const OrderForm = React.lazy(() => import('./components/OrderForm'));
 const OrderPage = React.lazy(() => import('./components/OrderPage'));
-const OrderList = React.lazy(() => import('./components/OrderList'));
 const OrderTable = React.lazy(() => import('./components/OrderTable'));
 
 export const orderRoutes = [
   { path: `${mainUrl}/table`, element: <OrderTable /> },
-  { path: `${mainUrl}/list`, element: <OrderList /> },
   { path: mainUrl, element: <OrderPage /> },
   {
     path: `${mainUrl}/create`,
