@@ -17,9 +17,28 @@ class CartController extends Controller {
     const resource = this.resource?.collection(data) || data;
     this.success({ res, message, resource, meta: { ...meta, count: data.length } });
   };
-  getById = async (req, res) => {};
-  store = async (req, res) => {};
-  update = async (req, res) => {};
-  delete = async (req, res) => {};
+
+  store = async (req, res) => {
+    let data = await this.service?.create(req.body);
+    if (!data._id) return this.error({ res, message: 'Invalid data!' });
+
+    const resource = this.resource?.make(data) || data;
+    this.success({ res, message: 'Data created!', resource });
+  };
+
+  update = async (req, res) => {
+    const data = await this.service?.update(req.params.id, validData);
+    if (!data._id) return this.error({ res, message: 'Invalid data!' });
+
+    const resource = this.resource?.make(data) || data;
+    this.success({ res, message: 'Data updated!', resource });
+  };
+
+  delete = async (req, res) => {
+    const data = await this.service?.delete(req.params.id);
+    if (!data?._id) return this.error({ res, message: 'Data not found!' });
+
+    this.success({ res, message: 'Data deleted!' });
+  };
 }
 export default new CartController();
