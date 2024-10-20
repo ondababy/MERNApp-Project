@@ -1,36 +1,41 @@
-import React from 'react'
-import { FaMinus, FaPlus } from 'react-icons/fa'
-export function Counter({ count = 1, onChange, max = null, min = 1 }) {
+import React, { useRef } from 'react';
+import { FaMinus, FaPlus } from 'react-icons/fa';
 
-  const [counter, setCounter] = React.useState(count)
+export function Counter({ count = 1, onChange, max = null, min = 1 }) {
+  const [counter, setCounter] = React.useState(count);
+  const num = useRef(null);
+
   const handleIncrement = () => {
-    if (max && counter >= max) return
-    setCounter(counter + 1)
-    onChange(counter + 1)
-  }
+    if (max && counter >= max) return;
+    setCounter(counter + 1);
+    if (num.current) {
+      num.current.value = counter + 1;
+    }
+    onChange(counter + 1);
+  };
 
   const handleDecrement = () => {
-    if (counter <= min) return
+    if (counter <= min) return;
     if (counter > 1) {
-      setCounter(counter - 1)
-      onChange(counter - 1)
+      setCounter(counter - 1);
+      if (num.current) {
+        num.current.value = counter - 1;
+      }
+      onChange(counter - 1);
     }
-  }
-
+  };
 
   const handleInput = (e) => {
-    const value = parseInt(e.target.value)
+    const value = parseInt(e.target.value);
     if (value >= min && (!max || value <= max)) {
-      setCounter(value)
-      onChange(value)
+      setCounter(value);
+      onChange(value);
+    } else {
+      if (num.current) {
+        num.current.value = '';
+      }
     }
-    else {
-      e.target.value = ''
-    }
-
-  }
-
-
+  };
 
   return (
     <>
@@ -42,6 +47,7 @@ export function Counter({ count = 1, onChange, max = null, min = 1 }) {
         <span>
           <input
             type="text"
+            ref={num}
             defaultValue={counter || count}
             onChange={handleInput}
             className="input input-bordered w-16 text-center"
@@ -52,5 +58,5 @@ export function Counter({ count = 1, onChange, max = null, min = 1 }) {
         </button>
       </div>
     </>
-  )
+  );
 }
