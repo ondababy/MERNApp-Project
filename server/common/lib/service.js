@@ -13,8 +13,7 @@ export class Service {
 
   hasSlugField() {
     const hasSlug = this.slugField && this.model.schema.paths[this.slugField];
-    const hasFieldToSlugify =
-      this.fieldToSlugify && this.model.schema.paths[this.fieldToSlugify];
+    const hasFieldToSlugify = this.fieldToSlugify && this.model.schema.paths[this.fieldToSlugify];
     return hasSlug && hasFieldToSlugify;
   }
 
@@ -35,7 +34,7 @@ export class Service {
   }
 
   makeSlug(field) {
-    if (!this.hasSlugField()) return null;
+    if (!this.hasSlugField() || !this.fieldToSlugify) return null;
     field = field || this.fieldToSlugify;
     return slugify(...this.slugParams(field));
   }
@@ -94,9 +93,7 @@ export class Service {
     this._checkModel();
     let page = parseInt(query.page) || 1;
     const limit = parseInt(query.limit) || 10;
-    const documentCount = await this.model
-      .find(this.forceFilter)
-      .countDocuments();
+    const documentCount = await this.model.find(this.forceFilter).countDocuments();
     const last_page = Math.ceil(documentCount / limit);
     if (page > last_page) {
       page = last_page;
@@ -139,7 +136,7 @@ export class Service {
       ? body.map((item) => this.model.filterFillables(item))
       : this.model.filterFillables(body);
     const slug = this.makeSlug(data[this.fieldToSlugify]);
-    if (slug && fieldToSlugify) data[this.slugField] = slug;
+    if (slug && this.fieldToSlugify) data[this.slugField] = slug;
     return this.model.create(data);
   }
 
@@ -149,7 +146,7 @@ export class Service {
       ? body.map((item) => this.model.filterFillables(item))
       : this.model.filterFillables(body);
     const slug = this.makeSlug(data[this.fieldToSlugify]);
-    if (slug && fieldToSlugify) data[this.slugField] = slug;
+    if (slug && this.fieldToSlugify) data[this.slugField] = slug;
     return this.model.findByIdAndUpdate(id, data, { new: true });
   }
 
@@ -163,7 +160,7 @@ export class Service {
     const data = bodies.map((body) => {
       const filteredData = this.model.filterFillables(body);
       const slug = this.makeSlug(filteredData[this.fieldToSlugify]);
-      if (slug && fieldToSlugify) filteredData[this.slugField] = slug;
+      if (slug && this.fieldToSlugify) filteredData[this.slugField] = slug;
       return filteredData;
     });
     return this.model.insertMany(data, { ordered: !ignoreErrors });

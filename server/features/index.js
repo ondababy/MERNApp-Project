@@ -7,3 +7,4 @@ export * from './suppliers/index.js';
 export * from './users/index.js';
 
 export * from './cart/index.js';
+export * from './orders/index.js';
