@@ -12,7 +12,7 @@ export class Controller {
 
   // controller functions
   search = async (req, res) => {
-    let meta = await this.service._getMeta(req, res);
+    const meta = await this.service._getMeta(req.query, res);
     const data = await this.service
       ?.search(req.query.q)
       .paginate(meta)
@@ -21,26 +21,16 @@ export class Controller {
     const message = data.length ? 'Data collection fetched!' : 'No data found!';
 
     const resource = this.resource?.collection(data) || data;
-    this.success({
-      res,
-      message,
-      resource,
-      meta: { ...meta, count: data.length },
-    });
+    this.success({ res, message, resource, meta: { ...meta, count: data.length } });
   };
 
   getAll = async (req, res) => {
-    let meta = await this.service._getMeta(req);
+    const meta = await this.service._getMeta(req.query);
     const data = await this.service.paginate(meta).exec();
     const message = data.length ? 'Data collection fetched!' : 'No data found!';
 
     const resource = this.resource?.collection(data) || data;
-    this.success({
-      res,
-      message,
-      resource,
-      meta: { ...meta, count: data.length },
-    });
+    this.success({ res, message, resource, meta: { ...meta, count: data.length } });
   };
 
   getById = async (req, res) => {

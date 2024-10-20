@@ -7,14 +7,15 @@ class CartController extends Controller {
   resource = CartResource;
 
   getAll = async (req, res) => {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
-    const documentCount = await this.service?.model.countDocuments();
-    const last_page = Math.ceil(documentCount / limit);
-    if (page > last_page) req.query.page = last_page;
+    const meta = await this.service._getMeta(req.query);
 
     const { user } = req;
     this.service.setUserId(user._id);
+    const data = await this.service.paginate(meta).exec();
+    const message = data.length ? 'Data collection fetched!' : 'No data found!';
+
+    const resource = this.resource?.collection(data) || data;
+    this.success({ res, message, resource, meta: { ...meta, count: data.length } });
   };
   getById = async (req, res) => {};
   store = async (req, res) => {};

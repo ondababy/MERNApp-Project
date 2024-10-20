@@ -50,9 +50,9 @@ export class Service {
     }
     return {
       total: documentCount,
-      limit: limit,
-      page: page,
-      last_page: last_page,
+      limit,
+      page,
+      last_page,
     };
   };
   exec() {
