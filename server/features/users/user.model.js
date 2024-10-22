@@ -60,6 +60,7 @@ const User = new Schema({
       },
       resetPasswordToken: String,
       resetPasswordExpire: Date,
+      emailVerifiedAt: Date,
     },
     { timestamps: true },
   ],
