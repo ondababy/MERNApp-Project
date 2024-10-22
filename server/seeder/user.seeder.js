@@ -16,7 +16,7 @@ class UserSeeder extends Seeder {
       {
         username: process.env.ADMIN_USERNAME,
         email: process.env.ADMIN_EMAIL,
-        password: () => this.hash(process.env.ADMIN_PASSWORD),
+        password: this.hash(process.env.ADMIN_PASSWORD),
       },
     ];
   }
