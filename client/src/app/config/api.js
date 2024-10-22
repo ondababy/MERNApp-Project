@@ -24,9 +24,9 @@ const loadingSlice = createSlice({
 });
 
 export const { startLoading, stopLoading } = loadingSlice.actions;
-
+const API = '/api/v1';
 const baseQuery = fetchBaseQuery({
-  baseUrl: '/api/v1',
+  baseUrl: API,
   credentials: 'include',
   prepareHeaders: (headers, { getState }) => {
     const token = getState().auth.accessToken;
