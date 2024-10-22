@@ -59,8 +59,8 @@ class EmailTemplate {
             <p>${this.message}</p>
           </div>
           <div class="footer">
-            <p>&copy; ${new Date().getFullYear()} ${this.company}. All rights reserved.</p>
-            <p>Shoeshable Inc. 1234 Main St. Springfield, IL 62701</p>
+            <p>&copy; ${new Date().getFullYear()}. All rights reserved.</p>
+            <p>${this.company} 1234 Main St. Springfield, IL 62701</p>
 
           </div>
         </div>
