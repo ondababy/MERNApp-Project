@@ -8,7 +8,7 @@ export default function CheckoutPage() {
     <>
       <CheckoutSteps />
 
-      <div className="bg-base-200 md:min-h-96 p-8 container mx-auto md:max-w-sm border-l">
+      <div className="bg-base-200 md:min-h-96 p-8 container mx-auto md:max-w-sm border-r">
         <h1 className='font-extrabold tracking-wider text-2xl uppercase'>
           Order Summary
         </h1>

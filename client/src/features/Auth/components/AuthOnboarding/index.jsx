@@ -1,6 +1,5 @@
 import { Steps } from '@common';
-import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import AccountInformation from './AccountInformation';
 import EmailVerificaiton from './EmailVerification';
 

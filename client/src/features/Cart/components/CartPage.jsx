@@ -60,9 +60,9 @@ export function CartPage() {
           </span>
         </div>
 
-        <button className={`${!items?.length ? 'btn-disabled' : ''} btn btn-outline btn-primary w-full`}>
+        <Link to="/checkout" className={`${!items?.length ? 'btn-disabled' : ''} btn btn-outline btn-primary w-full`}>
           Proceed to Checkout
-        </button>
+        </Link>
         <Link to="/" className="group flex gap-2 items-center my-4 hover:text-primary  transition-all ease-in">
           Continue Shopping
           <span className="group-hover:ml-8 transition-all ease-in">
