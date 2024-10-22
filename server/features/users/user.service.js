@@ -101,7 +101,7 @@ class UserService extends Service {
 
     const token = user.getVerifyEmailToken();
     const OTP = user.getOTP();
-    const message = `Your OTP is ${OTP}`;
+    const message = `Your OTP is <strong> ${OTP} </strong>;`;
     const altMessage = `Or click on the following link to verify your email:
     \n\n <a href="${redirectUrl}?verifyToken=${token}">Verify Email</a>`;
 
