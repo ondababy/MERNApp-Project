@@ -1,3 +1,4 @@
+import { ROLES } from '#constants';
 import { check } from 'express-validator';
 
 const commonrules = {
@@ -13,6 +14,10 @@ const commonrules = {
       .isLength({ min: 6, max: 20 })
       .withMessage('Password must be between 6 and 20 characters')
       .custom(matchPassword),
+  role: () => check('role').optional().isIn(ROLES).withMessage('Role is invalid'),
+};
+
+const userinforules = {
   first_name: () =>
     check('first_name')
       .notEmpty()
@@ -36,7 +41,6 @@ const commonrules = {
   city: () => check('city').notEmpty().withMessage('City is required'),
   region: () => check('region').notEmpty().withMessage('Region is required'),
   zip_code: () => check('zip_code').withMessage('Zip code is invalid'),
-  role: () => check('role').optional().isIn(ROLES).withMessage('Role is invalid'),
 };
 
 const matchPassword = (value, { req }) => {

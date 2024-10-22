@@ -7,14 +7,6 @@ const User = new Schema({
   name: 'User',
   schema: [
     {
-      first_name: {
-        type: String,
-        required: [true, 'Username is required'],
-      },
-      last_name: {
-        type: String,
-        required: [true, 'Username is required'],
-      },
       username: {
         type: String,
         required: [true, 'Username is required'],
@@ -28,35 +20,14 @@ const User = new Schema({
         type: String,
         required: [true, 'Password is required'],
       },
-      contact: {
-        type: String,
-        required: [true, 'Username is required'],
-        regex: /^[0-9]{10}$/,
-        unique: [true, 'Contact already exists'],
-      },
-      birthdate: {
-        type: Date,
-      },
-      address: {
-        type: String,
-        required: [true, 'Address is required'],
-      },
-      city: {
-        type: String,
-        required: [true, 'City is required'],
-      },
-      region: {
-        type: String,
-        required: [true, 'Region is required'],
-      },
-      zip_code: {
-        type: String,
-      },
-
       role: {
         type: String,
         enum: ROLES,
         default: ROLES.CUSTOMER,
+      },
+      info: {
+        type: Schema.Types.ObjectId,
+        ref: 'UserInfo',
       },
       resetPasswordToken: String,
       resetPasswordExpire: Date,
