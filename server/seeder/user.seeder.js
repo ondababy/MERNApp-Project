@@ -1,4 +1,4 @@
-import { UserService } from '#features';
+import { UserModel, UserService } from '#features';
 import { faker } from '@faker-js/faker';
 import { Seeder } from './seeder';
 
@@ -19,7 +19,7 @@ class UserSeeder extends Seeder {
     return {
       username: faker.internet.userName,
       email: faker.internet.email,
-      password: faker.internet.password,
+      password: UserModel.hashPassword(faker.internet.password),
     };
   }
 }
