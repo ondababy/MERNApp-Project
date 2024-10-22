@@ -1,5 +1,6 @@
+import EmailTemplate from '#common/lib/email-template';
 import { Service } from '#lib';
-import { destroyToken, Errors, generateToken } from '#utils';
+import { destroyToken, Errors, generateToken, sendEmail } from '#utils';
 import UserModel from './user.model.js';
 
 class UserService extends Service {
@@ -52,11 +53,27 @@ class UserService extends Service {
     return user;
   }
 
-  async forgotPassword(email) {
+  async forgotPassword({ email, redirectUrl }) {
     const user = await this.model?.findOne({ email: email });
     if (!user) throw new Errors.NotFound('User not found!');
 
     const resetToken = await this.model.getResetPasswordToken();
+    const resetUrl = `${redirectUrl}?verfiyToken=${token}`;
+    const message = `Your password reset token is as follow:\n\n${resetUrl}\n\nIf you have not requested this email, then ignore it.`;
+
+    try {
+      await sendEmail({
+        email: user.email,
+        subject: 'Password Recovery',
+        message,
+      });
+    } catch (err) {
+      user.resetPasswordToken = undefined;
+      user.resetPasswordExpire = undefined;
+      await user.save({ validateBeforeSave: false });
+      throw new Errors.InternalServerError('Email could not be sent!');
+    }
+
     await user.save({ validateBeforeSave: false });
     return { user, resetToken };
   }
@@ -76,6 +93,11 @@ class UserService extends Service {
     await user.save();
     const generatedToken = generateToken(user._id, this.authToken);
     return { user, token: generatedToken };
+  }
+
+  async testEmail({ email }) {
+    const message = new EmailTemplate({ userName: 'John Doe', message: 'This is a test email!' }).generate();
+    await sendEmail({ email, message });
   }
 }
 

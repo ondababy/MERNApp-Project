@@ -56,6 +56,11 @@ export default [
         method: METHODS.DELETE,
         controller: [protectAndPermit(READ_WRITE), controller.delete],
       },
+      {
+        path: '/test/email',
+        method: METHODS.POST,
+        controller: controller.testEmail,
+      },
     ],
   },
 ];

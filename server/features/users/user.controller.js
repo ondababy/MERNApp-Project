@@ -1,5 +1,5 @@
 import { Controller } from '#lib';
-import { Errors, getBearerToken, sendEmail, tokenExists } from '#utils';
+import { Errors, getBearerToken, tokenExists } from '#utils';
 import UserResource from './user.resource.js';
 import UserService from './user.service.js';
 import { userCreateRules, userUpdateRules } from './user.validation.js';
@@ -88,28 +88,15 @@ class UserController extends Controller {
   };
 
   forgotPassword = async (req, res) => {
-    const { email } = req.body;
-    const { user, token } = await this.service.forgotPassword(email);
-    const resetUrl = `${req.protocol}://${req.get('host')}/password/reset/${token}`;
-    const message = `Your password reset token is as follow:\n\n${resetUrl}\n\nIf you have not requested this email, then ignore it.`;
+    await this.service.forgotPassword(req.body);
 
-    try {
-      await sendEmail({
-        email: user.email,
-        subject: 'Password Recovery',
-        message,
-      });
-      this.success({ res, message: `Email sent to: ${user.email}` });
-    } catch (error) {
-      user.resetPasswordToken = undefined;
-      user.resetPasswordExpire = undefined;
-      await user.save({ validateBeforeSave: false });
-      throw new Errors.InternalServerError(error.message);
-    }
+    this.success({
+      res,
+      message: 'Password reset sent!',
+    });
   };
 
   resetPassword = async (req, res) => {
-    const validData = await this.validator(req, res, this.rules.update);
     const { password } = req.body;
     const token = req.params.token;
     const { user, token: newToken } = await this.service.resetPassword(token, password);
@@ -120,6 +107,11 @@ class UserController extends Controller {
       user: await this.resource.make(user),
       token: newToken[1],
     });
+  };
+
+  testEmail = async (req, res) => {
+    await this.service.testEmail(req.body);
+    this.success({ res, message: 'Email sent!' });
   };
 }
 export default new UserController();
