@@ -34,7 +34,8 @@ const useCheckAuth = (isPrivate = false) => {
 
 
   useEffect(() => {
-    if ((!accessToken && userInfo) || (isPrivate && !user?.role !== ROLES.ADMIN)) {
+    const isAdmin = (isPrivate && !user?.role !== ROLES.ADMIN)
+    if ((!accessToken && userInfo)) {
       logout();
       return navigate('/');
     }
@@ -43,9 +44,7 @@ const useCheckAuth = (isPrivate = false) => {
     } else if (!user?.id && isPrivate) {
       return navigate('/login');
     }
-    if (userInfo.role !== ROLES.ADMIN && isPrivate) {
-      return navigate('/');
-    }
+
   }, [navigate, user, isPrivate, userInfo, accessToken, logout]);
 
   return isPrivate || user?.id ? user : null;

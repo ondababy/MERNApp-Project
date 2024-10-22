@@ -15,7 +15,6 @@ export const authSlice = createSlice({
       const { userInfo, token } = action.payload;
       state.userInfo = userInfo;
       state.accessToken = token;
-      delete userInfo.role;
       localStorage.setItem('userInfo', JSON.stringify(userInfo));
       localStorage.setItem('accessToken', token);
     },
