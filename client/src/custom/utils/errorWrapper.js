@@ -4,13 +4,8 @@ const errorWrapper = (fn, onError = () => {}) => {
   try {
     return fn();
   } catch (e) {
-    console.log(e);
-    const errors = e?.data?.errors?.details;
-    if (Array.isArray(errors)) {
-      errors.forEach((error) => {
-        toast.error(error?.msg || 'Error while performing action');
-      });
-    } else toast.error(e?.data?.message || 'Client Broken: Error while performing action.');
+    toast.error(e.message || 'Something went wrong!');
+    console.error(e);
     return onError(e);
   }
 };
