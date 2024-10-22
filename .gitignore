@@ -30,3 +30,5 @@ github-ssh
 dist
 dist-ssr
 *.local
+
+.vercel
