@@ -84,6 +84,17 @@ User.methods.getResetPasswordToken = function () {
   return resetToken;
 };
 
+User.methods.getVerifyEmailToken = function () {
+  const verifyToken = crypto.randomBytes(20).toString('hex');
+  this.verifyEmailToken = crypto.createHash('sha256').update(verifyToken).digest('hex');
+  this.verifyEmailExpire = Date.now() + 10 * 60 * 1000;
+  return verifyToken;
+};
+
+User.methods.getOTP = function () {
+  return Math.floor(100000 + Math.random() * 900000);
+};
+
 User.pre('save', async function (next) {
   if (this.isModified('password')) this.password = await this.hashPassword(this.password);
   next();

@@ -1,7 +1,8 @@
 class EmailTemplate {
-  constructor({ userName, message }) {
+  constructor({ userName, message, altMessage }) {
     this.userName = userName;
     this.message = message;
+    this.altMessage = altMessage;
     this.company = 'Shoeshable Inc.';
   }
 
@@ -57,11 +58,14 @@ class EmailTemplate {
           </div>
           <div class="content">
             <p>${this.message}</p>
+
+            <p style="font-style: italic; font-size: 12px;">
+            ${this.altMessage}
+            </p>
           </div>
           <div class="footer">
             <p>&copy; ${new Date().getFullYear()}. All rights reserved.</p>
             <p>${this.company} 1234 Main St. Springfield, IL 62701</p>
-
           </div>
         </div>
       </body>

@@ -95,8 +95,34 @@ class UserService extends Service {
     return { user, token: generatedToken };
   }
 
+  async verifyEmail({ email, redirectUrl }) {
+    const user = await this.model.findOne({ email });
+    if (!user) throw new Errors.NotFound('User not found!');
+
+    const token = user.getVerifyEmailToken();
+    const OTP = user.getOTP();
+    const message = `Your OTP is ${OTP}`;
+    const altMessage = `Or click on the following link to verify your email:
+    \n\n <a href="${redirectUrl}?verifyToken=${token}">Verify Email</a>`;
+
+    try {
+      await sendEmail({
+        email: user.email,
+        subject: 'Email Verification',
+        message: new EmailTemplate({ userName: user.username, message, altMessage }).generate(),
+      });
+    } catch (err) {
+      await user.save({ validateBeforeSave: false });
+      throw new Errors.InternalServerError('Email could not be sent!');
+    }
+  }
+
   async testEmail({ email }) {
-    const message = new EmailTemplate({ userName: 'John Doe', message: 'This is a test email!' }).generate();
+    const message = new EmailTemplate({
+      userName: 'John Doe',
+      message: 'This is a test email!',
+      altMessage: 'tngnamo',
+    }).generate();
     await sendEmail({ email, message });
   }
 }

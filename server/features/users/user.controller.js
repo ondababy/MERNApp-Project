@@ -109,6 +109,12 @@ class UserController extends Controller {
     });
   };
 
+  verifyEmail = async (req, res) => {
+    const { email, redirectUrl } = req.body;
+    await this.service.verifyEmail({ email, redirectUrl });
+    this.success({ res, message: 'Email sent!' });
+  };
+
   testEmail = async (req, res) => {
     await this.service.testEmail(req.body);
     this.success({ res, message: 'Email sent!' });
