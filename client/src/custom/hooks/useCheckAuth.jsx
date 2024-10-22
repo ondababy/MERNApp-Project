@@ -1,3 +1,4 @@
+import { ROLES } from '@app/constants';
 import { authApi, setCredentials } from '@features';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,22 +18,23 @@ const useCheckAuth = (isPrivate = false) => {
   const logout = useLogoutAction();
   const navigate = useNavigate();
 
+  const fetchUser = async () => {
+    const res = await profile().unwrap();
+    setUser(res.user);
+    dispatch(
+      setCredentials({
+        userInfo: res.user,
+        token: res.token,
+      })
+    );
+  };
   useEffect(() => {
-    const fetchUser = async () => {
-      const res = await profile().unwrap();
-      setUser(res.user);
-      dispatch(
-        setCredentials({
-          userInfo: res.user,
-          token: res.token,
-        })
-      );
-    };
-    if (accessToken && !user?.id) fetchUser();
-  }, [accessToken, dispatch, profile, user]);
+    fetchUser();
+  }, []);
+
 
   useEffect(() => {
-    if (!accessToken && userInfo) {
+    if ((!accessToken && userInfo) || (isPrivate && !user?.role !== ROLES.ADMIN)) {
       logout();
       return navigate('/');
     }
@@ -40,6 +42,9 @@ const useCheckAuth = (isPrivate = false) => {
       return navigate('/');
     } else if (!user?.id && isPrivate) {
       return navigate('/login');
+    }
+    if (userInfo.role !== ROLES.ADMIN && isPrivate) {
+      return navigate('/');
     }
   }, [navigate, user, isPrivate, userInfo, accessToken, logout]);
 

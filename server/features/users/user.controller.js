@@ -62,6 +62,7 @@ class UserController extends Controller {
     this.success({ res, message: 'Logged out!' });
   };
 
+
   getProfile = async (req, res) => {
     const user = req.user;
 
