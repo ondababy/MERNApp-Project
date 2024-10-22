@@ -1,23 +1,23 @@
+import * as env from '#config';
 import nodemailer from 'nodemailer';
 
 export const sendEmail = async (options) => {
-  const transporter = nodemailer.createTransport({
-    service: 'Gmail',
-    host: process.env.SMTP_HOST,
-    port: process.env.SMTP_PORT,
+  var transport = nodemailer.createTransport({
+    host: env.SMTP_HOST,
+    port: env.SMTP_PORT,
     auth: {
-      user: process.env.SMTP_EMAIL,
-      pass: process.env.SMTP_PASSWORD,
+      user: env.SMTP_USER,
+      pass: env.SMTP_PASSWORD,
     },
   });
 
   const mailOptions = {
-    from: `${process.env.SMTP_FROM_NAME} <${process.env.SMTP_FROM_EMAIL}>`,
-    to: options.email,
-    subject: options.subject,
-    html: `${options.html}`,
+    from: `${env.SMTP_FROM_NAME} <${env.SMTP_FROM_EMAIL}>`,
+    to: options?.email || 'No email provided!',
+    subject: options?.subject || '',
+    html: `${options?.html || options?.message || ''}`,
   };
 
-  await transporter.sendMail(mailOptions);
+  await transport.sendMail(mailOptions);
 };
 
