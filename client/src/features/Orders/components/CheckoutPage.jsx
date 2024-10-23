@@ -11,11 +11,11 @@ export default function CheckoutPage() {
 
 
   return (
-    <>
+    <div className='flex flex-col lg:flex-col-reverse'>
       <CheckoutSteps />
 
       <OrderSummary order={order} />
 
-    </>
+    </div>
   )
 }

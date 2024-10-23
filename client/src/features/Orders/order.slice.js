@@ -18,9 +18,6 @@ export const orderSlice = createSlice({
     setOrder: (state, action) => {
       return action.payload;
     },
-    clearOrder: (state) => {
-      return initialState;
-    },
     updateOrder: (state, action) => {
       return action.payload
     }
