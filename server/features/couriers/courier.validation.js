@@ -36,7 +36,7 @@ const courierCreateRules = () => {
       .custom((value) => unique(CourierModel, 'contactNumber', value))
       .withMessage('Contact number has already been used!'),
     check('emailAddress')
-      .custom((value) => unique(BrandModel, 'emailAddress', value))
+      .custom((value) => unique(CourierModel, 'emailAddress', value))
       .withMessage('Email address must be unique!'),
   ];
 };
@@ -57,7 +57,7 @@ const courierUpdateRules = () => {
     
     check('emailAddress')
       .custom((value, { req }) =>
-        unique(BrandModel, 'emailAddress', value, req?.params?.id)
+        unique(CourierModel, 'emailAddress', value, req?.params?.id)
       )
       .withMessage('Email address must be unique!'),
   ];
