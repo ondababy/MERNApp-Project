@@ -6,11 +6,11 @@ import { Outlet } from 'react-router-dom';
 
 function PrivateLayout() {
   const [visible, toggleVisible] = useToggle(true);
-  const userInfo = useCheckAuth(true) || {
+  const { isAdmin } = useCheckAuth(true) || {
     name: 'Private User',
   };
   return (
-    userInfo?.id && (
+    isAdmin && (
       <div
         id="private-layout"
         className="flex w-screen h-screen overflow-y-auto "

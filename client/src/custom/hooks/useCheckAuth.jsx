@@ -1,8 +1,9 @@
 import { ROLES } from '@app/constants';
 import { authApi, setCredentials } from '@features';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { useLogoutAction } from './useLogout';
 
 export const useGetAuth = () => {
@@ -12,15 +13,14 @@ export const useGetAuth = () => {
 
 const useCheckAuth = (isPrivate = false) => {
   const dispatch = useDispatch();
-  const [profile] = authApi.useProfileMutation();
-  const { userInfo, accessToken, role } = useSelector((state) => state.auth);
-  const [user, setUser] = useState(userInfo);
   const logout = useLogoutAction();
   const navigate = useNavigate();
 
+  const { userInfo, accessToken, role } = useSelector((state) => state.auth);
+  const [profile] = authApi.useProfileMutation();
+
   const fetchUser = async () => {
     const res = await profile().unwrap();
-    setUser(res.user);
     dispatch(
       setCredentials({
         userInfo: res.user,
@@ -37,22 +37,27 @@ const useCheckAuth = (isPrivate = false) => {
 
 
   useEffect(() => {
-    const isAdmin = (isPrivate && role !== ROLES.ADMIN)
-    console.log('isAdmin', isAdmin)
-    if ((!accessToken && userInfo) || isAdmin) {
+    const isAdmin = userInfo?.id && role === ROLES.ADMIN && accessToken;
+    console.log(isAdmin)
+    if (!isAdmin && isPrivate) {
       logout();
       return navigate('/');
     }
-    if (user && !isPrivate) {
+    if (userInfo && !isPrivate) {
       return navigate('/');
-    } else if (!user?.id && isPrivate) {
+    } else if (!userInfo?.id && isPrivate) {
       return navigate('/login');
-    } else if (user?.id && isPrivate) {
+    } else if (userInfo?.id && isPrivate) {
       return navigate('/dashboard');
     }
 
-  }, [navigate, user, isPrivate, userInfo, accessToken, logout]);
+  }, [navigate, isPrivate, userInfo, accessToken, logout]);
 
-  return isPrivate || user?.id ? user : null;
+  return {
+    userInfo,
+    accessToken,
+    role,
+    isAdmin: userInfo?.id && role === ROLES.ADMIN,
+  };
 };
 export default useCheckAuth;
