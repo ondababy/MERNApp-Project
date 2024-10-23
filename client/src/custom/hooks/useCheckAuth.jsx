@@ -20,10 +20,10 @@ const useCheckAuth = (isPrivate = false) => {
 
   const fetchUser = async () => {
     const res = await profile().unwrap();
-    dispatch(
+    res && dispatch(
       setCredentials({
-        userInfo: res.user,
-        token: res.token,
+        userInfo: res?.user,
+        token: res?.token,
       })
     );
   };
@@ -31,12 +31,14 @@ const useCheckAuth = (isPrivate = false) => {
 
 
   useEffect(() => {
-    fetchUser();
-  }, []);
+    userInfo?.id && fetchUser();
+  }, [userInfo]);
 
 
   useEffect(() => {
-    const isAdmin = userInfo?.id && role === ROLES.ADMIN && accessToken;
+    const isDevelopment = import.meta.env.CLIENT_ENV === 'development';
+    const isAdmin = userInfo?.id && role === ROLES.ADMIN && accessToken && !isDevelopment;
+    console.log(userInfo?.id && role === ROLES.ADMIN && accessToken && !isDevelopment)
     if (!isAdmin && isPrivate) {
       return logout().finally(() => navigate('/login'));
     }
