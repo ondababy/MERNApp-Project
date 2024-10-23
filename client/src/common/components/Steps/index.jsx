@@ -33,7 +33,7 @@ function Steps({
         isActive: index === current,
       }))
     );
-  }, [current, steps]);
+  }, [current]);
 
   const onClick = (index) => {
     onChange(index);

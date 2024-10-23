@@ -49,8 +49,6 @@ function Step({
   isActive = false,
   isDone = false,
   onClick = () => { } },
-  doneIcon = checkMark,
-  icon = arrowNext,
 
 ) {
   const activeClass = isActive || isDone ? 'font-extrabold text-primary' : '';
