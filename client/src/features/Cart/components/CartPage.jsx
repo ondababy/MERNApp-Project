@@ -16,11 +16,6 @@ export function CartPage() {
   const handleRemove = async (cartItem) => {
     confirmDelete(() => {
       removeItem(cartItem).then(() => {
-        Swal.fire({
-          title: 'Success',
-          text: 'Item removed successfully.',
-          icon: 'success',
-        });
         getItems();
       })
     });
