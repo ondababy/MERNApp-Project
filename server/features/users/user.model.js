@@ -1,7 +1,7 @@
 import { ROLES } from '#constants';
 import { Schema } from '#lib';
 import bcrypt from 'bcryptjs';
-import crypto from 'crypto';
+import crypto, { verify } from 'crypto';
 
 const User = new Schema({
   name: 'User',
@@ -30,8 +30,19 @@ const User = new Schema({
         ref: 'UserInfo',
         default: null,
       },
-      resetPasswordToken: String,
-      resetPasswordExpire: Date,
+
+      resetPassword: {
+        token: String,
+        expire: Date,
+      },
+      verifyEmail: {
+        token: String,
+        expire: Date,
+      },
+      otp: {
+        code: Number,
+        expire: Date,
+      },
       emailVerifiedAt: {
         type: Date,
         default: null,
@@ -57,19 +68,21 @@ User.methods.matchPassword = async function (password) {
 User.methods.getResetPasswordToken = function () {
   const resetToken = crypto.randomBytes(20).toString('hex');
   this.resetPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex');
-  this.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
+  this.resetPasswordExpire = Date.now() + 10 * 60 * 1000; // 10 minutes
   return resetToken;
 };
 
 User.methods.getVerifyEmailToken = function () {
   const verifyToken = crypto.randomBytes(20).toString('hex');
   this.verifyEmailToken = crypto.createHash('sha256').update(verifyToken).digest('hex');
-  this.verifyEmailExpire = Date.now() + 10 * 60 * 1000;
+  this.verifyEmailExpire = Date.now() + 10 * 60 * 1000; // 10 minutes
   return verifyToken;
 };
 
 User.methods.getOTP = function () {
-  return Math.floor(100000 + Math.random() * 900000);
+  this.otp.code = Math.floor(100000 + Math.random() * 900000);
+  this.otp.expire = Date.now() + 5 * 60 * 1000; // 5 minutes
+  return this.otp.code;
 };
 
 User.pre('save', async function (next) {

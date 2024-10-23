@@ -95,10 +95,10 @@ class UserService extends Service {
     return { user, token: generatedToken };
   }
 
-  async verifyEmail({ email, redirectUrl }) {
+
+  async sendVerifyEmail({ email, redirectUrl }) {
     const user = await this.model.findOne({ email });
     if (!user) throw new Errors.NotFound('User not found!');
-
     const token = user.getVerifyEmailToken();
     const OTP = user.getOTP();
     const message = `Your OTP is <strong> ${OTP} </strong> `;
@@ -115,7 +115,53 @@ class UserService extends Service {
       await user.save({ validateBeforeSave: false });
       throw new Errors.InternalServerError('Email could not be sent!');
     }
+
+
+    return { user, token };
   }
+
+  async verifyUser(user){
+    user.emailVerifiedAt = Date.now();
+    user.verifyEmail = {
+      token: null,
+      expire: null,
+    };
+    user.otp = {
+      code: null,
+      expire: null,
+    };
+    await user.save();
+    return user;
+  }
+
+  async verifyToken({ token }) {
+    const dt = Date.now();
+    const verifyToken = crypto.createHash('sha256').update(token).digest('hex');
+    let user = await this.model.findOne({
+      'verifyEmail.token': verifyToken,
+      'verifyEmail.expire': { $gt: dt },
+    });
+
+    if (!user) throw new Errors.BadRequest('Invalid verify token!');
+
+    user = await this.verifyUser(user);
+    const generatedToken = generateToken(user._id, this.authToken);
+    return { user, token: generatedToken };
+  }
+
+  async verifyOTP({ email, OTP }) {
+    const dt = Date.now();
+    let user = await this.model.findOne({ email});
+
+    if (!user) throw new Errors.BadRequest('Invalid verify token!');
+    if (user.otp.code !== OTP ) throw new Errors.BadRequest('Invalid OTP!');
+    if (user.otp.expire < dt) throw new Errors.BadRequest('Your OTP expired! Please try again!');
+
+    user = await this.verifyUser(user);
+    const generatedToken = generateToken(user._id, this.authToken);
+    return { user, token: generatedToken };
+  }
+
 
   async testEmail({ email }) {
     const message = new EmailTemplate({
