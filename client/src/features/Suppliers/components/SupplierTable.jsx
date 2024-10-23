@@ -106,9 +106,11 @@ import SupplierWrapper from './SupplierWrapper';
 
 const allowedColumns = () => [
   { key: 'name', label: 'Name' },
+  { key: 'contactPerson', label: 'Contact Person' },
   { key: 'emailAddress', label: 'Email Address' },
   { key: 'contactNumber', label: 'Contact Number' },
-  { key: 'image', label: 'Supplier Image' },  // Updated column label
+  { key: 'description', label: 'Description' },
+  // { key: 'image', label: 'Supplier Image' }, 
   { key: 'actions', label: '' },
   // More columns can be added here
 ];
@@ -119,6 +121,7 @@ const SupplierTable = () => {
   const [suppliers, setSuppliers] = useState([]);
   const [getSuppliers, { isLoading, isError }] = useGetSuppliersMutation();
   const [deleteSupplier, { isLoading: isDeleting }] = useDeleteSupplierMutation();
+
 
   const handleDelete = async (id) => {
     try {

@@ -10,9 +10,11 @@ import CourierWrapper from './CourierWrapper';
 
 const allowedColumns = () => [
   { key: 'name', label: 'Name' },
+  { key: 'contactPerson', label: 'Contact Person' },
   { key: 'contactNumber', label: 'Contact Number' },
+  { key: 'emailAddress', label: 'Email Address' },
   { key: 'serviceArea', label: 'Service Area' },
-  { key: 'image', label: 'Courier Image' },
+  // { key: 'image', label: 'Courier Image' },
   { key: 'actions', label: '' },
   // More columns can be added here
 ];
