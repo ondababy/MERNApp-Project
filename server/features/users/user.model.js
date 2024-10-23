@@ -28,10 +28,15 @@ const User = new Schema({
       info: {
         type: Schema.Types.ObjectId,
         ref: 'UserInfo',
+        default: null,
       },
       resetPasswordToken: String,
       resetPasswordExpire: Date,
-      emailVerifiedAt: Date,
+      emailVerifiedAt: {
+        type: Date,
+        default: null,
+      },
+
     },
     { timestamps: true },
   ],
