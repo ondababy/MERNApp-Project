@@ -10,19 +10,12 @@ import {
 
 import React from 'react';
 const initialSteps = [
-  {
-    label: 'Fill up information',
-    isActive: true,
-  },
-  {
-    label: 'Choose shipping method',
-  },
-  {
-    label: 'Provide information',
-  },
+  { label: 'Fill up information', isActive: true, },
+  { label: 'Choose shipping method', },
+  { label: 'Confirm Items', },
 ];
 
-export default function CheckoutSteps() {
+export default function CheckoutSteps({ onFinish = () => { } }) {
   const [currentStep, setCurrentStep] = React.useState(0);
   const [api, setApi] = React.useState();
 
@@ -40,7 +33,7 @@ export default function CheckoutSteps() {
   };
 
   const handleFinished = () => {
-    console.log('Order finish');
+    onFinish();
   }
 
   // React.useEffect(() => {

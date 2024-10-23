@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function OrderSummary({ order, onCheckOut = () => { } }) {
+export default function OrderSummary({ order, checkoutFinished = false, onCheckOut = () => { } }) {
 
   const handleCheckOut = () => {
     onCheckOut()
@@ -58,7 +58,7 @@ export default function OrderSummary({ order, onCheckOut = () => { } }) {
 
         <button
           onClick={handleCheckOut}
-          className={`${!order.items?.length ? 'btn-disabled' : ''} btn btn-outline btn-primary w-full`}>
+          className={`${!order.items?.length || !checkoutFinished ? 'btn-disabled' : ''} btn btn-outline btn-primary w-full`}>
           Confirm Order
         </button>
       </div>
