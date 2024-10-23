@@ -26,11 +26,11 @@ export const STATUS = {
 
 export const PATHS = {
   ROOT: '/',
-  SLUG: '/slug/:slug',
   ALL: '/',
   STORE: '/',
   ID: '/:id',
   EDIT: '/edit/:id',
+  SLUG: '/slug/:slug',
   REGISTER: '/register',
   AUTHENTICATE: '/authenticate',
   PROFILE: '/profile',

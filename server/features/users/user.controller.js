@@ -109,10 +109,27 @@ class UserController extends Controller {
     });
   };
 
-  verifyEmail = async (req, res) => {
+  sendVerifyEmail = async (req, res) => {
     const { email, redirectUrl } = req.body;
-    await this.service.verifyEmail({ email, redirectUrl });
-    this.success({ res, message: 'Email sent!' });
+    await this.service.sendVerifyEmail(email, redirectUrl);
+    this.success({ res, message: 'Verification email sent!' });
+  };
+
+  verifyEmail = async (req, res) => {
+    const { verifyToken } = req.params;
+    const { email, OTP } = req.body;
+    let result;
+    if (verifyToken) result = await this.service.verifyToken(verifyToken);
+    else if (email && OTP) result = await this.service.verifyOTP(email, OTP);
+    else throw new Errors.BadRequest('Invalid data!');
+    if (!result) throw new Errors.BadRequest('Invalid token!');
+    const { user, token } = result;
+    this.success({
+      res,
+      message: 'Verified!',
+      user: await this.resource.make(user),
+      token: token,
+    });
   };
 
   testEmail = async (req, res) => {

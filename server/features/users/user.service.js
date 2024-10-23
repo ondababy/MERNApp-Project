@@ -95,8 +95,7 @@ class UserService extends Service {
     return { user, token: generatedToken };
   }
 
-
-  async sendVerifyEmail({ email, redirectUrl }) {
+  async sendVerifyEmail(email, redirectUrl) {
     const user = await this.model.findOne({ email });
     if (!user) throw new Errors.NotFound('User not found!');
     const token = user.getVerifyEmailToken();
@@ -116,11 +115,10 @@ class UserService extends Service {
       throw new Errors.InternalServerError('Email could not be sent!');
     }
 
-
-    return { user, token };
+    return { user, token, OTP };
   }
 
-  async verifyUser(user){
+  async verifyUser(user) {
     user.emailVerifiedAt = Date.now();
     user.verifyEmail = {
       token: null,
@@ -134,7 +132,7 @@ class UserService extends Service {
     return user;
   }
 
-  async verifyToken({ token }) {
+  async verifyToken(token) {
     const dt = Date.now();
     const verifyToken = crypto.createHash('sha256').update(token).digest('hex');
     let user = await this.model.findOne({
@@ -149,19 +147,18 @@ class UserService extends Service {
     return { user, token: generatedToken };
   }
 
-  async verifyOTP({ email, OTP }) {
+  async verifyOTP(email, OTP) {
     const dt = Date.now();
-    let user = await this.model.findOne({ email});
+    let user = await this.model.findOne({ email });
 
     if (!user) throw new Errors.BadRequest('Invalid verify token!');
-    if (user.otp.code !== OTP ) throw new Errors.BadRequest('Invalid OTP!');
+    if (user.otp.code !== OTP) throw new Errors.BadRequest('Invalid OTP!');
     if (user.otp.expire < dt) throw new Errors.BadRequest('Your OTP expired! Please try again!');
 
     user = await this.verifyUser(user);
     const generatedToken = generateToken(user._id, this.authToken);
     return { user, token: generatedToken };
   }
-
 
   async testEmail({ email }) {
     const message = new EmailTemplate({
