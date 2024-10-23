@@ -38,16 +38,17 @@ const useCheckAuth = (isPrivate = false) => {
   useEffect(() => {
     const isDevelopment = import.meta.env.CLIENT_ENV === 'development';
     const isAdmin = userInfo?.id && role === ROLES.ADMIN && accessToken && !isDevelopment;
-    console.log(userInfo?.id && role === ROLES.ADMIN && accessToken && !isDevelopment)
+    console.log(!isAdmin && isPrivate)
     if (!isAdmin && isPrivate) {
-      return logout().finally(() => navigate('/login'));
+      logout();
+      navigate('/login')
     }
     if (userInfo && !isPrivate) {
-      return navigate('/');
+      navigate('/');
     } else if (!userInfo?.id && isPrivate) {
-      return navigate('/login');
+      navigate('/login');
     } else if (userInfo?.id && isPrivate) {
-      return navigate('/dashboard');
+      navigate('/dashboard');
     }
 
   }, [navigate, isPrivate, userInfo, accessToken, logout]);

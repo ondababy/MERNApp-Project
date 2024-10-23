@@ -10,7 +10,7 @@ function PrivateLayout() {
     name: 'Private User',
   };
   return (
-    isAdmin && (
+    !isAdmin ? '' : (
       <div
         id="private-layout"
         className="flex w-screen h-screen overflow-y-auto "

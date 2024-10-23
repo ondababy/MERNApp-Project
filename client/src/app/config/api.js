@@ -44,7 +44,6 @@ const baseQueryWithReAuth = async (args, api, extraOptions) => {
 
   try {
     let result = await baseQuery(args, api, extraOptions);
-
     if (![401, 403].includes(result?.error?.status)) {
       return result || 'Forbidden';
     }
