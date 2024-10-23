@@ -6,8 +6,7 @@ import { addItem, removeItem, setItems, updateItem } from '../cart.slice';
 export function useCartActions() {
   /* DECLARATIONS #################################################### */
   const dispatch = useDispatch();
-  const items = useSelector((state) => state.cart.items);
-  const subTotal = useSelector((state) => state.cart.subTotal);
+  const cart = useSelector((state) => state.cart);
 
   const [getCartItems] = cartApi.useGetItemsMutation();
   const [createCartItem] = cartApi.useCreateItemMutation();
@@ -45,8 +44,7 @@ export function useCartActions() {
   }, [dispatch, deleteCartItem]);
 
   return {
-    items,
-    subTotal,
+    cart,
     getItems,
     addItem: addItemToCart,
     updateItem: updateCartItemInCart,

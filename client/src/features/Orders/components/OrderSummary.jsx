@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function OrderSummary(order) {
+export default function OrderSummary({ order }) {
 
   const handleCheckOut = () => {
     onCheckOut()
@@ -17,21 +17,21 @@ export default function OrderSummary(order) {
         <div className="flex justify-between my-4">
           <span className="text-gray-600">Subtotal</span>
           <span className="font-semibold">
-            {order.items?.length && order.items[0]?.currency || ''} {order?.subTotal || 0}
+            {order.items?.length && order?.currency || ''} {order?.subTotal || 0}
           </span>
         </div>
 
         <div className="flex justify-between my-4">
           <span className="text-gray-600">Shipping Fee</span>
           <span className="font-semibold">
-            {order.items?.length && order.items[0]?.currency || ''} {order?.shipping_fee || 0}
+            {order.items?.length && order?.currency || ''} {order?.shipping.fee || 0}
           </span>
         </div>
 
         <div className="flex justify-between my-4">
           <span className="text-gray-600">Tax Total</span>
           <span className="font-semibold">
-            {order.items?.length && order.items[0]?.currency || ''} {order?.tax_total || 0}
+            {order.items?.length && order?.currency || ''} {order?.taxTotal || 0}
           </span>
         </div>
 
@@ -40,7 +40,7 @@ export default function OrderSummary(order) {
         <div className="flex justify-between my-4 text-lg">
           <span className="text-gray-600 font-bold">Total</span>
           <span className="font-bold">
-            {order.items?.length && order.items[0]?.currency || ''} {order?.total || 0}
+            {order.items?.length && order?.currency || ''} {order?.total || 0}
           </span>
         </div>
 

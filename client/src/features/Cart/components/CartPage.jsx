@@ -7,8 +7,7 @@ import CartList from './CartList';
 
 export function CartPage() {
   const {
-    items,
-    subTotal,
+    cart: { items, subTotal },
     getItems,
     removeItem,
 

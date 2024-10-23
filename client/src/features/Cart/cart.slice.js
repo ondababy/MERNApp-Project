@@ -16,6 +16,10 @@ const calculateSubTotal = (items) => {
   return items.reduce((acc, item) => acc + item.price * item.quantity, 0);
 };
 
+const calculateTotal = (subTotal, shipping, taxTotal) => {
+  return subTotal + shipping.fee + taxTotal;
+}
+
 export const cartSlice = createSlice({
   name: 'cart',
   initialState,
@@ -28,7 +32,8 @@ export const cartSlice = createSlice({
       state.shipping = action.payload;
     },
     setTotal: (state, action) => {
-      state.total = action.payload;
+      let {subTotal, shipping, taxTotal} = action.payload;      
+      state.total = calculateTotal(subTotal, shipping, taxTotal);
     },
     addItem: (state, action) => {
       state.items.push(action.payload);

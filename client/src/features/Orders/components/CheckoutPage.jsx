@@ -1,3 +1,4 @@
+import { useCartActions } from '@features';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CheckoutSteps from './CheckoutSteps';
@@ -5,15 +6,17 @@ import OrderSummary from './OrderSummary';
 
 
 export default function CheckoutPage() {
-  const cart = useSelector((state) => state.cart);
-
+  const { cart, getItems } = useCartActions()
+  React.useEffect(() => {
+    getItems();
+  }, []);
 
 
   return (
     <>
       <CheckoutSteps />
 
-      <OrderSummary {...cart} />
+      <OrderSummary order={cart} />
 
     </>
   )
