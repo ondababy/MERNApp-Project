@@ -58,7 +58,7 @@ export default [
       },
       {
         path: '/role',
-        method: METHODS.POST,
+        method: METHODS.GET,
         controller: controller.getRole,
       },
       {

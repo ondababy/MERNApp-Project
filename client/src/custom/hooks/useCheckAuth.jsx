@@ -13,8 +13,10 @@ export const useGetAuth = () => {
 const useCheckAuth = (isPrivate = false) => {
   const dispatch = useDispatch();
   const [profile] = authApi.useProfileMutation();
+  const [getRole] = authApi.useGetRoleMutation();
   const { userInfo, accessToken } = useSelector((state) => state.auth);
   const [user, setUser] = useState(userInfo);
+  const [role, setRole] = useState(null);
   const logout = useLogoutAction();
   const navigate = useNavigate();
 
@@ -28,8 +30,21 @@ const useCheckAuth = (isPrivate = false) => {
       })
     );
   };
+  const fetchRole = async () => {
+    const res = await getRole().unwrap();
+    setRole(res);
+    dispatch(
+      setCredentials({
+        userInfo: res.user,
+        token: res.token,
+      })
+    );
+  };
+
+
   useEffect(() => {
     fetchUser();
+    fetchRole();
   }, []);
 
 
