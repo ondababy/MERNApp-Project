@@ -9,12 +9,6 @@ export const authApi = apiSlice.injectEndpoints({
         body,
       }),
     }),
-    getUserRole: build.mutation({
-      query: () => ({
-        url: `/users/role`,
-        method: 'GET',
-      }),
-    }),
     login: build.mutation({
       query: (body) => ({
         url: '/users/authenticate',

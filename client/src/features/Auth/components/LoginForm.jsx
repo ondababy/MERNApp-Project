@@ -35,7 +35,7 @@ function LoginForm() {
           token: res.token,
         })
       );
-      navigate('/dashboard');
+      navigate('/');
       toast.success('Logged in successfully');
     } catch (e) {
       toast.error(e?.data?.message || e.error);

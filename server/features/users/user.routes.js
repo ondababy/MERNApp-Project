@@ -57,11 +57,6 @@ export default [
         controller: [protectAndPermit(READ_WRITE), controller.delete],
       },
       {
-        path: '/role',
-        method: METHODS.GET,
-        controller: controller.getRole,
-      },
-      {
         path: '/test/email',
         method: METHODS.POST,
         controller: controller.testEmail,

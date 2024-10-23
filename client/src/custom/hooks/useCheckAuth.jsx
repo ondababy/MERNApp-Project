@@ -6,17 +6,15 @@ import { useNavigate } from 'react-router-dom';
 import { useLogoutAction } from './useLogout';
 
 export const useGetAuth = () => {
-  const { userInfo, accessToken } = useSelector((state) => state.auth);
-  return { userInfo, accessToken };
+  const { userInfo, accessToken, role } = useSelector((state) => state.auth);
+  return { userInfo, accessToken, role };
 };
 
 const useCheckAuth = (isPrivate = false) => {
   const dispatch = useDispatch();
   const [profile] = authApi.useProfileMutation();
-  const [getUserRole] = authApi.useGetUserRoleMutation();
-  const { userInfo, accessToken } = useSelector((state) => state.auth);
+  const { userInfo, accessToken, role } = useSelector((state) => state.auth);
   const [user, setUser] = useState(userInfo);
-  const [role, setRole] = useState(null);
   const logout = useLogoutAction();
   const navigate = useNavigate();
 
@@ -30,27 +28,18 @@ const useCheckAuth = (isPrivate = false) => {
       })
     );
   };
-  const fetchRole = async () => {
-    const res = await getUserRole().unwrap();
-    setRole(res);
-    dispatch(
-      setCredentials({
-        userInfo: res.user,
-        token: res.token,
-      })
-    );
-  };
+
 
 
   useEffect(() => {
     fetchUser();
-    fetchRole();
   }, []);
 
 
   useEffect(() => {
-    const isAdmin = (isPrivate && !user?.role !== ROLES.ADMIN)
-    if ((!accessToken && userInfo)) {
+    const isAdmin = (isPrivate && role !== ROLES.ADMIN)
+    console.log('isAdmin', isAdmin)
+    if ((!accessToken && userInfo) || isAdmin) {
       logout();
       return navigate('/');
     }
@@ -58,6 +47,8 @@ const useCheckAuth = (isPrivate = false) => {
       return navigate('/');
     } else if (!user?.id && isPrivate) {
       return navigate('/login');
+    } else if (user?.id && isPrivate) {
+      return navigate('/dashboard');
     }
 
   }, [navigate, user, isPrivate, userInfo, accessToken, logout]);

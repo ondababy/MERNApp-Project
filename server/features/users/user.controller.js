@@ -62,11 +62,6 @@ class UserController extends Controller {
     this.success({ res, message: 'Logged out!' });
   };
 
-  getRole = async (req, res) => {
-    const role = req.user?.role || 'guest';
-    this.success({ res, message: 'Role fetched!', role });
-  };
-
   getProfile = async (req, res) => {
     const user = req.user;
 
