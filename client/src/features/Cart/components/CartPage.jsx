@@ -1,10 +1,13 @@
 import { confirmDelete } from '@custom';
+import { useEffect, useRef, useState } from 'react';
 import { FaArrowRight } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { useCartActions } from '../hooks/useCartActions';
 import CartList from './CartList';
 
 export function CartPage() {
+  const [checkoutReady, setCheckoutReady] = useState(false);
+  const terms = useRef(null);
   const {
     cart: { items, subTotal },
     getItems,
@@ -19,8 +22,15 @@ export function CartPage() {
         getItems();
       })
     });
-
   }
+
+  const handleTerms = () => {
+    setCheckoutReady(terms.current.checked && items?.length);
+  }
+
+  useEffect(() => {
+    setCheckoutReady(terms.current.checked && items?.length);
+  }, [items])
 
 
 
@@ -44,13 +54,19 @@ export function CartPage() {
         </i>
         {/* Terms and Condition */}
         <div className="flex items-center my-4">
-          <input type="checkbox" />
+          <input
+            ref={terms}
+            onChange={handleTerms}
+            className="checkbox h-4 w-4 text-primary"
+            type="checkbox"
+
+          />
           <span className="text-xs ml-2">
             I agree with the terms and conditions
           </span>
         </div>
 
-        <Link to="/checkout" className={`${!items?.length ? 'btn-disabled' : ''} btn btn-outline btn-primary w-full`}>
+        <Link to="/checkout" className={`${!checkoutReady ? 'btn-disabled' : ''} btn btn-outline btn-primary w-full`}>
           Proceed to Checkout
         </Link>
         <Link to="/" className="group flex gap-2 items-center my-4 hover:text-primary  transition-all ease-in">
