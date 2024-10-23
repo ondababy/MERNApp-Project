@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { cartApi } from '../cart.api';
-import { addItem, removeItem, setItems, updateItem } from '../cart.slice';
+import { addItem, clearCart, removeItem, setItems, updateItem } from '../cart.slice';
 
 export function useCartActions() {
   /* DECLARATIONS #################################################### */
@@ -42,6 +42,10 @@ export function useCartActions() {
       dispatch(removeItem(item));
     });
   }, [dispatch, deleteCartItem]);
+
+  const clearCart = React.useCallback(() => {
+    dispatch(clearCart());
+  }, [dispatch]);
 
   React.useEffect(() => {
     getItems();

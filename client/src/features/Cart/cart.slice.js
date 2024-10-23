@@ -50,6 +50,9 @@ export const cartSlice = createSlice({
       state.items = state.items.filter((item) => item.id !== action.payload.id);
       state.subTotal = calculateSubTotal(state.items);
     },
+    clearCart: (state) => {
+      state = initialState;
+    }
   },
 });
 
