@@ -1,5 +1,4 @@
 import { FormikForm, FormikInput } from '@common/components';
-import PropTypes from 'prop-types';
 import React from 'react';
 import { Button } from 'react-daisyui';
 

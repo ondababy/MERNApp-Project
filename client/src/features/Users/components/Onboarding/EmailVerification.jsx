@@ -1,5 +1,4 @@
 import { InputOTPForm } from '@custom/components';
-import PropTypes from 'prop-types';
 import React from 'react';
 
 function EmailVerificaiton(props) {
