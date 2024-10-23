@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useLogoutAction } from './useLogout';
 
+const isDev = import.meta.env.VITE_CLIENT_ENV === 'development';
+
 export const useGetAuth = () => {
   const { userInfo, accessToken, role } = useSelector((state) => state.auth);
   return { userInfo, accessToken, role };
@@ -17,6 +19,7 @@ const useCheckAuth = (isPrivate = false) => {
 
   const { userInfo, accessToken, role } = useSelector((state) => state.auth);
   const [profile] = authApi.useProfileMutation();
+  const isAdmin = userInfo?.id && role === ROLES.ADMIN && accessToken || isDev;
 
   const fetchUser = async () => {
     const res = await profile().unwrap();
@@ -31,19 +34,16 @@ const useCheckAuth = (isPrivate = false) => {
 
 
   useEffect(() => {
-    userInfo?.id && fetchUser();
-  }, [userInfo]);
+    fetchUser();
+  }, []);
 
 
   useEffect(() => {
-    const isDevelopment = import.meta.env.CLIENT_ENV === 'development';
-    const isAdmin = userInfo?.id && role === ROLES.ADMIN && accessToken && !isDevelopment;
-    console.log(!isAdmin && isPrivate)
     if (!isAdmin && isPrivate) {
       logout();
       navigate('/login')
     }
-    if (userInfo && !isPrivate) {
+    else if (userInfo && !isPrivate) {
       navigate('/');
     } else if (!userInfo?.id && isPrivate) {
       navigate('/login');
@@ -57,7 +57,7 @@ const useCheckAuth = (isPrivate = false) => {
     userInfo,
     accessToken,
     role,
-    isAdmin: userInfo?.id && role === ROLES.ADMIN,
+    isAdmin: isAdmin,
   };
 };
 export default useCheckAuth;

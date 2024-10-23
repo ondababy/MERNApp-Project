@@ -6,7 +6,7 @@ import { Outlet } from 'react-router-dom';
 
 function PrivateLayout() {
   const [visible, toggleVisible] = useToggle(true);
-  const { isAdmin } = useCheckAuth(true) || {
+  const { isAdmin, userInfo } = useCheckAuth(true) || {
     name: 'Private User',
   };
   return (
