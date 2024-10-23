@@ -59,12 +59,12 @@ export default [
       {
         path: '/send-verify-email',
         method: METHODS.POST,
-        controller: controller.sendVerifyEmail,
+        controller: [protectAndPermit(), controller.sendVerifyEmail],
       },
       {
         path: '/verify-email',
         method: METHODS.POST,
-        controller: controller.verifyEmail,
+        controller: [protectAndPermit(), controller.verifyEmail],
       },
       {
         path: '/test/email',

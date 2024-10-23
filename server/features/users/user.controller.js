@@ -110,14 +110,16 @@ class UserController extends Controller {
   };
 
   sendVerifyEmail = async (req, res) => {
-    const { email, redirectUrl } = req.body;
+    const { redirectUrl } = req.params;
+    const { email } = req.user;
     await this.service.sendVerifyEmail(email, redirectUrl);
     this.success({ res, message: 'Verification email sent!' });
   };
 
   verifyEmail = async (req, res) => {
     const { verifyToken } = req.params;
-    const { email, OTP } = req.body;
+    const { OTP } = req.body;
+    const { email } = req.user;
     let result;
     if (verifyToken) result = await this.service.verifyToken(verifyToken);
     else if (email && OTP) result = await this.service.verifyOTP(email, OTP);
