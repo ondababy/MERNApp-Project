@@ -15,13 +15,13 @@ export function useCartActions() {
   /* END DECLARATIONS ################################################ */
 
   const getItems = React.useCallback(() => {
-    return getCartItems()?.unwrap().then((data) => {
+    return getCartItems().unwrap().then((data) => {
       dispatch(setItems(data?.resource || []));
     });
   }, [dispatch, getCartItems]);
 
   const addItemToCart = React.useCallback((item) => {
-    return createCartItem(item)?.unwrap().then((data) => {
+    return createCartItem(item).unwrap().then((data) => {
       dispatch(addItem(data?.resource || {}));
       return data?.resource || {};
     });
@@ -31,14 +31,14 @@ export function useCartActions() {
     return updateCartItem({
       id: item.id,
       item,
-    })?.unwrap().then((data) => {
+    }).unwrap().then((data) => {
       dispatch(updateItem(data?.resource || {}));
       return data?.resource || {};
     });
   }, [dispatch, updateCartItem]);
 
   const removeItemFromCart = React.useCallback((item) => {
-    return deleteCartItem(item.id)?.unwrap().then(() => {
+    return deleteCartItem(item.id).unwrap().then(() => {
       dispatch(removeItem(item));
     });
   }, [dispatch, deleteCartItem]);
