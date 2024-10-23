@@ -43,6 +43,12 @@ export default function CheckoutSteps() {
     console.log('Order finish');
   }
 
+  // React.useEffect(() => {
+  //   if (api) {
+  //     api.setActiveIndex(currentStep);
+  //   }
+  // }, [api]);
+
 
 
   return (

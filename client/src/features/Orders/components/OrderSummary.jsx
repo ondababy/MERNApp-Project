@@ -1,12 +1,12 @@
 import React from 'react'
 
-export default function OrderSummary({ items, subTotal, onCheckOut }) {
+export default function OrderSummary(order) {
 
   const handleCheckOut = () => {
-
+    onCheckOut()
   }
 
-  return !items?.length ? '' : (
+  return !order.items?.length ? '' : (
     <>
       <div className="bg-base-200 md:min-h-96 p-8 container mx-auto md:max-w-sm border-r">
         <h1 className='font-extrabold tracking-wider text-2xl uppercase'>
@@ -17,21 +17,21 @@ export default function OrderSummary({ items, subTotal, onCheckOut }) {
         <div className="flex justify-between my-4">
           <span className="text-gray-600">Subtotal</span>
           <span className="font-semibold">
-            {items?.length && items[0]?.currency || ''} {subTotal}
+            {order.items?.length && order.items[0]?.currency || ''} {order?.subTotal || 0}
           </span>
         </div>
 
         <div className="flex justify-between my-4">
           <span className="text-gray-600">Shipping Fee</span>
           <span className="font-semibold">
-            {items?.length && items[0]?.currency || ''} {subTotal}
+            {order.items?.length && order.items[0]?.currency || ''} {order?.shipping_fee || 0}
           </span>
         </div>
 
         <div className="flex justify-between my-4">
           <span className="text-gray-600">Tax Total</span>
           <span className="font-semibold">
-            {items?.length && items[0]?.currency || ''} {subTotal}
+            {order.items?.length && order.items[0]?.currency || ''} {order?.tax_total || 0}
           </span>
         </div>
 
@@ -40,7 +40,7 @@ export default function OrderSummary({ items, subTotal, onCheckOut }) {
         <div className="flex justify-between my-4 text-lg">
           <span className="text-gray-600 font-bold">Total</span>
           <span className="font-bold">
-            {items?.length && items[0]?.currency || ''} {subTotal}
+            {order.items?.length && order.items[0]?.currency || ''} {order?.total || 0}
           </span>
         </div>
 
@@ -58,7 +58,7 @@ export default function OrderSummary({ items, subTotal, onCheckOut }) {
 
         <button
           onCheckOut={handleCheckOut}
-          className={`${!items?.length ? 'btn-disabled' : ''} btn btn-outline btn-primary w-full`}>
+          className={`${!order.items?.length ? 'btn-disabled' : ''} btn btn-outline btn-primary w-full`}>
           Confirm Order
         </button>
       </div>

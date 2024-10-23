@@ -1,12 +1,11 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import CheckoutSteps from './CheckoutSteps';
 import OrderSummary from './OrderSummary';
 
 
 export default function CheckoutPage() {
-
-  const [items, setItems] = React.useState([]);
-  const [subTotal, setSubTotal] = React.useState(0);
+  const cart = useSelector((state) => state.cart);
 
 
 
@@ -14,7 +13,7 @@ export default function CheckoutPage() {
     <>
       <CheckoutSteps />
 
-      <OrderSummary items={items} subTotal={subTotal} />
+      <OrderSummary {...cart} />
 
     </>
   )

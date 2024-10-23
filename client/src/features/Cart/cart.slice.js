@@ -3,6 +3,13 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   items: [],
   subTotal: 0,
+  total: 0,
+  shipping: {
+    fee: 0,
+    method: 'Standard',
+  },
+  taxTotal: 0,
+  currency: 'PHP',
 };
 
 const calculateSubTotal = (items) => {
@@ -16,6 +23,12 @@ export const cartSlice = createSlice({
     setItems: (state, action) => {
       state.items = action.payload;
       state.subTotal = calculateSubTotal(state.items);
+    },
+    setShipping: (state, action) => {
+      state.shipping = action.payload;
+    },
+    setTotal: (state, action) => {
+      state.total = action.payload;
     },
     addItem: (state, action) => {
       state.items.push(action.payload);

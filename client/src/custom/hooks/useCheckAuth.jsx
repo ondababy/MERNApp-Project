@@ -3,7 +3,6 @@ import { authApi, setCredentials } from '@features';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { useLogoutAction } from './useLogout';
 
 export const useGetAuth = () => {
