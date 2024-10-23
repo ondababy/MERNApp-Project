@@ -42,6 +42,11 @@ export function useCartActions() {
       dispatch(removeItem(item));
     });
   }, [dispatch, deleteCartItem]);
+
+  React.useEffect(() => {
+    getItems();
+  }, []);
+
   return {
     cart,
     getItems,

@@ -13,9 +13,6 @@ export function CartPage() {
 
   } = useCartActions()
 
-  React.useEffect(() => {
-    getItems();
-  }, []);
 
   const handleRemove = async (cartItem) => {
     confirmDelete(() => {

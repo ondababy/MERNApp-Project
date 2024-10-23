@@ -6,9 +6,7 @@ import OrderSummary from './OrderSummary';
 
 export default function CheckoutPage() {
   const { cart, getItems } = useCartActions()
-  React.useEffect(() => {
-    getItems();
-  }, []);
+
 
 
   return (
