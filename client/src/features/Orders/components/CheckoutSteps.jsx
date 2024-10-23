@@ -44,11 +44,6 @@ export default function CheckoutSteps() {
   }
 
 
-  React.useEffect(() => {
-    if (!api) {
-      return;
-    }
-  }, [api]);
 
   return (
     <div className="flex flex-col min-h-96 bg-base-200/50 p-8 container mx-auto h-screen">
