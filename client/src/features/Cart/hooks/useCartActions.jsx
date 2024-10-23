@@ -42,7 +42,6 @@ export function useCartActions() {
       dispatch(removeItem(item));
     });
   }, [dispatch, deleteCartItem]);
-
   return {
     cart,
     getItems,
