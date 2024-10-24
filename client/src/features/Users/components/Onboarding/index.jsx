@@ -45,7 +45,7 @@ function UserOnboarding(props) {
         />
       </div>
       <div className="divider"></div>
-      <div >{pageComponents[currentStep]}</div>
+      {pageComponents[currentStep]}
       <div className="divider"></div>
       <div className="flex justify-between items-end w-full">
         {currentStep > 0 && (

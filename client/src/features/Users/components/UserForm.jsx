@@ -1,39 +1,48 @@
-import { FormikForm } from '@common/components';
-import { PageTitle } from '@partials';
+
 import isEqual from 'lodash/isEqual';
 import PropTypes from 'prop-types';
+
+import { FormikForm } from '@common/components';
+import { PageTitle } from '@partials';
 import { useEffect, useMemo, useState } from 'react';
 import { Button } from 'react-daisyui';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { userApi } from '../user.api';
+import { getAltFields, getFields } from '../user.fields';
 import { userValidation } from '../user.validation';
 
 const UserForm = ({ title = 'User Form', action = 'create' }) => {
+
+  /* DECLARATIONS #################################################### */
+  const fields = typeof getFields === 'function' ? getFields() : getFields || [];
+  const altFields = typeof getAltFields === 'function' ? getAltFields() : getAltFields || [];
+  // CAROUSEL
+  const images = [
+    {
+      src: "https://placehold.co/600",
+      alt: "n/a",
+    },
+  ]
+
+  /* DECLARATIONS #################################################### */
+  const navigate = useNavigate();
   const { id } = useParams();
   const [user, setUser] = useState(null);
-  const [userSchema, setUserSchema] = useState([
-    { label: 'Username', name: 'username', type: 'text' },
-    { label: 'Email Address', name: 'email', type: 'email' },
-  ]);
-  const navigate = useNavigate();
+  const [userSchema, setUserSchema] = useState(fields);
   const [createUser, { isLoading: isCreating }] = userApi.useCreateUserMutation();
   const [updateUser, { isLoading: isUpdating }] = userApi.useUpdateUserMutation();
   const [getUser, { isLoading: isFetching }] = userApi.useGetUserMutation();
+  /* ############ #################################################### */
 
   useEffect(() => {
     if (action === 'edit' && id) {
       getUser(id).then((res) => {
         setUser(res.data.resource);
       });
-    } else {
-      setUserSchema([
-        { label: 'Username', name: 'username', type: 'text' },
-        { label: 'Email Address', name: 'email', type: 'email' },
-        { label: 'Password', name: 'password', type: 'password' },
-        { label: 'Confirm Password', name: 'confirm_password', type: 'password' },
-      ]);
     }
+    setUserSchema(action === 'create' ? fields : altFields);
+
   }, [action, id, getUser]);
 
   const initialValues = useMemo(
@@ -54,7 +63,6 @@ const UserForm = ({ title = 'User Form', action = 'create' }) => {
         await updateUser({ id, user: values }).unwrap();
         toast.success('User updated successfully');
       }
-      // navigate('/dashboard/users/table');
     } catch (e) {
       const errors = e?.data?.errors?.details;
       if (Array.isArray(errors)) {

@@ -14,17 +14,18 @@ import { getAltFields, getFields } from '../_example.fields';
 import { _exampleValidation } from '../_example.validation';
 import _ExampleWrapper from './_ExampleWrapper';
 
-const fields = typeof getFields === 'function' ? getFields() : getFields || [];
-const altFields = typeof getAltFields === 'function' ? getAltFields() : getAltFields || [];
-// CAROUSEL
-const images = [
-  {
-    src: "https://placehold.co/600",
-    alt: "n/a",
-  },
-]
-
 const _ExampleForm = ({ title = '_Example Form', action = 'create' }) => {
+
+  /* DECLARATIONS #################################################### */
+  const fields = typeof getFields === 'function' ? getFields() : getFields || [];
+  const altFields = typeof getAltFields === 'function' ? getAltFields() : getAltFields || [];
+  const images = [
+    {
+      src: "https://placehold.co/600",
+      alt: "n/a",
+    },
+  ]
+
   /* DECLARATIONS #################################################### */
   const navigate = useNavigate();
   const [_example, set_Example] = useState(null);
