@@ -39,6 +39,14 @@ const useCheckAuth = (isPrivate = false) => {
       fetchUser();
   }, []);
 
+  const checkPath = (path) => {
+    const urlParams = new URLSearchParams(location.search);
+    const paramsString = urlParams.toString();
+    if (paramsString) path += `?${paramsString}`;
+    if (location.pathname.startsWith(path)) return location.pathname;
+    return path;
+  }
+
 
   useEffect(() => {
 
@@ -46,10 +54,10 @@ const useCheckAuth = (isPrivate = false) => {
     if (!isAdmin && isPrivate) logout();
 
     // User and private route
-    else if (userInfo?.id && isPrivate) navigate(location.pathname.startsWith('/dashboard') ? location.pathname : '/dashboard')
+    else if (userInfo?.id && isPrivate) navigate(checkPath('/dashboard'));
 
     // Not email verified
-    else if (userInfo?.id && !userInfo?.emailVerifiedAt) navigate('/onboarding');
+    else if (userInfo?.id && !userInfo?.emailVerifiedAt) navigate(checkPath('/onboarding'));
 
     // No user and private route
     else if (!userInfo?.id && isPrivate || userInfo?.id && !accessToken) {

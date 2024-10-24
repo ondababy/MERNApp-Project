@@ -9,8 +9,8 @@ import {
   InputOTPSlot
 } from "@common/components/ui/input-otp"
 
-export function InputOTPForm({ onChange = () => { } }) {
-  const [value, setValue] = React.useState("")
+export function InputOTPForm({ otp, onChange = () => { } }) {
+  const [value, setValue] = React.useState(otp)
   const handleChange = (value) => {
     setValue(value)
     onChange(value)

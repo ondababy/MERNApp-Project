@@ -116,12 +116,13 @@ class UserService extends Service {
     if (!user) throw new Errors.NotFound('User not found!');
     const token = user.getVerifyEmailToken();
     const OTP = user.getOTP();
+    let redirect = redirectUrl ? `${redirectUrl}?verifyToken=${token}&otp=${OTP}` : '';
     const message = `Your OTP is <strong> ${OTP} </strong> `;
     const altMessage = redirectUrl
       ? `Or click on the following link to verify your email:
-    \n\n <a href="${redirectUrl}?verifyToken=${token}">${redirectUrl}?verifyToken=${token}</a>`
+    \n\n <a href="${redirect}">${redirect}</a>`
       : '';
-
+    console.log(redirect);
     try {
       await sendEmail({
         email: user.email,

@@ -124,7 +124,7 @@ class UserController extends Controller {
   };
 
   sendVerifyEmail = async (req, res) => {
-    const { redirectUrl } = req.params;
+    const { redirectUrl } = req.body;
     const { email } = req.user;
     await this.service.sendVerifyEmail(email, redirectUrl);
     this.success({ res, message: 'Verification email sent!' });

@@ -1,18 +1,13 @@
 import { InputOTPForm } from '@custom/components';
 import React from 'react';
+import { useEmailVerification } from '../hooks/useEmailVerification';
 
 function EmailVerificaiton({ onSave = () => { } }) {
-  const [otp, setOTP] = React.useState('');
+  const { verify, resend, userInfo, otp, setOTP } = useEmailVerification();
   const handleOTPChange = (otp) => {
     setOTP(otp);
   }
 
-
-  const handleVerify = () => {
-    onSave(otp);
-  }
-
-  const handleResend = () => { }
 
 
   return (
@@ -25,16 +20,16 @@ function EmailVerificaiton({ onSave = () => { } }) {
         <div className="divider"></div>
         <div className="form-wrapper">
           <span className="mb-2">Enter a 6-digit valid code.</span>
-          <InputOTPForm onChange={handleOTPChange} />
+          <InputOTPForm otp={otp} onChange={handleOTPChange} />
         </div>
 
         {/* Verify  */}
         <div className="flex gap-2 my-4">
           <button
-            onClick={handleVerify}
+            onClick={verify}
             className="btn btn-sm btn-primary">Verify</button>
           <button
-            onClick={handleResend}
+            onClick={resend}
             className="btn btn-sm btn-ghost btn-primary">Resend Code</button>
         </div>
       </div>

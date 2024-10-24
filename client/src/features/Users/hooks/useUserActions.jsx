@@ -1,6 +1,6 @@
 
 import { confirmSave } from '@custom';
-import { authApi, setCredentials } from '@features';
+import { setCredentials } from '@features';
 import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
