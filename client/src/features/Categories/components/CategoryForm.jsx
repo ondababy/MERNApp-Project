@@ -110,7 +110,7 @@ const CategoryForm = ({ title = 'Category Form', action = 'create' }) => {
               onSubmit: onSubmit,
               enableReinitialize: true,
             }}
-            className="flex flex-wrap gap-8"
+            className="grid grid-col-6 gap-8"
             element={({ isSubmitting, values }) => {
               const isFormChanged = !isEqual(initialValues, values);
               const isProcessing = isSubmitting || isCreating || isUpdating;

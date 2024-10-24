@@ -21,7 +21,7 @@ export default function UserForm({ id = null, action = 'create', ...props }) {
     <div className="container p-8">
       <FormikForm
         formikProps={formikProps}
-        className="flex flex-wrap gap-8"
+        className="grid grid-col-6 gap-8"
         formSchema={userSchema}
         element={({ isSubmitting, values }) => {
           const isFormChanged = !isEqual(initialValues, values);
