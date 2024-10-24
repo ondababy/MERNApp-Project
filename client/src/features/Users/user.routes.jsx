@@ -1,5 +1,5 @@
 import React from 'react';
-import { UserList, UserPage, UserTable } from '.';
+import { UserPage, UserTable } from '.';
 
 const UserForm = React.lazy(() => import('./components/UserForm'));
 
