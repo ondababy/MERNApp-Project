@@ -72,6 +72,7 @@ export default function useUserActions({ id = null, action = "create", fields = 
       initialValues,
       validationSchema: userValidation,
       enableReinitialize: true,
+      onSubmit: handleSubmit
     },
     userSchema,
     initialValues,

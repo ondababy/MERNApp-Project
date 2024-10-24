@@ -40,7 +40,7 @@ const userinforules = {
   'info.birthdate': () => check('info.birthdate').isISO8601().withMessage('Birthdate is invalid').optional(),
   'info.city': () => check('info.city').notEmpty().withMessage('City is required'),
   'info.region': () => check('info.region').notEmpty().withMessage('Region is required'),
-  'info.zip_code': () => check('info.zip_code').notEmpty().withMessage('Zip code is invalid'),
+  'info.zip_code': () => check('info.zip_code'),
 };
 
 const matchPassword = (value, { req }) => {

@@ -41,8 +41,7 @@ export default function UserForm({ id = null, action = 'create', ...props }) {
               <div className="w-full col-span-3 md:col-span-6">
                 <Button
                   variant="outline"
-                  type="button"
-                  onClick={handleSubmit(values)}
+                  type="submit"
                   color="primary"
                   className="max-w-md"
                   disabled={isButtonDisabled}
