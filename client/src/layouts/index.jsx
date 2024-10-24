@@ -1,3 +1,3 @@
-export { default as GuestLayout } from './Guest';
-export { default as PrivateLayout } from './Private';
+export { GuestLayout } from './Guest';
+export { PrivateLayout } from './Private';
 

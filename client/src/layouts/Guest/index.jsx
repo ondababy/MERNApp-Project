@@ -1,7 +1,7 @@
 import { FooterWrapper, Header } from '@partials';
 import { Outlet } from 'react-router-dom';
 
-function GuestLayout() {
+export function GuestLayout() {
 
 
   return (
@@ -14,5 +14,3 @@ function GuestLayout() {
     </div>
   );
 }
-
-export default GuestLayout;

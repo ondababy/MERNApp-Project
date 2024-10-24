@@ -4,7 +4,8 @@ import { DashboardHeader, FooterWrapper, Sidebar } from '@partials';
 import { Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 
-function PrivateLayout() {
+
+export function PrivateLayout() {
   const [visible, toggleVisible] = useToggle(true);
   const { isAdmin, userInfo } = useCheckAuth(true) || {
     name: 'Private User',
@@ -38,4 +39,3 @@ function PrivateLayout() {
   );
 }
 
-export default PrivateLayout;
