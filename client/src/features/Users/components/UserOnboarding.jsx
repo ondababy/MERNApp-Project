@@ -1,5 +1,6 @@
 import { Steps } from '@common';
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 import AccountInformation from './UserAccountInformation';
 import EmailVerificaiton from './UserEmailVerification';
 
@@ -19,6 +20,17 @@ const initialSteps = [
 function UserOnboarding(props) {
   const [currentStep, setCurrentStep] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
+
+
+  const handleStepClick = (index) => {
+    if (index < currentStep) {
+      setCurrentStep(index);
+    } else {
+      toast.error('Please complete the current step!');
+    }
+
+  }
 
 
   const handleContinue = () => {
@@ -36,6 +48,7 @@ function UserOnboarding(props) {
   };
 
   const handleSave = (user) => {
+    setIsEmailVerified(user?.emailVerifiedAt);
     setIsFinished(user?.emailVerifiedAt && user?.info);
   }
 
@@ -47,7 +60,7 @@ function UserOnboarding(props) {
       <div>
         <Steps
           stepList={initialSteps}
-          onChange={(index) => setCurrentStep(index - 1)}
+          onChange={handleStepClick}
           current={currentStep}
         />
       </div>
@@ -66,6 +79,7 @@ function UserOnboarding(props) {
         {currentStep < initialSteps.length - 1 ? <button
           className="btn btn-primary"
           onClick={handleContinue}
+          disabled={!isEmailVerified}
 
         >
           Continue

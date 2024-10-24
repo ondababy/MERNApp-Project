@@ -2,9 +2,19 @@ import { InputOTPForm } from '@custom/components';
 import React from 'react';
 
 function EmailVerificaiton({ onSave = () => { } }) {
+  const [otp, setOTP] = React.useState('');
   const handleOTPChange = (otp) => {
-    console.log(otp);
+    setOTP(otp);
   }
+
+
+  const handleVerify = () => {
+    onSave(otp);
+  }
+
+  const handleResend = () => { }
+
+
   return (
     <>
       <div className="w-full">
@@ -20,8 +30,12 @@ function EmailVerificaiton({ onSave = () => { } }) {
 
         {/* Verify  */}
         <div className="flex gap-2 my-4">
-          <button className="btn btn-sm btn-primary">Verify</button>
-          <button className="btn btn-sm btn-ghost btn-primary">Resend Code</button>
+          <button
+            onClick={handleVerify}
+            className="btn btn-sm btn-primary">Verify</button>
+          <button
+            onClick={handleResend}
+            className="btn btn-sm btn-ghost btn-primary">Resend Code</button>
         </div>
       </div>
     </>
