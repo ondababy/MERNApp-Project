@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useLogoutAction } from './useLogout';
 
-const isDev = import.meta.env.VITE_CLIENT_ENV === 'development';
+const isDev = import.meta.env.VITE_CLIENT_ENV === 'development' && false;
 
 export const useGetAuth = () => {
   const { userInfo, accessToken, role } = useSelector((state) => state.auth);
@@ -40,16 +40,10 @@ const useCheckAuth = (isPrivate = false) => {
 
 
   useEffect(() => {
-    if (!isAdmin && isPrivate) {
-      logout();
-    }
-    else if (userInfo && !isPrivate) {
-      navigate('/');
-    } else if (!userInfo?.id && isPrivate) {
-      navigate('/login');
-    } else if (userInfo?.id && isPrivate) {
-      navigate('/dashboard');
-    }
+    if (!isAdmin && isPrivate) logout();
+    else if (!userInfo?.id && isPrivate) navigate('/login');
+    else if (userInfo?.id && isPrivate) navigate('/dashboard');
+
 
   }, [navigate, isPrivate, userInfo, accessToken, logout]);
 

@@ -48,6 +48,7 @@ export function useCartActions() {
   }, [dispatch]);
 
   React.useEffect(() => {
+    getItems();
   }, []);
 
   return {
