@@ -34,6 +34,21 @@ const userApi = apiSlice.injectEndpoints({
         body: user,
       }),
     }),
+    sendVerifyEmail: build.mutation({
+      query: (id, redirectUrl) => ({
+        url: `/users/${id}/send-verify-email?redirectUrl=${redirectUrl}`,
+        method: 'POST',
+      }),
+    }),
+    verifyEmail: build.mutation({
+      query: ({ id, otp, verifyToken }) => ({
+        url: `/users/${id}/verify-email?verifyToken=${verifyToken}`,
+        method: 'POST',
+        body: {
+          OTP: otp,
+        },
+      }),
+    }),
   }),
 });
 
