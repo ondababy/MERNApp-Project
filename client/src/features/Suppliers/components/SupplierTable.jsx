@@ -14,9 +14,7 @@ const allowedColumns = () => [
   { key: 'emailAddress', label: 'Email Address' },
   { key: 'contactNumber', label: 'Contact Number' },
   { key: 'description', label: 'Description' },
-//{ key: 'image', label: 'Supplier Image' }, 
   { key: 'actions', label: '' },
-  // More columns can be added here
 ];
 
 const SupplierTable = () => {
@@ -34,6 +32,7 @@ const SupplierTable = () => {
         toast.success('Supplier deleted successfully');
       });
     } catch (error) {
+
       toast.error(error.message);
     }
   };
@@ -68,32 +67,30 @@ const SupplierTable = () => {
         </Button>
       </div>
     );
+  
   return (
-    <>
-      <SupplierWrapper title="Suppliers Table">
-        <Table
-          data={suppliers.map((supplier) => ({
-            ...supplier,
-            actions: (
-              <ActionButtons
-                key={'action_' + supplier.slug}
-                className="flex justify-end"
-                isLoading={isDeleting}
-                onDelete={() => handleDelete(supplier.id)}
-                onEdit={() => navigate(`/dashboard/suppliers/${supplier.slug}/edit`)}
-                onView={() => navigate(`/dashboard/suppliers/${supplier.slug}/view`)}
-              />
-            ),
-          }))}
-          columns={allowedColumns()}
-        />
-      </SupplierWrapper>
-    </>
+    <SupplierWrapper title="Suppliers Table">
+      <Table
+        data={suppliers.map((supplier) => ({
+          ...supplier,
+          actions: (
+            <ActionButtons
+              key={'action_' + supplier.slug}
+              className="flex justify-end"
+              isLoading={isDeleting}
+              onDelete={() => handleDelete(supplier.id)}
+              onEdit={() => navigate(`/dashboard/suppliers/${supplier.slug}/edit`)}
+              onView={() => navigate(`/dashboard/suppliers/${supplier.slug}/view`)}
+            />
+          ),
+        }))}
+        columns={allowedColumns()}
+      />
+    </SupplierWrapper>
   );
 };
 
 export default SupplierTable;
-
 
 
 // import { ActionButtons, Table } from '@common';
@@ -112,7 +109,7 @@ export default SupplierTable;
 //   { key: 'emailAddress', label: 'Email Address' },
 //   { key: 'contactNumber', label: 'Contact Number' },
 //   { key: 'description', label: 'Description' },
-//   // { key: 'image', label: 'Supplier Image' }, 
+// //{ key: 'image', label: 'Supplier Image' }, 
 //   { key: 'actions', label: '' },
 //   // More columns can be added here
 // ];
@@ -123,7 +120,6 @@ export default SupplierTable;
 //   const [suppliers, setSuppliers] = useState([]);
 //   const [getSuppliers, { isLoading, isError }] = useGetSuppliersMutation();
 //   const [deleteSupplier, { isLoading: isDeleting }] = useDeleteSupplierMutation();
-
 
 //   const handleDelete = async (id) => {
 //     try {
@@ -167,7 +163,6 @@ export default SupplierTable;
 //         </Button>
 //       </div>
 //     );
-
 //   return (
 //     <>
 //       <SupplierWrapper title="Suppliers Table">
@@ -193,3 +188,4 @@ export default SupplierTable;
 // };
 
 // export default SupplierTable;
+
