@@ -7,18 +7,16 @@ export default function AuthLogout({ iconOnly = false, className, ...props }) {
   const { userInfo } = useGetAuth();
   return (
     userInfo && (
-      <div>
-        <form onSubmit={handleLogout}>
-          <button
-            type="submit"
-            className={cn("btn btn-outline btn-primary rounded-btn ", className)}
-            {...props}
-          >
-            <FaArrowRightFromBracket />
-            {iconOnly ? '' : 'Logout'}
-          </button>
-        </form>
-      </div>
+      <form onSubmit={handleLogout} className='w-full'>
+        <button
+          type="submit"
+          className={cn("btn btn-outline btn-primary rounded-btn ", className)}
+          {...props}
+        >
+          <FaArrowRightFromBracket />
+          {iconOnly ? '' : 'Logout'}
+        </button>
+      </form>
     )
   );
 }

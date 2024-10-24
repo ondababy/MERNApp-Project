@@ -26,13 +26,13 @@ const MenuList = ({ menus = defaultMenus, iconOnly = false }) => {
           <Link
             key={index}
             to={menu.link}
-            className="btn btn-ghost rounded-btn group p-0 lg:p-3 hover:text-primary"
+            className={`btn btn-ghost group hover:text-primary  ${iconOnly ? 'w-12 p-0  rounded-full aspect-square' : 'w-full'} `}
           >
-            <span className="text-lg group-hover:text-primary">
+            <span className={`text-lg group-hover:text-primary ${iconOnly ? 'flex items-center justify-center' : ''} `}>
               {menu.icon}
             </span>
-            <span className="text-sm">
-              {iconOnly ? '' : menu.name}
+            <span className={`text-sm ${iconOnly ? 'hidden' : ''}`}>
+              {menu.name}
             </span>
           </Link>
         )
@@ -51,7 +51,7 @@ function Header({ clickLogo }) {
             </Dropdown.Toggle>
             <Dropdown.Menu className="items-center border border-gray-400 rounded border-opacity-30 bg-base-200 w-52">
               <MenuList />
-              <AuthLogout className="btn btn-ghost rounded-btn group p-0 lg:p-3 hover:text-primary" />
+              <AuthLogout className="hover:text-primary" />
             </Dropdown.Menu>
           </Dropdown>
           <TextRainbow
@@ -64,8 +64,8 @@ function Header({ clickLogo }) {
           </span>
         </Navbar.Start>
         <Navbar.End className='w-full'>
-          <div className="hidden lg:flex">
-            <MenuList />
+          <div className="hidden lg:flex gap-2">
+            <MenuList iconOnly={true} />
             <AuthLogout />
           </div>
           <div className="lg:hidden">
