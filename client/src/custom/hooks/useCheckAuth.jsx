@@ -34,7 +34,8 @@ const useCheckAuth = (isPrivate = false) => {
 
 
   useEffect(() => {
-    fetchUser();
+    if (!userInfo?.id && accessToken && isPrivate)
+      fetchUser();
   }, []);
 
 
