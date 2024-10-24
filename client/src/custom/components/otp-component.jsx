@@ -1,29 +1,40 @@
-import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from '@common/components/ui/input-otp';
-import React from 'react';
+"use client"
 
-export const InputOTPForm = ({ count = 6, divide = 3 }) => {
-  const groups = [];
-  let slotIndex = 0;
+import * as React from "react"
 
-  for (let i = 0; i < count; i += divide) {
-    const slots = [];
-    for (let j = 0; j < divide && slotIndex < count; j++, slotIndex++) {
-      slots.push(
-        <InputOTPSlot
-          key={slotIndex}
-          index={slotIndex}
-        />
-      );
-    }
-    groups.push(
-      <React.Fragment key={i}>
-        <InputOTPGroup>{slots}</InputOTPGroup>
-        {i + divide < count && <InputOTPSeparator />}
-      </React.Fragment>
-    );
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot
+} from "@common/components/ui/input-otp"
+
+export function InputOTPForm({ onChange = () => { } }) {
+  const [value, setValue] = React.useState("")
+  const handleChange = (value) => {
+    setValue(value)
+    onChange(value)
   }
 
-  return <InputOTP maxLength={count}>{groups}</InputOTP>;
-};
-
-
+  return (
+    <div className="space-y-2">
+      <InputOTP
+        maxLength={6}
+        value={value}
+        onChange={handleChange}
+      >
+        <InputOTPGroup>
+          <InputOTPSlot index={0} />
+          <InputOTPSlot index={1} />
+          <InputOTPSlot index={2} />
+          <InputOTPSlot index={3} />
+          <InputOTPSlot index={4} />
+          <InputOTPSlot index={5} />
+        </InputOTPGroup>
+      </InputOTP>
+      <div className="text-sm">
+        Enter your one-time password.
+      </div>
+    </div>
+  )
+}

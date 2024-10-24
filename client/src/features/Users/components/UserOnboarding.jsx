@@ -36,10 +36,10 @@ function UserOnboarding(props) {
   };
 
   const handleSave = (user) => {
-    setIsFinished(user.emailVerifiedAt && user.info);
+    setIsFinished(user?.emailVerifiedAt && user?.info);
   }
 
-  const pageComponents = [<EmailVerificaiton />, <AccountInformation onSave={handleSave} />];
+  const pageComponents = [<EmailVerificaiton onSave={handleSave} />, <AccountInformation onSave={handleSave} />];
 
 
   return (

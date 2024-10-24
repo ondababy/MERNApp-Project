@@ -74,12 +74,12 @@ export default function useUserActions({ id = null, action = "create", fields = 
         toast.success('User updated successfully');
       }
       const userData = res?.user;
-      if (!userData) return
       if (userInfo?.id === userData?.id) {
         dispatch(setCredentials({
           userInfo: userData,
         }));
       }
+      onSave(userData);
     } catch (e) {
       const errors = e?.data?.errors?.details;
       if (Array.isArray(errors)) {

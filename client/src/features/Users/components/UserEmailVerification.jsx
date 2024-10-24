@@ -1,7 +1,10 @@
 import { InputOTPForm } from '@custom/components';
 import React from 'react';
 
-function EmailVerificaiton(props) {
+function EmailVerificaiton({ onSave = () => { } }) {
+  const handleOTPChange = (otp) => {
+    console.log(otp);
+  }
   return (
     <>
       <div className="w-full">
@@ -12,7 +15,7 @@ function EmailVerificaiton(props) {
         <div className="divider"></div>
         <div className="form-wrapper">
           <span className="mb-2">Enter a 6-digit valid code.</span>
-          <InputOTPForm />
+          <InputOTPForm onChange={handleOTPChange} />
         </div>
 
         {/* Verify  */}
