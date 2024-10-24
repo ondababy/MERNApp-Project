@@ -1,21 +1,15 @@
-
+import { useDispatch, useSelector } from 'react-redux';
+import UserForm from "./UserForm";
 
 export default function AccountInformation(props) {
-  const accSchema = [];
-  const accFormik = {
-    initialValues: accSchema.reduce((acc, field) => {
-      acc[field.name] = '';
-      return acc;
-    }, {}),
-  };
-
+  const { userInfo } = useSelector(state => state.auth)
 
   return (
     <div className="w-full min-h-full">
       <h1 className="font-extrabold text-xl  mb-4">Account Information</h1>
       <div className="divider"></div>
       <div className="form-wrapper ">
-
+        <UserForm action="edit" id={userInfo?.id} />
       </div>
     </div>
   );

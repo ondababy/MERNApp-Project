@@ -5,7 +5,7 @@ import { FormikForm } from '@common/components';
 import { Button } from 'react-daisyui';
 import useUserActions from '../hooks/useUserActions';
 
-export default function UserForm({ action = 'create' }) {
+export default function UserForm({ id = null, action = 'create', ...props }) {
   const {
     formikProps,
     userSchema,
@@ -14,7 +14,7 @@ export default function UserForm({ action = 'create' }) {
     isUpdating,
     isFetching,
     handleSubmit
-  } = useUserActions(action);
+  } = useUserActions({ id, action, ...props });
 
 
   return (
@@ -37,7 +37,7 @@ export default function UserForm({ action = 'create' }) {
                 className="max-w-md"
                 disabled={isButtonDisabled}
               >
-                {action === 'create' ? 'Create User' : 'Update User'}
+                {action === 'create' ? 'Create' : 'Update'}
               </Button>
             </div>
           );

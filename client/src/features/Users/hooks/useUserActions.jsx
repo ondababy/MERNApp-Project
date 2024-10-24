@@ -6,10 +6,10 @@ import { userApi } from '../user.api';
 import { getAltFields, getFields } from '../user.fields';
 import { userValidation } from '../user.validation';
 
-export default function useUserActions(action = "create") {
+export default function useUserActions({ id = null, action = "create", fields = null, altFields = null }) {
   /* DECLARATIONS #################################################### */
-  const fields = typeof getFields === 'function' ? getFields() : getFields || [];
-  const altFields = typeof getAltFields === 'function' ? getAltFields() : getAltFields || [];
+  const _fields = fields || typeof getFields === 'function' ? getFields() : getFields;
+  const _altFields = altFields || typeof getAltFields === 'function' ? getAltFields() : getAltFields;
   // CAROUSEL
   const images = [
     {
@@ -20,9 +20,8 @@ export default function useUserActions(action = "create") {
 
   /* DECLARATIONS #################################################### */
   const navigate = useNavigate();
-  const { id } = useParams();
   const [user, setUser] = useState(null);
-  const [userSchema, setUserSchema] = useState(fields);
+  const [userSchema, setUserSchema] = useState(_fields);
   const [createUser, { isLoading: isCreating }] = userApi.useCreateUserMutation();
   const [updateUser, { isLoading: isUpdating }] = userApi.useUpdateUserMutation();
   const [getUser, { isLoading: isFetching }] = userApi.useGetUserMutation();
@@ -43,7 +42,7 @@ export default function useUserActions(action = "create") {
         setUser(res.data.resource);
       });
     }
-    setUserSchema(action === 'create' ? fields : altFields);
+    setUserSchema(action === 'create' ? _fields : _altFields);
 
   }, [action, id, getUser]);
 
