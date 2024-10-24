@@ -9,7 +9,7 @@ import { userApi } from '../user.api';
 import { getAltFields, getFields } from '../user.fields';
 import * as validator from '../user.validation';
 
-export default function useUserActions({ id = null, action = "create", fields = null, altFields = null }) {
+export default function useUserActions({ id = null, action = "create", fields = null, altFields = null, onSave }) {
   /* DECLARATIONS #################################################### */
   const _fields = fields || typeof getFields === 'function' ? getFields() : getFields;
   const _altFields = altFields || typeof getAltFields === 'function' ? getAltFields() : getAltFields;
@@ -64,20 +64,27 @@ export default function useUserActions({ id = null, action = "create", fields = 
   const handleSubmit = async (values, actions) => {
     const { username, email, password, confirm_password, ...info } = values
     const payload = { username, email, password, confirm_password, info }
-    console.log(payload)
     try {
+      let res;
       if (action === 'create') {
-        await createUser(payload).unwrap();
+        res = await createUser(payload).unwrap();
         toast.success('User created successfully');
       } else {
-        await updateUser({ id, user: payload }).unwrap();
+        res = await updateUser({ id, user: payload }).unwrap();
         toast.success('User updated successfully');
+      }
+      const userData = res?.user;
+      if (!userData) return
+      if (userInfo?.id === userData?.id) {
+        dispatch(setCredentials({
+          userInfo: userData,
+        }));
       }
     } catch (e) {
       const errors = e?.data?.errors?.details;
       if (Array.isArray(errors)) {
         errors.forEach((error) => {
-          toast.error(error?.msg || 'test');
+          toast.error(error?.msg || 'Error');
         });
       } else toast.error(e?.data?.message || e.error);
     }

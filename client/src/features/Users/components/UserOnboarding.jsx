@@ -19,7 +19,6 @@ const initialSteps = [
 function UserOnboarding(props) {
   const [currentStep, setCurrentStep] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
-  const pageComponents = [<EmailVerificaiton />, <AccountInformation />];
 
 
   const handleContinue = () => {
@@ -35,6 +34,13 @@ function UserOnboarding(props) {
       setCurrentStep(currentStep - 1);
     }
   };
+
+  const handleSave = (user) => {
+    setIsFinished(user.emailVerifiedAt && user.info);
+  }
+
+  const pageComponents = [<EmailVerificaiton />, <AccountInformation onSave={handleSave} />];
+
 
   return (
     <div className="flex flex-col items-start min-h-screen w-full max-w-6xl mx-auto  px-4 lg:px-24 my-12">
