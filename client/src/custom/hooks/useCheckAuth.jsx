@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useLogoutAction } from './useLogout';
 
-const isDev = import.meta.env.VITE_CLIENT_ENV === 'development' && false;
+const isDev = import.meta.env.VITE_CLIENT_ENV === 'development';
 
 export const useGetAuth = () => {
   const { userInfo, accessToken, role } = useSelector((state) => state.auth);
@@ -44,6 +44,8 @@ const useCheckAuth = (isPrivate = false) => {
     // Dashboard Access Control
     if (!isAdmin && isPrivate) logout();
 
+    // User and private route
+    else if (userInfo?.id && isPrivate) navigate('/dashboard');
     // Not email verified
     else if (userInfo?.id && !userInfo?.emailVerifiedAt) navigate('/onboarding');
 
@@ -53,8 +55,6 @@ const useCheckAuth = (isPrivate = false) => {
       navigate('/login');
     }
 
-    // User and private route
-    else if (userInfo?.id && isPrivate) navigate('/dashboard');
 
 
   }, [navigate, isPrivate, userInfo, accessToken, logout]);

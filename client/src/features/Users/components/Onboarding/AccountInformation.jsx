@@ -2,14 +2,16 @@ import { FormikForm, FormikInput } from '@common/components';
 import React from 'react';
 import { Button } from 'react-daisyui';
 
-const accSchema = [];
-const accFormik = {
-  initialValues: accSchema.reduce((acc, field) => {
-    acc[field.name] = '';
-    return acc;
-  }, {}),
-};
-function AccountInformation(props) {
+export default function AccountInformation(props) {
+  const accSchema = [];
+  const accFormik = {
+    initialValues: accSchema.reduce((acc, field) => {
+      acc[field.name] = '';
+      return acc;
+    }, {}),
+  };
+
+
   return (
     <div className="w-full h-full">
       <h1 className="font-extrabold text-xl  mb-4">Account Information</h1>
@@ -22,7 +24,7 @@ function AccountInformation(props) {
             return (
               <>
                 <div className="top flex flex-col lg:flex-row items-top gap-2 lg:gap-8">
-                  <div className="right lg:w-1/3 shadow-2xl p-4 py-8">
+                  <div className="right lg:w-2/6 shadow-2xl p-4 py-8">
                     <div className="image-preview flex flex-col items-center gap-2 lg:gap-4">
                       <img
                         src="https://placehold.co/150"
@@ -44,9 +46,9 @@ function AccountInformation(props) {
                       </div>
                     </div>
                   </div>
-                  <div className="left flex flex-col gap-2">
+                  <div className="left flex-1 flex flex-col gap-2">
                     {/* Full Name */}
-                    <div className="flex gap-2 items-center">
+                    <div className="grid grid-cols-2 gap-4">
                       <FormikInput
                         label="First Name"
                         name="first_name"
@@ -99,7 +101,7 @@ function AccountInformation(props) {
                   </div>
                 </div>
 
-                <div className="bottom">
+                <div className="bottom flex flex-col gap-4">
                   {/* Address */}
                   <FormikInput
                     label="Address"
@@ -117,7 +119,7 @@ function AccountInformation(props) {
                   />
 
                   {/* City + province + zipcode */}
-                  <div className="flex gap-2 items-center justify-between">
+                  <div className="grid grid-cols-3 gap-4">
                     <FormikInput
                       label="City"
                       name="city"
@@ -156,7 +158,4 @@ function AccountInformation(props) {
   );
 }
 
-AccountInformation.propTypes = {};
-
-export default AccountInformation;
 

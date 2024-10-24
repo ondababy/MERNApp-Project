@@ -36,14 +36,16 @@ function UserOnboarding(props) {
   };
 
   return (
-    <div className="flex flex-col items-start min-h-screen w-screen  px-4 lg:px-24 my-12">
-      <Steps
-        stepList={initialSteps}
-        onChange={(index) => setCurrentStep(index - 1)}
-        current={currentStep}
-      />
+    <div className="flex flex-col items-start min-h-screen w-full max-w-6xl mx-auto  px-4 lg:px-24 my-12">
+      <div>
+        <Steps
+          stepList={initialSteps}
+          onChange={(index) => setCurrentStep(index - 1)}
+          current={currentStep}
+        />
+      </div>
       <div className="divider"></div>
-      <div className="container w-full">{pageComponents[currentStep]}</div>
+      <div >{pageComponents[currentStep]}</div>
       <div className="divider"></div>
       <div className="flex justify-between items-end w-full">
         {currentStep > 0 && (
