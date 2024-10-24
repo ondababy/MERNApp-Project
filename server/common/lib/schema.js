@@ -13,6 +13,15 @@ export class Schema extends mongoose.Schema {
     }, {});
   }
 
+  filterHidden(data) {
+    if (!this.hidden?.length) return data;
+
+    return Object.keys(data).reduce((acc, key) => {
+      if (!this.hidden.includes(key)) acc[key] = data[key];
+      return acc;
+    }, {});
+  }
+
   toJSON() {
     const obj = this.toObject();
     if (!this.constructor.hidden?.length) return obj;
@@ -26,6 +35,7 @@ export class Schema extends mongoose.Schema {
 
   makeModel() {
     this.statics.filterFillables = this.filterFillables;
+    this.statics.filterHidden = this.filterHidden;
 
     const model = mongoose.model(this.name, this);
     return model;

@@ -53,7 +53,7 @@ const User = new Schema({
 });
 
 User.statics.fillables = ['username', 'email', 'password'];
-User.statics.hidden = ['password'];
+User.statics.hidden = ['_id', '__v', 'password', 'resetPassword', 'verifyEmail', 'otp'];
 
 User.methods.hashPassword = async function (password) {
   const salt = await bcrypt.genSalt(10);
