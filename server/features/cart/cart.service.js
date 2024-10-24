@@ -47,6 +47,12 @@ class CartService extends Service {
     const newData = await this.model.create({ ...validData, user: user._id });
     return newData;
   }
+
+  async clear(){
+    const data = await this.model.find(this.forceFilter).deleteMany();
+    return data;
+  }
+
 }
 
 export default new CartService();

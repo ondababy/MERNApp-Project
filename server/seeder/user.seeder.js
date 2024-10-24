@@ -1,17 +1,22 @@
-import { UserService } from '#features';
+import { UserModel, UserService } from '#features';
 import { faker } from '@faker-js/faker';
+import bcrypt from 'bcryptjs';
 import { Seeder } from './seeder';
 
 class UserSeeder extends Seeder {
   constructor(service, count) {
     super(service, count);
   }
+  hash(password) {
+    const salt = bcrypt.genSaltSync(10);
+    return bcrypt.hashSync(password, salt);
+  }
   custom() {
     return [
       {
         username: process.env.ADMIN_USERNAME,
         email: process.env.ADMIN_EMAIL,
-        password: process.env.ADMIN_PASSWORD,
+        password: this.hash(process.env.ADMIN_PASSWORD),
       },
     ];
   }
@@ -19,7 +24,7 @@ class UserSeeder extends Seeder {
     return {
       username: faker.internet.userName,
       email: faker.internet.email,
-      password: faker.internet.password,
+      password: () => this.hash(faker.internet.password()),
     };
   }
 }

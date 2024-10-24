@@ -1,5 +1,4 @@
 import { confirmDelete } from '@custom';
-import React from 'react';
 import { FaArrowRight } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { useCartActions } from '../hooks/useCartActions';
@@ -7,25 +6,16 @@ import CartList from './CartList';
 
 export function CartPage() {
   const {
-    items,
-    subTotal,
+    cart: { items, subTotal },
     getItems,
     removeItem,
 
   } = useCartActions()
 
-  React.useEffect(() => {
-    getItems();
-  }, []);
 
   const handleRemove = async (cartItem) => {
     confirmDelete(() => {
       removeItem(cartItem).then(() => {
-        Swal.fire({
-          title: 'Success',
-          text: 'Item removed successfully.',
-          icon: 'success',
-        });
         getItems();
       })
     });
@@ -60,9 +50,9 @@ export function CartPage() {
           </span>
         </div>
 
-        <button className={`${!items?.length ? 'btn-disabled' : ''} btn btn-outline btn-primary w-full`}>
+        <Link to="/checkout" className={`${!items?.length ? 'btn-disabled' : ''} btn btn-outline btn-primary w-full`}>
           Proceed to Checkout
-        </button>
+        </Link>
         <Link to="/" className="group flex gap-2 items-center my-4 hover:text-primary  transition-all ease-in">
           Continue Shopping
           <span className="group-hover:ml-8 transition-all ease-in">

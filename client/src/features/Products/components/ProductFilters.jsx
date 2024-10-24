@@ -30,7 +30,7 @@ function Filter({ ...props }) {
 
 export default function ProductFilters() {
     return (
-        <div className="container max-w-sm ">
+        <div className="hidden container max-w-sm lg:block">
             <div className="divider"></div>
             <div className="my-4 overflow-auto">
                 {/* FILTERS */}

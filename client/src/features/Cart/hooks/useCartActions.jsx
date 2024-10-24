@@ -1,13 +1,12 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { cartApi } from '../cart.api';
-import { addItem, removeItem, setItems, updateItem } from '../cart.slice';
+import { addItem, clearCart, removeItem, setItems, updateItem } from '../cart.slice';
 
 export function useCartActions() {
   /* DECLARATIONS #################################################### */
   const dispatch = useDispatch();
-  const items = useSelector((state) => state.cart.items);
-  const subTotal = useSelector((state) => state.cart.subTotal);
+  const cart = useSelector((state) => state.cart);
 
   const [getCartItems] = cartApi.useGetItemsMutation();
   const [createCartItem] = cartApi.useCreateItemMutation();
@@ -44,9 +43,15 @@ export function useCartActions() {
     });
   }, [dispatch, deleteCartItem]);
 
+  const clearCart = React.useCallback(() => {
+    dispatch(clearCart());
+  }, [dispatch]);
+
+  React.useEffect(() => {
+  }, []);
+
   return {
-    items,
-    subTotal,
+    cart,
     getItems,
     addItem: addItemToCart,
     updateItem: updateCartItemInCart,

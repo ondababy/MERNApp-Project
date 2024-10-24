@@ -5,8 +5,8 @@ export default class UserResource extends Resource {
       id: user._id,
       username: user.username,
       email: user.email,
-      role: user.role,
       createdAt: this.formatDate(user.createdAt),
+      role: user.role,
     };
   }
 }

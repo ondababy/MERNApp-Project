@@ -13,8 +13,4 @@ export const authRoutes = [
     path: '/onboarding',
     element: <Auth page="onboarding" />,
   },
-  {
-    path: '/verify-email',
-    element: <Auth page="verify-email" />,
-  }
 ];

@@ -56,6 +56,21 @@ export default [
         method: METHODS.DELETE,
         controller: [protectAndPermit(READ_WRITE), controller.delete],
       },
+      {
+        path: '/send-verify-email',
+        method: METHODS.POST,
+        controller: [protectAndPermit(), controller.sendVerifyEmail],
+      },
+      {
+        path: '/verify-email',
+        method: METHODS.POST,
+        controller: [protectAndPermit(), controller.verifyEmail],
+      },
+      {
+        path: '/test/email',
+        method: METHODS.POST,
+        controller: controller.testEmail,
+      },
     ],
   },
 ];

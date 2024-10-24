@@ -1,4 +1,5 @@
 import { TextRainbow, ThemeToggler } from '@common/components';
+import { useGetAuth } from '@custom';
 import { AuthLogout } from '@features';
 import { PropTypes } from 'prop-types';
 import { Dropdown, Navbar } from 'react-daisyui';
@@ -8,26 +9,34 @@ import { Link } from 'react-router-dom';
 const defaultMenus = [
   { name: 'Search', link: '/', icon: <FaSearch />, },
   { name: 'Cart', link: '/cart', icon: <FaCartArrowDown /> },
-  { name: 'Profile', link: '/profile', icon: <FaUser /> }
+  { name: 'Profile', link: '/profile', icon: <FaUser /> },
+  { name: 'Log In', link: '/login', icon: <FaUser /> }
+
 ]
 
 const MenuList = ({ menus = defaultMenus, iconOnly = false }) => {
+  const { userInfo } = useGetAuth();
   return (
     <>
-      {menus.map((menu, index) => (
-        <Link
-          key={index}
-          to={menu.link}
-          className="btn btn-ghost rounded-btn group p-0 lg:p-3 hover:text-primary"
-        >
-          <span className="text-lg group-hover:text-primary">
-            {menu.icon}
-          </span>
-          <span className="text-sm">
-            {iconOnly ? '' : menu.name}
-          </span>
-        </Link>
-      ))}
+      {menus.map((menu, index) => {
+        if (menu.name === 'Profile' && !userInfo?.id) return null;
+        if (menu.name === 'Log In' && userInfo?.id) return null;
+
+        return (
+          <Link
+            key={index}
+            to={menu.link}
+            className="btn btn-ghost rounded-btn group p-0 lg:p-3 hover:text-primary"
+          >
+            <span className="text-lg group-hover:text-primary">
+              {menu.icon}
+            </span>
+            <span className="text-sm">
+              {iconOnly ? '' : menu.name}
+            </span>
+          </Link>
+        )
+      })}
     </>
   );
 };

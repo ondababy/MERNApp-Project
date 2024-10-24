@@ -10,7 +10,10 @@ const defaultRoutes = [
       {
         path: '/',
         element: <Screen.Shop />,
-        // element: <Screen.Home />,
+      },
+      {
+        path: '/home',
+        element: <Screen.Home />,
       },
       {
         path: '/shop',

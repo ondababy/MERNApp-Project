@@ -1,48 +1,63 @@
+import { ROLES } from '@app/constants';
 import { authApi, setCredentials } from '@features';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useLogoutAction } from './useLogout';
 
+const isDev = import.meta.env.VITE_CLIENT_ENV === 'development';
+
 export const useGetAuth = () => {
-  const { userInfo, accessToken } = useSelector((state) => state.auth);
-  return { userInfo, accessToken };
+  const { userInfo, accessToken, role } = useSelector((state) => state.auth);
+  return { userInfo, accessToken, role };
 };
 
 const useCheckAuth = (isPrivate = false) => {
   const dispatch = useDispatch();
-  const [profile] = authApi.useProfileMutation();
-  const { userInfo, accessToken } = useSelector((state) => state.auth);
-  const [user, setUser] = useState(userInfo);
   const logout = useLogoutAction();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      const res = await profile().unwrap();
-      setUser(res.user);
-      dispatch(
-        setCredentials({
-          userInfo: res.user,
-          token: res.token,
-        })
-      );
-    };
-    if (accessToken && !user?.id) fetchUser();
-  }, [accessToken, dispatch, profile, user]);
+  const { userInfo, accessToken, role } = useSelector((state) => state.auth);
+  const [profile] = authApi.useProfileMutation();
+  const isAdmin = userInfo?.id && role === ROLES.ADMIN && accessToken || isDev;
+
+  const fetchUser = async () => {
+    const res = await profile().unwrap();
+    res && dispatch(
+      setCredentials({
+        userInfo: res?.user,
+        token: res?.token,
+      })
+    );
+  };
+
+
 
   useEffect(() => {
-    if (!accessToken && userInfo) {
+    fetchUser();
+  }, []);
+
+
+  useEffect(() => {
+    if (!isAdmin && isPrivate) {
       logout();
-      return navigate('/');
+      navigate('/login')
     }
-    if (user && !isPrivate) {
-      return navigate('/');
-    } else if (!user?.id && isPrivate) {
-      return navigate('/login');
+    else if (userInfo && !isPrivate) {
+      navigate('/');
+    } else if (!userInfo?.id && isPrivate) {
+      navigate('/login');
+    } else if (userInfo?.id && isPrivate) {
+      navigate('/dashboard');
     }
-  }, [navigate, user, isPrivate, userInfo, accessToken, logout]);
 
-  return isPrivate || user?.id ? user : null;
+  }, [navigate, isPrivate, userInfo, accessToken, logout]);
+
+  return {
+    userInfo,
+    accessToken,
+    role,
+    isAdmin: isAdmin,
+  };
 };
 export default useCheckAuth;

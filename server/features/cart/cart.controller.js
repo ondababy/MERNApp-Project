@@ -37,5 +37,13 @@ class CartController extends Controller {
 
     this.success({ res, message: 'Data deleted!' });
   };
+
+  clear = async (req, res) => {
+    const data = await this.service?.clear();
+    if (!data) return this.error({ res, message: 'No data found!' });
+
+    this.success({ res, message: 'Data deleted!' });
+  };
+
 }
 export default new CartController();

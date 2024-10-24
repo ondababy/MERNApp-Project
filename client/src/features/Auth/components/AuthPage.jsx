@@ -5,7 +5,7 @@ import AuthLogin from './AuthLogin';
 import AuthOnboarding from './AuthOnboarding';
 import AuthSignup from './AuthSignup';
 function Auth({ page = 'login' }) {
-  const user = useCheckAuth();
+  const { userInfo } = useCheckAuth();
   let pageComponent = <AuthLogin />;
 
   switch (page) {
@@ -18,7 +18,7 @@ function Auth({ page = 'login' }) {
   }
 
   return (
-    !user?.id && (
+    !userInfo?.id && (
       <>
         <Hero className="container max-w-5xl h-full ">
           <Hero.Content className="flex-col lg:flex-row-reverse h-full w-full">{pageComponent}</Hero.Content>
