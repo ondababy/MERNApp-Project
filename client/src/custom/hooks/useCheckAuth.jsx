@@ -42,7 +42,6 @@ const useCheckAuth = (isPrivate = false) => {
   useEffect(() => {
     if (!isAdmin && isPrivate) {
       logout();
-      navigate('/login')
     }
     else if (userInfo && !isPrivate) {
       navigate('/');

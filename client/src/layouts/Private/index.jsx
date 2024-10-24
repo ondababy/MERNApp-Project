@@ -2,7 +2,7 @@ import { useToggle } from '@common';
 import { useCheckAuth } from '@custom';
 import { DashboardHeader, FooterWrapper, Sidebar } from '@partials';
 import { Suspense } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 
 
 export function PrivateLayout() {
@@ -11,7 +11,7 @@ export function PrivateLayout() {
     name: 'Private User',
   };
   return (
-    !isAdmin ? '' : (
+    !isAdmin ? <Navigate to="/login" /> : (
       <div
         id="private-layout"
         className="flex w-screen h-screen overflow-y-auto "

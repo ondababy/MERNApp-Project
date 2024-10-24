@@ -24,10 +24,6 @@ const guestRoutes = [
         element: <Screen.Cart />,
       },
       {
-        path: '/checkout',
-        element: <Screen.Checkout />,
-      },
-      {
         path: '/shop/:slug',
         element: <Screen.ProductDisplay />,
       },
