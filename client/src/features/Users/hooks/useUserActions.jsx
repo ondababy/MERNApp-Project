@@ -1,10 +1,13 @@
 
+import { confirmSave } from '@custom';
+import { authApi, setCredentials } from '@features';
 import { useEffect, useMemo, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { userApi } from '../user.api';
 import { getAltFields, getFields } from '../user.fields';
-import { userValidation } from '../user.validation';
+import * as validator from '../user.validation';
 
 export default function useUserActions({ id = null, action = "create", fields = null, altFields = null }) {
   /* DECLARATIONS #################################################### */
@@ -20,6 +23,8 @@ export default function useUserActions({ id = null, action = "create", fields = 
 
   /* DECLARATIONS #################################################### */
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { userInfo } = useSelector((state) => state.auth);
   const [user, setUser] = useState(null);
   const [userSchema, setUserSchema] = useState(_fields);
   const [createUser, { isLoading: isCreating }] = userApi.useCreateUserMutation();
@@ -39,16 +44,27 @@ export default function useUserActions({ id = null, action = "create", fields = 
   useEffect(() => {
     if (action === 'edit' && id) {
       getUser(id).then((res) => {
-        setUser(res.data.resource);
+        const { info, ...values } = res?.data?.resource
+        const userData = { ...values, ...info }
+        setUser(userData);
+        if (userInfo?.id === id) {
+          dispatch(setCredentials({
+            userInfo: res?.data?.resource,
+          }));
+        }
       });
     }
     setUserSchema(action === 'create' ? _fields : _altFields);
 
   }, [action, id, getUser]);
 
-  const handleSubmit = (values) => async () => {
+  const onSubmit = async (values, actions) => {
+    confirmSave(async () => handleSubmit(values, actions));
+  };
+  const handleSubmit = async (values, actions) => {
     const { username, email, password, confirm_password, ...info } = values
     const payload = { username, email, password, confirm_password, info }
+    console.log(payload)
     try {
       if (action === 'create') {
         await createUser(payload).unwrap();
@@ -70,9 +86,9 @@ export default function useUserActions({ id = null, action = "create", fields = 
   return {
     formikProps: {
       initialValues,
-      validationSchema: userValidation,
+      validationSchema: validator.updateUser,
       enableReinitialize: true,
-      onSubmit: handleSubmit
+      onSubmit,
     },
     userSchema,
     initialValues,

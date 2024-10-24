@@ -18,6 +18,7 @@ const initialSteps = [
 
 function UserOnboarding(props) {
   const [currentStep, setCurrentStep] = useState(0);
+  const [isFinished, setIsFinished] = useState(false);
   const pageComponents = [<EmailVerificaiton />, <AccountInformation />];
 
 
@@ -56,14 +57,22 @@ function UserOnboarding(props) {
             Back
           </button>
         )}
-        <button
+        {currentStep < initialSteps.length - 1 ? <button
           className="btn btn-primary"
           onClick={handleContinue}
+
         >
-          {currentStep < initialSteps.length - 1 ? 'Continue' : 'Submit'}
-        </button>
+          Continue
+        </button> :
+          <button
+            className="btn btn-primary"
+            onClick={handleContinue}
+            disabled={!isFinished}
+          >
+            Finish
+          </button>}
       </div>
-    </div>
+    </div >
   );
 }
 

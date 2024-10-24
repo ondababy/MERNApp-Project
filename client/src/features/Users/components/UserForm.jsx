@@ -46,7 +46,7 @@ export default function UserForm({ id = null, action = 'create', ...props }) {
                   className="max-w-md"
                   disabled={isButtonDisabled}
                 >
-                  {action === 'create' ? 'Create' : 'Update'}
+                  {action === 'create' ? 'Save' : 'Save'}
                 </Button>
               </div>
 

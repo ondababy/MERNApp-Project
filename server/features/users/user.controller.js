@@ -83,13 +83,13 @@ class UserController extends Controller {
     const user = await this.service.updateUser(id, validData);
     if (!user) throw new Errors.BadRequest('Invalid user data!');
 
-    let info, userInfo;
+    let userInfo;
     if (req.body?.info && !user?.info?._id) {
-      info = await this.validator(req, res, this.rules.createInfo);
-      userInfo = await this.service.createInfo(user, info);
+      validData = await this.validator(req, res, this.rules.createInfo);
+      userInfo = await this.service.createUserInfo(user, validData.info);
     } else if (req.body?.info && user?.info?._id) {
-      info = await this.validator(req, res, this.rules.updateInfo);
-      userInfo = await this.service.updateInfo(user, info);
+      validData = await this.validator(req, res, this.rules.updateInfo);
+      userInfo = await this.service.updateUserInfo(user, validData.info);
     }
 
     let resource = await this.resource.make(user);

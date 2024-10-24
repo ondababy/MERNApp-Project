@@ -25,7 +25,7 @@ const userinforules = {
       .matches(/^[a-zA-Z ]+$/)
       .withMessage('First name must be alphabetic'),
   'info.last_name': () =>
-    check('lastinfo.last_name_name')
+    check('info.last_name')
       .notEmpty()
       .withMessage('Last name is required')
       .matches(/^[a-zA-Z ]+$/)
@@ -37,7 +37,7 @@ const userinforules = {
       .matches(/^[0-9]{10}$/)
       .withMessage('Contact must be 10 digits'),
   'info.address': () => check('info.address').notEmpty().withMessage('Address is required'),
-  'info.birthdate': () => check('info.birthdate').isISO8601().withMessage('Birthdate is invalid').optional(),
+  'info.birthdate': () => check('info.birthdate'),
   'info.city': () => check('info.city').notEmpty().withMessage('City is required'),
   'info.region': () => check('info.region').notEmpty().withMessage('Region is required'),
   'info.zip_code': () => check('info.zip_code'),

@@ -52,7 +52,7 @@ const useCheckAuth = (isPrivate = false) => {
     else if (userInfo?.id && !userInfo?.emailVerifiedAt) navigate('/onboarding');
 
     // No user and private route
-    else if (!userInfo?.id && isPrivate || !accessToken) {
+    else if (!userInfo?.id && isPrivate || userInfo?.id && !accessToken) {
       logout();
       navigate('/login');
     }

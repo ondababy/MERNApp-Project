@@ -56,6 +56,7 @@ class UserService extends Service {
   }
 
   async createUserInfo(user, info) {
+    console.log(info);
     const data = this.info?.filterFillables(info);
     const userInfo = await this.info?.create(data);
     user.info = userInfo._id;
