@@ -16,7 +16,7 @@ const initialSteps = [
   },
 ];
 
-function AuthOnboarding(props) {
+function UserOnboarding(props) {
   const [currentStep, setCurrentStep] = useState(0);
   const pageComponents = [<EmailVerificaiton />, <AccountInformation />];
 
@@ -36,14 +36,14 @@ function AuthOnboarding(props) {
   };
 
   return (
-    <div className="flex flex-col items-start h-full w-full">
+    <div className="flex flex-col items-start min-h-screen w-screen  px-4 lg:px-24 my-12">
       <Steps
         stepList={initialSteps}
         onChange={(index) => setCurrentStep(index - 1)}
         current={currentStep}
       />
       <div className="divider"></div>
-      <div className="container">{pageComponents[currentStep]}</div>
+      <div className="container w-full">{pageComponents[currentStep]}</div>
       <div className="divider"></div>
       <div className="flex justify-between items-end w-full">
         {currentStep > 0 && (
@@ -65,5 +65,5 @@ function AuthOnboarding(props) {
   );
 }
 
-export default AuthOnboarding;
+export default UserOnboarding;
 

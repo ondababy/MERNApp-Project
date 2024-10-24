@@ -4,7 +4,6 @@ import { Navigate, Outlet } from 'react-router-dom';
 
 export function DefaultLayout() {
   const { userInfo: user } = useCheckAuth();
-  console.log(!user?.id)
   return !user?.id ? <Navigate to="/login" /> : (
     <div id="default-layout" >
       <Header />

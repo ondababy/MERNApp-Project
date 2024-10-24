@@ -11,7 +11,7 @@ const accFormik = {
 };
 function AccountInformation(props) {
   return (
-    <div className="w-full">
+    <div className="w-full h-full">
       <h1 className="font-extrabold text-xl  mb-4">Account Information</h1>
       <div className="divider"></div>
       <div className="form-wrapper">
@@ -21,9 +21,9 @@ function AccountInformation(props) {
           element={({ isSubmitting, ...rest }) => {
             return (
               <>
-                <div className="top flex items-top gap-8">
-                  <div className="right w-1/3 shadow-2xl p-4 py-8">
-                    <div className="image-preview flex flex-col items-center gap-4">
+                <div className="top flex flex-col lg:flex-row items-top gap-2 lg:gap-8">
+                  <div className="right lg:w-1/3 shadow-2xl p-4 py-8">
+                    <div className="image-preview flex flex-col items-center gap-2 lg:gap-4">
                       <img
                         src="https://placehold.co/150"
                         alt="profile"
@@ -51,13 +51,13 @@ function AccountInformation(props) {
                         label="First Name"
                         name="first_name"
                         type="text"
-                        {...rest}
+
                       />
                       <FormikInput
                         label="Last Name"
                         name="last_name"
                         type="text"
-                        {...rest}
+
                       />
                     </div>
 
@@ -66,7 +66,7 @@ function AccountInformation(props) {
                       label="Email"
                       name="email"
                       type="email"
-                      {...rest}
+
                     />
 
                     {/* Contact */}
@@ -74,7 +74,7 @@ function AccountInformation(props) {
                       label="Contact"
                       name="contact"
                       type="text"
-                      {...rest}
+
                     />
                     {/* Birthday + Age (disabled) */}
                     <div className="flex gap-2 items-center">
@@ -83,7 +83,7 @@ function AccountInformation(props) {
                           label="Birthday"
                           name="birthday"
                           type="date"
-                          {...rest}
+
                         />
                       </div>
                       <div className="w-1/3">
@@ -92,7 +92,7 @@ function AccountInformation(props) {
                           name="age"
                           type="text"
                           disabled
-                          {...rest}
+
                         />
                       </div>
                     </div>
@@ -105,7 +105,7 @@ function AccountInformation(props) {
                     label="Address"
                     name="address"
                     type="text"
-                    {...rest}
+
                   />
 
                   {/* Street */}
@@ -113,7 +113,7 @@ function AccountInformation(props) {
                     label="Street"
                     name="street"
                     type="text"
-                    {...rest}
+
                   />
 
                   {/* City + province + zipcode */}
@@ -122,19 +122,19 @@ function AccountInformation(props) {
                       label="City"
                       name="city"
                       type="text"
-                      {...rest}
+
                     />
                     <FormikInput
                       label="Province"
                       name="province"
                       type="text"
-                      {...rest}
+
                     />
                     <FormikInput
                       label="Zipcode"
                       name="zipcode"
                       type="text"
-                      {...rest}
+
                     />
                   </div>
                 </div>

@@ -44,6 +44,9 @@ const useCheckAuth = (isPrivate = false) => {
     // Dashboard Access Control
     if (!isAdmin && isPrivate) logout();
 
+    // Not email verified
+    else if (userInfo?.id && !userInfo?.emailVerifiedAt) navigate('/onboarding');
+
     // No user and private route
     else if (!userInfo?.id && isPrivate || !accessToken) {
       logout();

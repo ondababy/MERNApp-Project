@@ -1,3 +1,4 @@
+export { default as UserOnboarding } from './Onboarding';
 export { default as UserCard } from './UserCard';
 export { default as UserForm } from './UserForm';
 export { default as UserModal } from './UserModal';
