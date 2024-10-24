@@ -1,12 +1,4 @@
-const getFields = () => [
-  { label: 'Username', name: 'username', type: 'text' },
-  { label: 'Email Address', name: 'email', type: 'email' },
-  { label: 'Password', name: 'password', type: 'password' },
-  { label: 'Confirm Password', name: 'confirm_password', type: 'password' },
-  // More getFields can be added here
-];
-
-const getAltFields = () => [
+const common = [
   {
     label: 'Username',
     name: 'username',
@@ -60,6 +52,15 @@ const getAltFields = () => [
     multiple: true,
   },
 ];
+
+const getFields = () => [
+  ...common,
+
+  { label: 'Password', name: 'password', type: 'password' },
+  { label: 'Confirm Password', name: 'confirm_password', type: 'password' },
+];
+
+const getAltFields = () => [...common];
 const getInfoFields = () => [];
 
 export { getAltFields, getFields, getInfoFields };
