@@ -39,7 +39,7 @@ export default [
       {
         path: '/profile',
         method: METHODS.PATCH,
-        controller: [protectAndPermit(READ_WRITE), controller.updateProfile],
+        controller: [protectAndPermit(READ_WRITE), controller.update],
       },
       {
         path: '/:id',

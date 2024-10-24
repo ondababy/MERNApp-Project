@@ -1,10 +1,12 @@
 import EmailTemplate from '#common/lib/email-template';
 import { Service } from '#lib';
 import { destroyToken, Errors, generateToken, sendEmail } from '#utils';
+import UserInfo from './user-info.model.js';
 import UserModel from './user.model.js';
 
 class UserService extends Service {
   model = UserModel;
+  info = UserInfo;
   authToken = 'jwt';
 
   async getAuthenticatedUser(userId) {
@@ -51,6 +53,19 @@ class UserService extends Service {
     if (data.password) data.password = await this.model?.hashPassword(data.password);
     const user = await this.model?.findByIdAndUpdate(id, data, { new: true });
     return user;
+  }
+
+  async createUserInfo(user, info) {
+    const data = this.info?.filterFillables(info);
+    const userInfo = await this.info?.create(data);
+    user.info = userInfo._id;
+    await user.save();
+    return userInfo;
+  }
+  async updateUserInfo(user, info) {
+    const data = this.info?.filterFillables(info);
+    const userInfo = await this.info?.findByIdAndUpdate(user.info, data, { new: true });
+    return userInfo;
   }
 
   async forgotPassword({ email, redirectUrl }) {

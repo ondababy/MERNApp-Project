@@ -2,14 +2,16 @@ import { Controller } from '#lib';
 import { Errors, getBearerToken, tokenExists } from '#utils';
 import UserResource from './user.resource.js';
 import UserService from './user.service.js';
-import { userCreateRules, userUpdateRules } from './user.validation.js';
+import * as rules from './user.validation.js';
 
 class UserController extends Controller {
   service = UserService;
   resource = UserResource;
   rules = {
-    create: userCreateRules,
-    update: userUpdateRules,
+    create: rules.userCreateRules,
+    update: rules.userUpdateRules,
+    createInfo: rules.userInfoCreateRules,
+    updateInfo: rules.userInfoUpdateRules,
   };
 
   refresh = async (req, res) => {
@@ -75,14 +77,26 @@ class UserController extends Controller {
     });
   };
 
-  updateProfile = async (req, res) => {
-    const validData = await this.validator(req, res, this.rules.update);
-    const user = await this.service.updateUser(req.user._id, validData);
+  update = async (req, res) => {
+    let id = req.params.id || req.params.id || req.user._id;
+    let validData = await this.validator(req, res, this.rules.update);
+    const user = await this.service.updateUser(id, validData);
     if (!user) throw new Errors.BadRequest('Invalid user data!');
+
+    let info, userInfo;
+    if (req.body?.info && !user?.info?._id) {
+      info = await this.validator(req, res, this.rules.createInfo);
+      userInfo = await this.service.createInfo(user, info);
+    } else if (req.body?.info && user?.info?._id) {
+      info = await this.validator(req, res, this.rules.updateInfo);
+      userInfo = await this.service.updateInfo(user, info);
+    }
+
+    let resource = await this.resource.make(user);
     this.success({
       res,
-      message: 'Profile updated!',
-      user: await this.resource.make(user),
+      message: 'User profile updated!',
+      user: resource,
       token: getBearerToken(req),
     });
   };

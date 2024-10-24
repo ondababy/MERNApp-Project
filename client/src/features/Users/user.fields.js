@@ -3,13 +3,13 @@ const common = [
     label: 'First Name',
     name: 'first_name',
     type: 'text',
-    outerStyle: 'w-full col-span-3 md:col-span-3 lg:col-span-3',
+    outerStyle: 'w-full col-span-3 md:col-span-3 lg:col-span-2',
   },
   {
     label: 'Last Name',
     name: 'last_name',
     type: 'text',
-    outerStyle: 'w-full col-span-3 md:col-span-3 lg:col-span-3',
+    outerStyle: 'w-full col-span-3 md:col-span-3 lg:col-span-1',
   },
   {
     label: 'Username',
@@ -27,13 +27,13 @@ const common = [
     label: 'Contact',
     name: 'contact',
     type: 'text',
-    outerStyle: 'w-full col-span-3 md:col-span-6 lg:col-span-4 ',
+    outerStyle: 'w-full col-span-3 md:col-span-6 lg:col-span-2',
   },
   {
     label: 'Birthdate',
     name: 'birthdate',
     variant: 'birthdate',
-    outerStyle: 'w-full col-span-3 md:col-span-3 lg:col-span-2 ',
+    outerStyle: 'w-full col-span-3 md:col-span-3 lg:col-span-1 ',
   },
   {
     label: 'Adress',
