@@ -1,11 +1,11 @@
 import { authRoutes } from '@features';
-import { DefaultLayout } from '@layouts';
+import { GuestLayout } from '@layouts';
 import * as Screen from '@screens';
 
 const defaultRoutes = [
   {
     path: '/',
-    element: <DefaultLayout />,
+    element: <GuestLayout />,
     children: [
       {
         path: '/',
