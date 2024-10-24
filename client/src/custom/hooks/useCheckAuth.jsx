@@ -40,8 +40,17 @@ const useCheckAuth = (isPrivate = false) => {
 
 
   useEffect(() => {
+
+    // Dashboard Access Control
     if (!isAdmin && isPrivate) logout();
-    else if (!userInfo?.id && isPrivate) navigate('/login');
+
+    // No user and private route
+    else if (!userInfo?.id && isPrivate || !accessToken) {
+      logout();
+      navigate('/login');
+    }
+
+    // User and private route
     else if (userInfo?.id && isPrivate) navigate('/dashboard');
 
 
