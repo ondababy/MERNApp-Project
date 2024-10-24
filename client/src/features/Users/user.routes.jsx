@@ -6,7 +6,6 @@ const UserForm = React.lazy(() => import('./components/UserForm'));
 export const userRoutes = [
   { path: '/dashboard/users', element: <UserPage /> },
   { path: '/dashboard/users/table', element: <UserTable /> },
-  { path: '/dashboard/users/list', element: <UserList /> },
   {
     path: '/dashboard/users/:id/edit',
     element: (
