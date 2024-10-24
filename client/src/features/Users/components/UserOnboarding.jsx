@@ -1,7 +1,7 @@
 import { Steps } from '@common';
 import { useState } from 'react';
-import AccountInformation from './AccountInformation';
-import EmailVerificaiton from './EmailVerification';
+import AccountInformation from './UserAccountInformation';
+import EmailVerificaiton from './UserEmailVerification';
 
 const initialSteps = [
   {
