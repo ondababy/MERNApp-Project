@@ -1,5 +1,6 @@
 import { useField } from 'formik';
 import PropTypes from 'prop-types';
+import BirthdateInput from './BirthdateInput';
 import FloatingInput from './FloatingInput';
 import FormInput from './FormInput';
 import LongText from './LongText';
@@ -30,6 +31,15 @@ function FormikInput({ label, variant, ...props }) {
           {...props}
         />
       );
+    case 'birthdate':
+      return (
+        <BirthdateInput
+          label={label}
+          meta={meta}
+          {...field}
+          {...props}
+        />
+      )
 
     default:
       return (

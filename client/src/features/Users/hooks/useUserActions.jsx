@@ -47,12 +47,15 @@ export default function useUserActions({ id = null, action = "create", fields = 
   }, [action, id, getUser]);
 
   const handleSubmit = (values) => async () => {
+    const { username, email, password, confirm_password, ...info } = values
+    const payload = { username, email, password, confirm_password, info }
+    console.log(payload)
     try {
       if (action === 'create') {
-        await createUser(values).unwrap();
+        // await createUser(values).unwrap();
         toast.success('User created successfully');
       } else {
-        await updateUser({ id, user: values }).unwrap();
+        // await updateUser({ id, user: values }).unwrap();
         toast.success('User updated successfully');
       }
     } catch (e) {
