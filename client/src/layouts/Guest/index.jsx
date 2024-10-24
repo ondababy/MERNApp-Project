@@ -5,7 +5,7 @@ export function GuestLayout() {
 
 
   return (
-    <div id="default-layout" >
+    <div id="guest-layout" >
       <Header />
       <div className="w-full grid min-h-screen  mx-auto place-items-center">
         <Outlet />
