@@ -2,7 +2,7 @@ import { authRoutes } from '@features';
 import { GuestLayout } from '@layouts';
 import * as Screen from '@screens';
 
-const defaultRoutes = [
+const guestRoutes = [
   {
     path: '/',
     element: <GuestLayout />,
@@ -41,4 +41,4 @@ const defaultRoutes = [
   },
 ];
 
-export default defaultRoutes;
+export default guestRoutes;

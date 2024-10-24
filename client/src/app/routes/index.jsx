@@ -1,9 +1,11 @@
 import { Errors } from '@common/components';
 import { createBrowserRouter } from 'react-router-dom';
-import defaultRoutes from './00-guest';
+import guestRoutes from './00-guest';
+import defaultRoutes from './10-default';
 import privateRoutes from './20-private';
 
 const router = createBrowserRouter([
+  ...guestRoutes,
   ...defaultRoutes,
   ...privateRoutes,
   {

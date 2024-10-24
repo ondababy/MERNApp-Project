@@ -1,42 +1,10 @@
-import { authRoutes } from '@features';
-import { GuestLayout } from '@layouts';
-import * as Screen from '@screens';
+import { DefaultLayout } from '@layouts';
 
 const defaultRoutes = [
   {
     path: '/',
-    element: <GuestLayout />,
+    element: <DefaultLayout />,
     children: [
-      {
-        path: '/',
-        element: <Screen.Shop />,
-      },
-      {
-        path: '/home',
-        element: <Screen.Home />,
-      },
-      {
-        path: '/shop',
-        element: <Screen.Shop />,
-      },
-      {
-        path: '/cart',
-        element: <Screen.Cart />,
-      },
-      {
-        path: '/checkout',
-        element: <Screen.Checkout />,
-      },
-      {
-        path: '/shop/:slug',
-        element: <Screen.ProductDisplay />,
-      },
-      {
-        path: '/about',
-        element: <Screen.About />,
-      },
-
-      ...authRoutes,
     ],
   },
 ];
