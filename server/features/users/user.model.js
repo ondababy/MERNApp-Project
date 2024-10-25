@@ -75,13 +75,13 @@ User.methods.getResetPasswordToken = function () {
 User.methods.getVerifyEmailToken = function () {
   const verifyToken = crypto.randomBytes(20).toString('hex');
   this.verifyEmail.token = crypto.createHash('sha256').update(verifyToken).digest('hex');
-  this.verifyEmail.expire = Date.now() + 10 * 60 * 1000;
+  this.verifyEmail.expire = Date.now() + 10 * 60 * 1000; // 10 minutes
   return this.verifyEmail;
 };
 
 User.methods.getOTP = function () {
   this.otp.code = Math.floor(100000 + Math.random() * 900000);
-  this.otp.expire = Date.now() + 10 * 60 * 1000;
+  this.otp.expire = Date.now() + 10 * 60 * 1000; // 10 minutes
   return this.otp;
 };
 

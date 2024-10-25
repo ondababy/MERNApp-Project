@@ -5,7 +5,15 @@ import { useEmailVerification } from '../hooks/useEmailVerification';
 
 function EmailVerification({ onSave = () => { } }) {
 
-  const { isCodeSent, resendDelay, verify, resend, userInfo, otp, setOTP } = useEmailVerification();
+  const {
+    invalid,
+    isCodeSent,
+    resendDelay,
+    verify,
+    resend,
+    userInfo,
+    otp,
+    setOTP } = useEmailVerification();
 
   const handleOTPChange = (otp) => {
     setOTP(otp);
@@ -28,6 +36,12 @@ function EmailVerification({ onSave = () => { } }) {
           <div className="divider"></div>
           <div className="form-wrapper">
             <span className="mb-2">Enter a 6-digit valid code.</span>
+            {/* Invalid error */}
+            {invalid && (
+              <div className="text-sm text-error">
+                Invalid OTP. Please try again.
+              </div>
+            )}
             <InputOTPForm otp={otp} onChange={handleOTPChange} />
           </div>
 

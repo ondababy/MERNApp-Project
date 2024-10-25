@@ -16,18 +16,26 @@ export function useEmailVerification() {
   const [sendVerifyEmail] = userApi.useSendVerifyEmailMutation();
   const [verifyEmail] = userApi.useVerifyEmailMutation();
   const [resendDelay, setResendDelay] = useState(0);
+  const [invalid, setInvalid] = useState(false);
   /* DECLARATIONS #################################################### */
 
   const verify = useCallback(async () => {
     const verifyToken = new URLSearchParams(window.location.search).get('verifyToken');
     const payload = { id: userInfo.id, otp, verifyToken };
     verifyEmail(payload).then((res) => {
-      dispatch(setCredentials({
-        userInfo: res?.data?.user,
-        token: res?.data?.token,
-        role: res?.data?.user?.role
-      }));
-      toast.success('Email verified successfully');
+      if (res?.error) {
+        setInvalid(true);
+        toast.error('Invalid OTP');
+      }
+      else if (res?.data) {
+        toast.success('Email verified successfully');
+        dispatch(setCredentials({
+          userInfo: res?.data?.user,
+          token: res?.data?.token,
+          role: res?.data?.user?.role
+        }));
+      }
+
     });
   }, [otp, userInfo.id, verifyEmail, dispatch]);
 
@@ -36,6 +44,7 @@ export function useEmailVerification() {
     sendVerifyEmail({
       id: userInfo.id, redirectUrl
     }).then((res) => {
+      setInvalid(false);
       setIsCodeSent(true);
       dispatch(setCredentials({
         userInfo: { ...userInfo, emailVerifiedAt: null },
@@ -66,6 +75,7 @@ export function useEmailVerification() {
     userInfo,
     otp,
     setOTP,
-    resendDelay
+    resendDelay,
+    invalid,
   };
 }
