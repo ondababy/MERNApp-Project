@@ -23,9 +23,8 @@ export function useEmailVerification() {
     const payload = { id: userInfo.id, otp, verifyToken };
     verifyEmail(payload).then((res) => {
       toast.success('Email verified successfully');
-      console.log(res)
       dispatch(setCredentials({
-        userInfo: res?.user,
+        userInfo: res?.data?.user,
       }));
       navigate('/dashboard');
     });

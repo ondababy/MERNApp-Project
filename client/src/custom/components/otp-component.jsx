@@ -10,11 +10,16 @@ import {
 } from "@common/components/ui/input-otp"
 
 export function InputOTPForm({ otp, onChange = () => { } }) {
-  const [value, setValue] = React.useState(otp)
+  const [value, setValue] = React.useState("")
   const handleChange = (value) => {
     setValue(value)
     onChange(value)
   }
+
+  React.useEffect(() => {
+    setValue(otp)
+  }, [otp])
+
 
   return (
     <div className="space-y-2">
