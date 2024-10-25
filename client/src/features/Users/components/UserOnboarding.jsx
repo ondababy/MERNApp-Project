@@ -17,7 +17,7 @@ const initialSteps = [
   },
 ];
 
-function UserOnboarding(props) {
+function UserOnboarding() {
   const [currentStep, setCurrentStep] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
   const [isEmailVerified, setIsEmailVerified] = useState(false);

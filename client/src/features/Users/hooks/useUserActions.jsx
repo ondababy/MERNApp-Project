@@ -24,7 +24,7 @@ export default function useUserActions({ id = null, action = "create", fields = 
   /* DECLARATIONS #################################################### */
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { userInfo } = useSelector((state) => state.auth);
+  const { userInfo, accessToken } = useSelector((state) => state.auth);
   const [user, setUser] = useState(null);
   const [userSchema, setUserSchema] = useState(_fields);
   const [createUser, { isLoading: isCreating }] = userApi.useCreateUserMutation();
@@ -50,6 +50,7 @@ export default function useUserActions({ id = null, action = "create", fields = 
         if (userInfo?.id === id) {
           dispatch(setCredentials({
             userInfo: res?.data?.resource,
+            token: accessToken,
           }));
         }
       });
@@ -77,6 +78,7 @@ export default function useUserActions({ id = null, action = "create", fields = 
       if (userInfo?.id === userData?.id) {
         dispatch(setCredentials({
           userInfo: userData,
+          token: accessToken,
         }));
       }
       onSave(userData);
