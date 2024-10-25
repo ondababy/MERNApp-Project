@@ -13,20 +13,22 @@ export function useEmailVerification() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [otp, setOTP] = useState('');
-  const { userInfo } = useSelector((state) => state.auth);
+  const { userInfo, accessToken } = useSelector((state) => state.auth);
   const [sendVerifyEmail] = userApi.useSendVerifyEmailMutation()
   const [verifyEmail] = userApi.useVerifyEmailMutation()
   /* DECLARATIONS #################################################### */
+
 
   const verify = useCallback(async () => {
     const verifyToken = new URLSearchParams(window.location.search).get('verifyToken');
     const payload = { id: userInfo.id, otp, verifyToken };
     verifyEmail(payload).then((res) => {
-      toast.success('Email verified successfully');
       dispatch(setCredentials({
         userInfo: res?.data?.user,
+        token: res?.data?.token,
+        role: res?.data?.user?.role
       }));
-      navigate('/dashboard');
+      toast.success('Email verified successfully');
     });
   })
   const resend = useCallback(async () => {
@@ -36,6 +38,12 @@ export function useEmailVerification() {
     }).then((res) => {
       toast.success('Email sent successfully');
     });
+    dispatch(setCredentials({
+      userInfo: { ...userInfo, emailVerifiedAt: null },
+      token: accessToken,
+      role: userInfo?.role
+    }));
+
   })
 
   useEffect(() => {

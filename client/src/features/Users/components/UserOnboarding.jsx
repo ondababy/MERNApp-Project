@@ -2,7 +2,7 @@ import { Steps } from '@common';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import AccountInformation from './UserAccountInformation';
-import EmailVerificaiton from './UserEmailVerification';
+import EmailVerification from './UserEmailVerification';
 
 const initialSteps = [
   {
@@ -52,7 +52,7 @@ function UserOnboarding(props) {
     setIsFinished(user?.emailVerifiedAt && user?.info);
   }
 
-  const pageComponents = [<EmailVerificaiton onSave={handleSave} />, <AccountInformation onSave={handleSave} />];
+  const pageComponents = [<EmailVerification onSave={handleSave} />, <AccountInformation onSave={handleSave} />];
 
 
   return (

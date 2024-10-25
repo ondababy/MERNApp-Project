@@ -28,6 +28,7 @@ const useCheckAuth = (isPrivate = false) => {
       setCredentials({
         userInfo: res?.user,
         token: res?.token,
+        role: res?.user?.role
       })
     );
   };

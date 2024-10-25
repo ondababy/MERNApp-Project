@@ -116,8 +116,8 @@ class UserService extends Service {
     if (!user) throw new Errors.NotFound('User not found!');
     const { token } = user.getVerifyEmailToken();
     const { code } = user.getOTP();
+    user.emailVerifiedAt = null;
     await user.save({ validateBeforeSave: false, new: true });
-    console.log(user.otp, user.verifyEmail);
     let redirect = redirectUrl ? `${redirectUrl}?verifyToken=${token}&otp=${code}` : '';
     const message = `Your OTP is <strong> ${code} </strong> `;
     const altMessage = redirectUrl
@@ -163,8 +163,7 @@ class UserService extends Service {
     if (!user) throw new Errors.BadRequest('Invalid verify token!');
 
     user = await this.verifyUser(user);
-    const generatedToken = generateToken(user._id, this.authToken);
-    return { user, token: generatedToken };
+    return { user };
   }
 
   async verifyOTP(email, OTP) {
@@ -177,8 +176,7 @@ class UserService extends Service {
     if (user.otp.expire < dt) throw new Errors.BadRequest('Your OTP expired! Please try again!');
 
     user = await this.verifyUser(user);
-    const generatedToken = generateToken(user._id, this.authToken);
-    return { user, token: generatedToken };
+    return { user };
   }
 
   async testEmail({ email }) {

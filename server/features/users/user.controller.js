@@ -127,7 +127,12 @@ class UserController extends Controller {
     const { redirectUrl } = req.body;
     const { email } = req.user;
     await this.service.sendVerifyEmail(email, redirectUrl);
-    this.success({ res, message: 'Verification email sent!' });
+    this.success({ 
+      res, 
+      message: 'Verification email sent!',
+      user: await this.resource.make(req.user),
+      token: getBearerToken(req),
+     });
   };
 
   verifyEmail = async (req, res) => {
@@ -139,12 +144,12 @@ class UserController extends Controller {
     else if (email && OTP) result = await this.service.verifyOTP(email, OTP);
     else throw new Errors.BadRequest('Invalid data!');
     if (!result) throw new Errors.BadRequest('Invalid token!');
-    const { user, token } = result;
+    const { user } = result;
     this.success({
       res,
       message: 'Verified!',
       user: await this.resource.make(user),
-      token: token,
+      token: getBearerToken(req),
     });
   };
 
