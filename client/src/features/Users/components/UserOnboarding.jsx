@@ -1,5 +1,7 @@
 import { Steps } from '@common';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import AccountInformation from './UserAccountInformation';
 import EmailVerification from './UserEmailVerification';
@@ -18,29 +20,29 @@ const initialSteps = [
 ];
 
 function UserOnboarding() {
+  const nav = useNavigate();
+  const { userInfo } = useSelector((state) => state.auth);
   const [currentStep, setCurrentStep] = useState(0);
-  const [isFinished, setIsFinished] = useState(false);
+  const [isFinished, setIsFinished] = useState(userInfo?.emailVerifiedAt && userInfo?.info);
   const [isEmailVerified, setIsEmailVerified] = useState(false);
 
-
   const handleStepClick = (index) => {
-    if (index < currentStep) {
-      setCurrentStep(index);
-    } else {
+    if (index - 1 < currentStep) {
+      setCurrentStep(index - 1);
+    } else if (index - 1 > currentStep) {
       toast.error('Please complete the current step!');
     }
 
   }
-
-
   const handleContinue = () => {
     if (currentStep < initialSteps.length - 1) {
       setCurrentStep(currentStep + 1);
     } else {
-      console.log('Form submitted');
+      toast.success('Congratulations! You are all set up.');
+      nav('/');
+
     }
   };
-
   const handleBack = () => {
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
@@ -55,7 +57,7 @@ function UserOnboarding() {
   const pageComponents = [<EmailVerification onSave={handleSave} />, <AccountInformation onSave={handleSave} />];
 
 
-  return (
+  return isFinished ? <Navigate to="/" /> : (
     <div className="flex flex-col items-start min-h-screen w-full max-w-6xl mx-auto  px-4 lg:px-24 my-12">
       <div>
         <Steps

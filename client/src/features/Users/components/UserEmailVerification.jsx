@@ -4,7 +4,8 @@ import { IoIosCheckmarkCircle } from "react-icons/io";
 import { useEmailVerification } from '../hooks/useEmailVerification';
 
 function EmailVerification({ onSave = () => { } }) {
-  const { verify, resend, userInfo, otp, setOTP } = useEmailVerification();
+
+  const { isCodeSent, resendDelay, verify, resend, userInfo, otp, setOTP } = useEmailVerification();
 
   const handleOTPChange = (otp) => {
     setOTP(otp);
@@ -31,14 +32,34 @@ function EmailVerification({ onSave = () => { } }) {
           </div>
 
           {/* Verify  */}
-          <div className="flex gap-2 my-4">
-            <button
-              onClick={verify}
-              className="btn btn-sm btn-primary">Verify</button>
-            <button
-              onClick={resend}
-              className="btn btn-sm btn-ghost btn-primary">Resend Code</button>
-          </div>
+          {isCodeSent && (
+            <div className="flex gap-2 my-4">
+              <button
+                onClick={verify}
+                className="btn btn-sm btn-primary">Verify</button>
+              <button
+                onClick={resend}
+                disabled={resendDelay > 0}
+                className="btn btn-sm btn-ghost btn-primary">
+                <span>
+                  Resend
+                  {resendDelay > 0 && ` in ${resendDelay}s`}
+                </span>
+                {resendDelay > 0 && <span className='loading loading-spinner'>
+
+                </span>}
+              </button>
+            </div>
+          )}
+          {
+            !isCodeSent && (
+              <button
+                onClick={resend}
+                className="my-4 btn btn-outline btn-secondary btn-ghost btn-primary">
+                Send Code
+              </button>
+            )
+          }
         </>) : (<>
 
           <div className="flex items-center gap-2">
