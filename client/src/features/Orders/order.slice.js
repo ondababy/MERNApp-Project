@@ -2,26 +2,29 @@ import { createSlice } from '@reduxjs/toolkit';
 
 // hard coded shipping methods
 const shippingMethods = {
-  std: { fee: 100, method: 'Standard' },
-  exp: { fee: 200, method: 'Express' },
-  smd: { fee: 300, method: 'Same Day' }
-}
+  std: { key: 'std', fee: 100, method: 'Standard' },
+  exp: { key: 'exp', fee: 200, method: 'Express' },
+  smd: { key: 'smd', fee: 300, method: 'Same Day' },
+};
 
 const paymentMethods = {
-  cod: { method: 'Cash on Delivery' },
-  card: { 
+  cod: { key: 'cod', method: 'Cash on Delivery' },
+  card: {
+    key: 'card',
     method: 'Credit Card',
-    data: null
-   },
-  paypal: { 
-    method: 'Paypal', 
-    data: null 
+    data: null,
   },
-  gcash: { 
-    method: 'GCash', 
-    data: null 
+  paypal: {
+    key: 'paypal',
+    method: 'Paypal',
+    data: null,
   },
-}
+  gcash: {
+    key: 'gcash',
+    method: 'GCash',
+    data: null,
+  },
+};
 
 const initialState = {
   items: [],
@@ -30,12 +33,12 @@ const initialState = {
   shipping: shippingMethods.std,
   taxTotal: 0,
   currency: 'PHP',
-  payment:  paymentMethods.cod,
+  payment: paymentMethods.cod,
   completed: false,
 };
 
 // const calculateTaxTotal = (subTotal) => {
-  // think it through
+// think it through
 // }
 
 const calculateSubTotal = (items = []) => {
@@ -43,8 +46,8 @@ const calculateSubTotal = (items = []) => {
 };
 
 const calculateTotal = (subTotal = 0, shipping = 0, taxTotal = 0) => {
-  return subTotal + shipping?.fee||0 + taxTotal;
-}
+  return subTotal + shipping?.fee || 0 + taxTotal;
+};
 
 export const orderSlice = createSlice({
   name: 'order',
@@ -63,20 +66,13 @@ export const orderSlice = createSlice({
       return shippingMethods;
     },
     setCompleted: (state, action) => {
-      state.completed = action.payload
-    }
-
+      state.completed = action.payload;
+    },
+    clearOrder: (state, action) => {
+      state = { ...initialState, shipping: state.shipping, payment: state.payment };
+    },
   },
 });
 
-export const { 
-  setOrder,
-  setShipping,
-  getShippingMethods,
-  setCompleted,
-
-   } = orderSlice.actions;
+export const { setOrder, setShipping, getShippingMethods, setCompleted } = orderSlice.actions;
 export const orderReducer = orderSlice.reducer;
-
-
-

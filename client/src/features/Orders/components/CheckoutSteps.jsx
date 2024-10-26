@@ -52,7 +52,7 @@ export default function CheckoutSteps() {
 
   /* END DECLARATIONS ################################################ */
   const handleStepClick = (index) => {
-    if (!rules[currentStep]) return;
+    if (!rules[currentStep]) return setCurrentStep(0);
     if (!rules[currentStep]?.condition) {
       toast.error(rules[currentStep].message);
       return;
@@ -63,7 +63,7 @@ export default function CheckoutSteps() {
   }
 
   const handleContinue = () => {
-    if (!rules[currentStep]) return;
+    if (!rules[currentStep]) return setCurrentStep(0);
     if (!rules[currentStep]?.condition) {
       toast.error(rules[currentStep].message);
       return;
@@ -103,20 +103,21 @@ export default function CheckoutSteps() {
   useEffect(() => {
     let quickStep = 0;
     for (let i = 0; i < initialSteps.length; i++) {
-      if (rules[i]?.condition) {
-        quickStep = i;
+      if (!rules[i]?.condition) {
         i > 1 && toast.error(rules[i]?.message);
         break;
       }
+      quickStep++;
     }
 
-    setCurrentStep(quickStep - 1);
-    api && api.scrollTo(quickStep - 1);
+    setCurrentStep(quickStep);
+    api && api.scrollTo(quickStep);
 
 
   }, [userInfo, api]);
 
   useEffect(() => {
+    console.log(currentStep)
     if (currentStep == pageComponents.length - 1)
       dispatch(setCompleted(true));
     else

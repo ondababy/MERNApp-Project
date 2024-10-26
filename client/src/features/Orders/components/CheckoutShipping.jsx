@@ -11,6 +11,7 @@ import { FaCheck } from "react-icons/fa";
 // hard coded shipping methods
 const defaultMethods = {
   std: {
+    key: "std",
     fee: 100,
     method: 'Standard',
     description: 'A standard shipping method',
@@ -20,6 +21,7 @@ const defaultMethods = {
     }
   },
   exp: {
+    key: "exp",
     fee: 200,
     method: 'Express',
     description: 'An express shipping method.',
@@ -29,6 +31,7 @@ const defaultMethods = {
     }
   },
   smd: {
+    key: "smd",
     fee: 300,
     method: 'Same Day',
     description: 'A prioritized  shipping method. Deliver on the same day.',

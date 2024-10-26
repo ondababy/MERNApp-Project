@@ -38,9 +38,12 @@ export function useOrderActions({ cartData = {}, action = 'create' }) {
     });
   })
   const handleCreate = useCallback(async (values) => {
-    await createOrder(values).unwrap();
-    navigate(role === 'admin' ? '/dashboard/orders/table' : '/');
-    toast.success('Create successful!');
+    await createOrder(values).unwrap().then(res => {
+      // dispatch(clearCart());
+      // dispatch(clearOrder());
+      toast.success('Create successful!');
+      navigate(role === 'admin' ? '/dashboard/orders/table' : '/');
+    });
   })
   const handleUpdate = useCallback(async (values) => {
     const res = await updateOrder({ id: order.id, order: values }).unwrap();
@@ -68,11 +71,11 @@ export function useOrderActions({ cartData = {}, action = 'create' }) {
       userId: userInfo.id,
       products: selectedItems.map(item => ({ product: item.id, quantity: item.quantity })),
       payment: {
-        method: order.payment.method,
+        method: order.payment.key,
         status: 'pending',
       },
       shipping: {
-        method: order.shipping.method,
+        method: order.shipping.key,
         address: [userInfo.info.address, userInfo.info.city, userInfo.info.state, userInfo.info.zip_code].join(', '),
       },
       total: order.total,
