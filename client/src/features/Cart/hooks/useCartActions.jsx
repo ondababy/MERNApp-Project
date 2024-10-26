@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { cartApi } from '../cart.api';
-import { addItem, clearCart, removeItem, setItems, updateItem } from '../cart.slice';
+import { addItem, clearCart, removeItem, setItems, setSelected, updateItem } from '../cart.slice';
 
 export function useCartActions() {
   /* DECLARATIONS #################################################### */
@@ -19,6 +19,10 @@ export function useCartActions() {
       dispatch(setItems(data?.resource || []));
     });
   }, [dispatch, getCartItems]);
+
+  const selectItem = React.useCallback((item) => {
+    return dispatch(setSelected({ selectedItem: item }));
+  });
 
   const addItemToCart = React.useCallback((item) => {
     return createCartItem(item).unwrap().then((data) => {
@@ -54,6 +58,7 @@ export function useCartActions() {
   return {
     cart,
     getItems,
+    selectItem,
     addItem: addItemToCart,
     updateItem: updateCartItemInCart,
     removeItem: removeItemFromCart,

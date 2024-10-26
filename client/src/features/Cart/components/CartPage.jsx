@@ -1,4 +1,3 @@
-import { confirmDelete } from '@custom';
 import { useEffect, useRef, useState } from 'react';
 import { FaArrowRight } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
@@ -7,33 +6,16 @@ import CartList from './CartList';
 
 export function CartPage() {
   const [checkoutReady, setCheckoutReady] = useState(false);
-  const {
-    cart: { items, subTotal },
-    getItems,
-    removeItem,
-
-  } = useCartActions()
-
-
-  const handleRemove = async (cartItem) => {
-    confirmDelete(() => {
-      removeItem(cartItem).then(() => {
-        getItems();
-      })
-    });
-  }
-
+  const { cart: { items, subTotal }, } = useCartActions()
 
   useEffect(() => {
     setCheckoutReady(items?.length);
   }, [items])
 
 
-
-
   return (
     <>
-      <CartList cartItems={items} onRemove={handleRemove} />
+      <CartList />
 
       <div className="bg-base-200 lg:min-h-96 p-8 container mx-auto md:max-w-sm border-l">
         <h1 className='font-extrabold tracking-wider text-2xl uppercase'>
@@ -58,10 +40,6 @@ export function CartPage() {
             <FaArrowRight />
           </span>
         </Link>
-
-
-
-
       </div>
     </>
   )
