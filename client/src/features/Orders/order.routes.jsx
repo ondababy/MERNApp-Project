@@ -1,7 +1,7 @@
 import React from 'react';
 import { dashUrl as mainUrl } from './order.api';
 
-const OrderForm = React.lazy(() => import('./components/OrderForm'));
+const OrderFormPage = React.lazy(() => import('./components/OrderFormPage'));
 const OrderPage = React.lazy(() => import('./components/OrderPage'));
 const OrderTable = React.lazy(() => import('./components/OrderTable'));
 
@@ -11,7 +11,7 @@ export const orderRoutes = [
   {
     path: `${mainUrl}/create`,
     element: (
-      <OrderForm
+      <OrderFormPage
         action="create"
         title="Create Order"
       />
@@ -20,7 +20,7 @@ export const orderRoutes = [
   {
     path: `${mainUrl}/:slug/view`,
     element: (
-      <OrderForm
+      <OrderFormPage
         action="view"
         title="View Order"
       />
@@ -29,7 +29,7 @@ export const orderRoutes = [
   {
     path: `${mainUrl}/:slug/edit`,
     element: (
-      <OrderForm
+      <OrderFormPage
         action="edit"
         title="Edit Order"
       />

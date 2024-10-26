@@ -8,7 +8,7 @@ import OrderSummary from './OrderSummary';
 export default function CheckoutPage() {
   const [checkoutStatus, setCheckoutStatus] = React.useState(false)
   const { items } = useCartActions()
-  const { order } = useOrderActions(items)
+  const { order } = useOrderActions({ cartData: items })
 
 
 

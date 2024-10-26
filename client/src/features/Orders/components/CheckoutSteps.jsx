@@ -5,9 +5,9 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@common/components/ui/carousel";
-
-import React from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
+import OrderForm from './OrderForm';
 
 
 export default function CheckoutSteps({ onFinish = () => { } }) {
@@ -19,16 +19,14 @@ export default function CheckoutSteps({ onFinish = () => { } }) {
   ];
 
   const pageComponents = [
-    <>Fill up information</>,
+    <OrderForm />,
     <>Choose shipping method</>,
     <>Confirm Items</>,
   ]
 
-  const [currentStep, setCurrentStep] = React.useState(0);
-  const [api, setApi] = React.useState();
+  const [currentStep, setCurrentStep] = useState(0);
+  const [api, setApi] = useState();
   /* END DECLARATIONS ################################################ */
-
-
   const handleStepClick = (index) => {
     if (index - 1 < currentStep) {
       setCurrentStep(index - 1);
@@ -37,26 +35,22 @@ export default function CheckoutSteps({ onFinish = () => { } }) {
       toast.error('Please complete the current step!');
     }
   }
-
   const handleContinue = () => {
     if (currentStep < initialSteps.length - 1) {
       api && api.scrollTo(currentStep + 1);
       setCurrentStep(currentStep + 1);
     }
   };
-
   const handleBack = () => {
     if (currentStep > 0) {
       api && api.scrollTo(currentStep - 1);
       setCurrentStep(currentStep - 1);
     }
   };
-
   const handleFinished = () => {
     onFinish();
   }
-
-  React.useEffect(() => {
+  useEffect(() => {
     if (!api) {
       return;
     }
