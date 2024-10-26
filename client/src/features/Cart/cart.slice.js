@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const selectedIds = window.sessionStorage.getItem('selectedCartIds');
+let selectedIds = window.sessionStorage.getItem('selectedCartIds');
 const initialState = {
   items: [],
   selectedIds: selectedIds ? JSON.parse(selectedIds) : [],
@@ -20,31 +20,42 @@ const calculateSubTotal = (items) => {
 
 const calculateTotal = (subTotal, shipping, taxTotal) => {
   return subTotal + shipping.fee + taxTotal;
-}
+};
+
+const verifySelectedIds = (items) => {
+  let selectedIds = window.sessionStorage.getItem('selectedCartIds');
+  selectedIds = selectedIds ? JSON.parse(selectedIds) : [];
+  let validIds = items.map((item) => item.id);
+  selectedIds = selectedIds.filter((id) => validIds.includes(id));
+  window.sessionStorage.setItem('selectedCartIds', JSON.stringify(selectedIds));
+  return selectedIds;
+};
 
 export const cartSlice = createSlice({
   name: 'cart',
   initialState,
   reducers: {
     setSelected: (state, action) => {
-      const {selectedItem = null} = action.payload;
+      const { selectedItem = null } = action.payload;
       if (!selectedItem) return;
       state.items = state.items.map((item) => {
         if (item.id === selectedItem.id) {
-          state.selectedIds = selectedItem.selected ? state.selectedIds.filter((id) => id !== selectedItem.id) : [...state.selectedIds, selectedItem.id];
+          state.selectedIds = selectedItem.selected
+            ? state.selectedIds.filter((id) => id !== selectedItem.id)
+            : [...state.selectedIds, selectedItem.id];
 
           sessionStorage.setItem('selectedCartIds', JSON.stringify(state.selectedIds));
 
-          return {...item, selected: !selectedItem?.selected};
+          return { ...item, selected: !selectedItem?.selected };
         }
         return item;
       });
     },
     setItems: (state, action) => {
-      // if there is selected items, set them to selected
+      verifySelectedIds(action.payload || []);
       state.items = action.payload.map((item) => {
         if (state.selectedIds.includes(item.id)) {
-          return {...item, selected: true};
+          return { ...item, selected: true };
         }
         return item;
       });
@@ -54,7 +65,7 @@ export const cartSlice = createSlice({
       state.shipping = action.payload;
     },
     setTotal: (state, action) => {
-      let {subTotal, shipping, taxTotal} = action.payload;      
+      let { subTotal, shipping, taxTotal } = action.payload;
       state.total = calculateTotal(subTotal, shipping, taxTotal);
     },
     addItem: (state, action) => {
@@ -64,7 +75,7 @@ export const cartSlice = createSlice({
       } else {
         state.items.push(action.payload);
       }
-    state.subTotal = calculateSubTotal(state.items);
+      state.subTotal = calculateSubTotal(state.items);
     },
     updateItem: (state, action) => {
       const index = state.items.findIndex((item) => item.id === action.payload.id);
@@ -81,16 +92,9 @@ export const cartSlice = createSlice({
     },
     clearCart: (state) => {
       state = initialState;
-    }
+    },
   },
 });
 
-export const { 
-  setItems, 
-  addItem, 
-  updateItem, 
-  removeItem, 
-  clearCart,
-  setSelected
-} = cartSlice.actions;
+export const { setItems, addItem, updateItem, removeItem, clearCart, setSelected } = cartSlice.actions;
 export const cartReducer = cartSlice.reducer;

@@ -33,7 +33,7 @@ export default function CheckoutSteps() {
   // Step rules
   const rules = {
     0: {
-      condition: selectedIds.length,
+      condition: order.items.length,
       message: 'Please add items to your cart!',
     },
     1: {
@@ -102,7 +102,7 @@ export default function CheckoutSteps() {
 
   useEffect(() => {
     let quickStep = 0;
-    for (let i = 0; i < initialSteps.length; i++) {
+    for (let i = 0; i < Object.keys(rules).length; i++) {
       if (!rules[i]?.condition) {
         i > 1 && toast.error(rules[i]?.message);
         break;
@@ -117,7 +117,6 @@ export default function CheckoutSteps() {
   }, [userInfo, api]);
 
   useEffect(() => {
-    console.log(currentStep)
     if (currentStep == pageComponents.length - 1)
       dispatch(setCompleted(true));
     else
