@@ -75,6 +75,8 @@ export const cartSlice = createSlice({
     },
     removeItem: (state, action) => {
       state.items = state.items.filter((item) => item.id !== action.payload.id);
+      state.selectedIds = state.selectedIds.filter((id) => id !== action.payload.id);
+      sessionStorage.setItem('selectedCartIds', JSON.stringify(state.selectedIds));
       state.subTotal = calculateSubTotal(state.items);
     },
     clearCart: (state) => {

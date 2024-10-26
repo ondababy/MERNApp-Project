@@ -7,11 +7,13 @@ import {
 } from "@common/components/ui/carousel";
 import { CartList } from "@features";
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import OrderForm from './OrderForm';
 
 
 export default function CheckoutSteps({ onFinish = () => { } }) {
+  const { selectedIds } = useSelector((state) => state.cart);
   /* DECLARATIONS #################################################### */
   const initialSteps = [
     { label: 'Cart', isActive: true, },
@@ -22,11 +24,11 @@ export default function CheckoutSteps({ onFinish = () => { } }) {
   ];
 
   const pageComponents = [
-    <><CartList /></>,
+    <CartList />,
     <OrderForm />,
     <>Choose shipping method</>,
     <>Choose payment method</>,
-    <>Confirm Items</>,
+    <>Finish</>,
   ]
 
   const [currentStep, setCurrentStep] = useState(0);
@@ -40,21 +42,52 @@ export default function CheckoutSteps({ onFinish = () => { } }) {
       toast.error('Please complete the current step!');
     }
   }
+
   const handleContinue = () => {
+
+    // Step rules
+    const rules = {
+      0: {
+        condition: selectedIds.length,
+        message: 'Please add items to your cart!',
+      },
+      1: {
+        condition: true,
+        message: 'Please fill out the order form!',
+      },
+      2: {
+        condition: true,
+        message: 'Please choose a shipping method!',
+      },
+      3: {
+        condition: true,
+        message: 'Please choose a payment method!',
+      },
+    }
+
+    if (!rules[currentStep]?.condition) {
+      toast.error(rules[currentStep].message);
+      return;
+    }
+
     if (currentStep < initialSteps.length - 1) {
       api && api.scrollTo(currentStep + 1);
       setCurrentStep(currentStep + 1);
     }
   };
+
   const handleBack = () => {
     if (currentStep > 0) {
       api && api.scrollTo(currentStep - 1);
       setCurrentStep(currentStep - 1);
     }
   };
+
   const handleFinished = () => {
     onFinish();
   }
+
+
   useEffect(() => {
     if (!api) {
       return;
