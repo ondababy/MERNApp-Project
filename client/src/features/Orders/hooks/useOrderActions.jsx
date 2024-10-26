@@ -18,6 +18,7 @@ export function useOrderActions({ cartData = {}, action = 'create' }) {
   const fields = typeof getFields === 'function' ? getFields() : getFields || [];
   const altFields = typeof getAltFields === 'function' ? getAltFields() : getAltFields || [];
   const order = useSelector((state) => state.cart) || cartData;
+  const selectedItems = order?.items ? order?.items.filter(item => item?.selected) : [];
   const [orderSchema, setOrderSchema] = useState(fields);
   const [createOrder, { isLoading: isCreating }] = orderApi.useCreateOrderMutation();
   const [updateOrder, { isLoading: isUpdating }] = orderApi.useUpdateOrderMutation();
@@ -73,9 +74,12 @@ export function useOrderActions({ cartData = {}, action = 'create' }) {
     if (id) fetchOrder();
     else setOrderSchema(action === 'create' ? fields : altFields);
   }, [action, id]);
-
   return {
-    order,
+    order: {
+      ...order,
+      items: selectedItems,
+      subTotal: selectedItems.reduce((acc, item) => acc + item.price, 0),
+    },
     formikProps: {
       initialValues,
       validationSchema: orderValidation,

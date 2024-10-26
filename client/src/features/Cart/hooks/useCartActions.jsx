@@ -6,7 +6,7 @@ import { addItem, clearCart, removeItem, setItems, setSelected, updateItem } fro
 export function useCartActions() {
   /* DECLARATIONS #################################################### */
   const dispatch = useDispatch();
-  const cart = useSelector((state) => state.cart);
+  const { selectedIds, ...cart } = useSelector((state) => state.cart);
 
   const [getCartItems] = cartApi.useGetItemsMutation();
   const [createCartItem] = cartApi.useCreateItemMutation();

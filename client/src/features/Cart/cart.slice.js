@@ -1,7 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+const selectedIds = window.sessionStorage.getItem('selectedCartIds');
 const initialState = {
   items: [],
+  selectedIds: selectedIds ? JSON.parse(selectedIds) : [],
   subTotal: 0,
   total: 0,
   shipping: {
@@ -28,16 +30,24 @@ export const cartSlice = createSlice({
       const {selectedItem = null} = action.payload;
       if (!selectedItem) return;
       state.items = state.items.map((item) => {
-    
         if (item.id === selectedItem.id) {
+          state.selectedIds = selectedItem.selected ? state.selectedIds.filter((id) => id !== selectedItem.id) : [...state.selectedIds, selectedItem.id];
+
+          sessionStorage.setItem('selectedCartIds', JSON.stringify(state.selectedIds));
+
           return {...item, selected: !selectedItem?.selected};
         }
         return item;
       });
-
     },
     setItems: (state, action) => {
-      state.items = action.payload;
+      // if there is selected items, set them to selected
+      state.items = action.payload.map((item) => {
+        if (state.selectedIds.includes(item.id)) {
+          return {...item, selected: true};
+        }
+        return item;
+      });
       state.subTotal = calculateSubTotal(state.items);
     },
     setShipping: (state, action) => {

@@ -39,7 +39,7 @@ export default function CartList() {
               <CartCard
                 key={item.id} item={item}
                 onRemove={handleRemove}
-                onClick={e => selectItem(item)}
+                onSelect={e => selectItem(item)}
                 className={`${item.selected ? 'bg-primary/10 border border-primary transition-all ease-out' : ''}`}
               />
             )) : ''

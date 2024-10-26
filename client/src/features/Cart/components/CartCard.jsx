@@ -15,7 +15,7 @@ const itemDefault = {
   total: 0,
 }
 
-export function CartCard({ item = itemDefault, onRemove = () => { }, className, ...props }) {
+export function CartCard({ item = itemDefault, onRemove = () => { }, onSelect = () => { }, className, ...props }) {
   const [product, setProduct] = React.useState(item?.product || itemDefault.product);
   const [cartItem, setCartItem] = React.useState(item || itemDefault);
   const { updateItem } = useCartActions();
@@ -84,12 +84,19 @@ export function CartCard({ item = itemDefault, onRemove = () => { }, className, 
           />
         </div>
       </div>
+      <div className="flex lg:flex-col items-center w-full lg:w-fit lg:h-full">
+        <button
+          onClick={onSelect}
+          className="rounded-none btn btn-ghost w-full flex-1">
+          Select
+        </button>
 
-      <button
-        onClick={handlRemove}
-        className="lg:h-full btn btn-ghost text-red-500 flex-1">
-        Remove
-      </button>
+        <button
+          onClick={handlRemove}
+          className="rounded-none btn btn-ghost text-red-500 w-full flex-1">
+          Remove
+        </button>
+      </div>
     </div>
   )
 }

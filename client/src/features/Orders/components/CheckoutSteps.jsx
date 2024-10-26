@@ -5,6 +5,7 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@common/components/ui/carousel";
+import { CartList } from "@features";
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import OrderForm from './OrderForm';
@@ -13,14 +14,18 @@ import OrderForm from './OrderForm';
 export default function CheckoutSteps({ onFinish = () => { } }) {
   /* DECLARATIONS #################################################### */
   const initialSteps = [
-    { label: 'Fill up information', isActive: true, },
-    { label: 'Choose shipping method', },
-    { label: 'Confirm Items', },
+    { label: 'Cart', isActive: true, },
+    { label: 'Order Info', },
+    { label: 'Shipping', },
+    { label: 'Payment', },
+    { label: 'Complete', },
   ];
 
   const pageComponents = [
+    <><CartList /></>,
     <OrderForm />,
     <>Choose shipping method</>,
+    <>Choose payment method</>,
     <>Confirm Items</>,
   ]
 
@@ -57,7 +62,7 @@ export default function CheckoutSteps({ onFinish = () => { } }) {
   }, [api]);
 
   return (
-    <div className="flex flex-col min-h-96 bg-base-200/50 p-8 container mx-auto h-screen">
+    <div className="flex flex-col min-h-96 bg-base-200/50 p-8 container mx-auto max-h-[200%]">
       <h1 className='font-extrabold tracking-wider text-2xl uppercase'>
         Order Process
       </h1>
@@ -71,29 +76,8 @@ export default function CheckoutSteps({ onFinish = () => { } }) {
       />
 
 
-      {/* CAROUSEL CONTENT */}
-      <Carousel
-        className="w-full h-full"
-        opts={{ watchDrag: false }}
-        setApi={setApi}
-      >
-        <CarouselContent className="h-full">
-          {pageComponents.map((page, index) => (
-            <CarouselItem key={index} >
-              <div className="p-1 h-full">
-                <Card className="h-full">
-                  <CardContent className=" flex items-center justify-center p-6">
-                    {page}
-                  </CardContent>
-                </Card>
-              </div>
-            </CarouselItem>
-          ))}
-        </CarouselContent>
-      </Carousel>
-
       {/* ACTIONS */}
-      <div className="flex items-center justify-end gap-4 mt-auto">
+      <div className="flex items-center justify-between gap-4 mt-auto">
         {
           currentStep > 0 && (
             <button className="btn btn-outline" onClick={handleBack}>
@@ -104,7 +88,7 @@ export default function CheckoutSteps({ onFinish = () => { } }) {
 
         {
           currentStep < initialSteps.length - 1 && (
-            <button className=" btn btn-outline btn-primary" onClick={handleContinue}>
+            <button className="ml-auto btn btn-outline btn-primary" onClick={handleContinue}>
               Continue
             </button>
           )
@@ -114,12 +98,34 @@ export default function CheckoutSteps({ onFinish = () => { } }) {
           currentStep === initialSteps.length - 1 && (
             <button
               onClick={handleFinished}
-              className="  btn btn-outline btn-success">
+              className="ml-auto btn btn-outline btn-success">
               Finish
             </button>
           )
         }
       </div>
+
+      {/* CAROUSEL CONTENT */}
+      <Carousel
+        className="w-full h-full overflow-y-auto"
+        opts={{ watchDrag: false }}
+        setApi={setApi}
+      >
+        <CarouselContent className="h-full ">
+          {pageComponents.map((page, index) => (
+            <CarouselItem key={index} >
+              <div className="p-1 h-full overflow-y-auto">
+                <Card className="h-full overflow-y-auto">
+                  <CardContent className=" flex items-center justify-center p-6">
+                    {page}
+                  </CardContent>
+                </Card>
+              </div>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+      </Carousel>
+
     </div >
   )
 }
