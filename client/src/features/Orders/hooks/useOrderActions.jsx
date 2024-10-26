@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import { orderApi } from '../order.api';
 import { getAltFields, getFields } from '../order.fields';
 import { setOrder } from '../order.slice';
+import { setShipping } from '../order.slice.js';
 import { orderValidation } from '../order.validation';
 
 
@@ -69,6 +70,14 @@ export function useOrderActions({ cartData = {}, action = 'create' }) {
     confirmSave(async () => handleSubmit(values));
   })
 
+  const handleCheckout = () => {
+    alert(JSON.stringify(order, null, 2));
+  }
+  const handleShipping = (shipping) => {
+    dispatch(setShipping(shipping));
+  }
+
+
   useEffect(() => {
     const fetchOrder = async () => {
     };
@@ -100,5 +109,7 @@ export function useOrderActions({ cartData = {}, action = 'create' }) {
     handleUpdate,
     handleSubmit,
     onSubmit,
+    handleCheckout,
+    handleShipping,
   }
 }

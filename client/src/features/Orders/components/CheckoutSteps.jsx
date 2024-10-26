@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { useOrderActions } from '../hooks/useOrderActions';
-import { setCompleted, setShipping } from '../order.slice.js';
+import { setCompleted } from '../order.slice.js';
 
 import CheckoutShipping from './CheckoutShipping';
 import OrderSummary from './OrderSummary.jsx';
@@ -17,7 +17,7 @@ import OrderSummary from './OrderSummary.jsx';
 
 export default function CheckoutSteps() {
   const dispatch = useDispatch();
-  const { order } = useOrderActions({})
+  const { order, handleShipping, handleCheckout } = useOrderActions({})
   const { selectedIds } = useSelector((state) => state.cart);
   const { userInfo, isChanging } = useSelector((state) => state.auth);
   /* DECLARATIONS #################################################### */
@@ -81,13 +81,6 @@ export default function CheckoutSteps() {
   };
 
 
-  const handleShipping = (shipping) => {
-    dispatch(setShipping(shipping));
-  }
-
-  const handleCheckout = () => {
-    alert(JSON.stringify(order, null, 2));
-  }
 
   useEffect(() => {
     if (!api) {
