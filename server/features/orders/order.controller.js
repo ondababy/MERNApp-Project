@@ -7,7 +7,7 @@ class OrderController extends Controller {
   resource = OrderResource;
 
   store = async (req, res) => {
-    const order = false && (await this.service.create(req.body));
+    const order = await this.service.create(req.body);
     if (!order?.id) return this.error({ res, message: 'Order not created' });
 
     const resource = await this.resource.make(order);
