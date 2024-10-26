@@ -50,8 +50,8 @@ export default function CheckoutSteps({ onFinish = () => { } }) {
 
   /* END DECLARATIONS ################################################ */
   const handleStepClick = (index) => {
-    if (!rules[index - 1]?.condition) {
-      toast.error(rules[currentStep].message);
+    if (rules[index - 1] && !rules[index - 1]?.condition) {
+      rules[index - 1] && toast.error(rules[index - 1]?.message);
       return;
     }
     setCurrentStep(index - 1);
