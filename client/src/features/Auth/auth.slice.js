@@ -6,12 +6,16 @@ const initialState = {
   userInfo: userInfo ? JSON.parse(userInfo) : null,
   accessToken: accessToken || null,
   role: null,
+  isChanging: false,
 };
 
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
+    setIsChanging: (state, action) => {
+      state.isChanging = action.payload.isChanging;
+    },
     setCredentials: (state, action) => {
       const { userInfo, token } = action.payload;
       const {role, ...info} = userInfo
@@ -30,7 +34,7 @@ export const authSlice = createSlice({
   },
 });
 
-export const { setCredentials, logout } = authSlice.actions;
+export const { setCredentials, logout, setIsChanging } = authSlice.actions;
 export const authReducer = authSlice.reducer;
 export const selectCurrentUser = (state) => state.auth.userInfo;
 export const selectAccessToken = (state) => state.auth.accessToken;

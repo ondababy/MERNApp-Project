@@ -1,5 +1,4 @@
 
-import isEqual from 'lodash/isEqual';
 
 import { FormikForm } from '@common/components';
 import { Button } from 'react-daisyui';
@@ -10,15 +9,17 @@ const avatarPlaceholder = {
 };
 
 export default function UserForm({ id = null, action = 'create', noAvatar = false, ...props }) {
+
   const {
     formikProps,
     userSchema,
-    initialValues,
     isCreating,
     isUpdating,
     isFetching,
-    handleSubmit
+    handleSubmit,
+    compareValues,
   } = useUserActions({ id, action, ...props });
+
 
 
   return (
@@ -28,14 +29,14 @@ export default function UserForm({ id = null, action = 'create', noAvatar = fals
         className="w-full max-w-7xl grid grid-cols-1 md:grid-cols-6 gap-2 lg:gap-4"
         formSchema={userSchema}
         element={({ isSubmitting, values }) => {
-          const isFormChanged = !isEqual(initialValues, values);
+          const isFormChanged = !(compareValues(values));
           const isButtonDisabled = isSubmitting || isCreating || isUpdating || isFetching || !isFormChanged;
 
           return (
             <>
               {
                 !noAvatar &&
-                <div className="w-full h-64 p-4 row-start-1 row-span-4 col-span-3 rounded flex justify-center">
+                <div className="w-full h-64 p-4 row-start-2 row-span-4 col-span-3 rounded flex justify-center">
                   <img src={avatarPlaceholder.src} alt={avatarPlaceholder.alt} className='h-full shadow-xl rounded-full object-contain bg-base-100 aspect-square bg-blend-lighten ' />
                 </div>
               }

@@ -1,5 +1,10 @@
 const common = [
   {
+    label: 'Basic Info',
+    variant: 'divider',
+    outerStyle: 'w-full col-span-3 lg:col-span-6',
+  },
+  {
     label: 'First Name',
     name: 'first_name',
     type: 'text',
@@ -36,6 +41,11 @@ const common = [
     outerStyle: 'w-full col-span-3 md:col-span-3 lg:col-span-2 ',
   },
   {
+    label: 'Address Information',
+    variant: 'divider',
+    outerStyle: 'w-full col-span-3 lg:col-span-6',
+  },
+  {
     label: 'Adress',
     name: 'address',
     type: 'text',
@@ -60,12 +70,22 @@ const common = [
     outerStyle: 'w-full col-span-1 md:col-span-2 ',
   },
   {
-    label: 'Avatar',
+    label: '',
+    variant: 'divider',
+    outerStyle: 'w-full col-span-3 lg:col-span-6',
+  },
+  {
+    label: 'Upload Avatar ',
     name: 'avatar',
     type: 'image',
     accept: 'image/*',
     multiple: true,
     outerStyle: 'w-full col-span-3 md:col-span-3 lg:col-span-6 ',
+  },
+  {
+    label: '',
+    variant: 'divider',
+    outerStyle: 'w-full col-span-3 lg:col-span-6',
   },
 ];
 
@@ -88,6 +108,11 @@ const getFields = () => [
 
 const getAltFields = () => [...common];
 const getInfoFields = () => [
+  {
+    label: 'Customer Info',
+    variant: 'divider',
+    outerStyle: 'w-full col-span-3 lg:col-span-6',
+  },
   {
     label: 'First Name',
     name: 'first_name',
@@ -113,6 +138,11 @@ const getInfoFields = () => [
     outerStyle: 'w-full col-span-3 lg:col-span-2',
   },
   {
+    label: 'Shipping Information',
+    variant: 'divider',
+    outerStyle: 'w-full col-span-3 lg:col-span-6',
+  },
+  {
     label: 'Adress',
     name: 'address',
     type: 'text',
@@ -135,6 +165,10 @@ const getInfoFields = () => [
     name: 'zip_code',
     type: 'text',
     outerStyle: 'w-full col-span-1 lg:col-span-2',
+  },
+  {
+    variant: 'divider',
+    outerStyle: 'w-full col-span-3 lg:col-span-6',
   },
 ];
 

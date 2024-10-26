@@ -13,7 +13,7 @@ import { toast } from 'react-toastify';
 
 export default function CheckoutSteps({ onFinish = () => { } }) {
   const { selectedIds } = useSelector((state) => state.cart);
-  const { userInfo } = useSelector((state) => state.auth);
+  const { userInfo, isChanging } = useSelector((state) => state.auth);
   /* DECLARATIONS #################################################### */
   const initialSteps = [
     { label: 'Cart', isActive: true, },
@@ -43,7 +43,6 @@ export default function CheckoutSteps({ onFinish = () => { } }) {
   }
 
   const handleContinue = () => {
-
     // Step rules
     const rules = {
       0: {
@@ -51,8 +50,8 @@ export default function CheckoutSteps({ onFinish = () => { } }) {
         message: 'Please add items to your cart!',
       },
       1: {
-        condition: true,
-        message: 'Please fill out the order form!',
+        condition: !isChanging,
+        message: 'Please fill out the form and save the changes!',
       },
       2: {
         condition: true,
@@ -145,7 +144,7 @@ export default function CheckoutSteps({ onFinish = () => { } }) {
       >
         <CarouselContent className="h-full ">
           {pageComponents.map((page, index) => (
-            <CarouselItem key={index} >
+            <CarouselItem key={`${initialSteps[index]?.label}_${index}`} >
               <div className="p-1 h-full overflow-y-auto">
                 <Card className="h-full overflow-y-auto">
                   <CardContent className=" flex items-center justify-center p-6">

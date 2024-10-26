@@ -1,6 +1,8 @@
 
+import isEqual from 'lodash/isEqual';
+
 import { confirmSave } from '@custom';
-import { setCredentials } from '@features';
+import { setCredentials, setIsChanging } from '@features';
 import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -39,6 +41,15 @@ export default function useUserActions({ id = null, action = "create", fields = 
       }, {}),
     [user, userSchema, action]
   );
+
+  const compareValues = (values) => {
+    const isChanged = isEqual(initialValues, values);
+    dispatch(setIsChanging({
+      isChanging: !isChanged,
+    }));
+    return isChanged
+  }
+
 
 
   useEffect(() => {
@@ -105,6 +116,7 @@ export default function useUserActions({ id = null, action = "create", fields = 
     isCreating,
     isUpdating,
     isFetching,
-    handleSubmit
+    handleSubmit,
+    compareValues
   }
 }
