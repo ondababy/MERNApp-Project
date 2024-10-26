@@ -10,7 +10,7 @@ export const useLogoutAction = () => {
   const [logout] = authApi.useLogoutMutation();
 
   const action = useCallback(async () => {
-    await logout().unwrap();
+    await logout();
     dispatch(logoutAction());
   }, [dispatch, logout]);
 

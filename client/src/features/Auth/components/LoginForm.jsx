@@ -28,14 +28,14 @@ function LoginForm() {
   const handleLogin = async (values) => {
     try {
       const res = await login(values).unwrap();
-      console.log(res)
       dispatch(
         setCredentials({
           userInfo: res.user,
           token: res.token,
+          role: res.user.role,
         })
       );
-      navigate('/dashboard');
+      navigate('/');
       toast.success('Logged in successfully');
     } catch (e) {
       toast.error(e?.data?.message || e.error);

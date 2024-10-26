@@ -1,4 +1,6 @@
 import PropTypes from 'prop-types';
+import { Link } from "react-router-dom";
+
 
 function PageTitle({ title, children, ...props }) {
   return (
@@ -11,6 +13,11 @@ function PageTitle({ title, children, ...props }) {
           {title}
         </h1>
         {children}
+        <Link to={-1}>
+          <div className="btn btn-ghost">
+            Back
+          </div>
+        </Link>
       </div>
     </div>
   );

@@ -44,18 +44,27 @@ const baseQueryWithReAuth = async (args, api, extraOptions) => {
 
   try {
     let result = await baseQuery(args, api, extraOptions);
-    if (![401, 403].includes(result.error?.status)) {
-      return result;
+
+    if (result === undefined) {
+      console.error('API request result is undefined');
+      return { error: { status: 'FETCH_ERROR', data: 'API request result is undefined' } };
+    }
+
+    if (![401, 403].includes(result?.error?.status)) {
+      return result || 'Forbidden';
     }
     const refreshResult = await baseQuery('/users/refresh', api, extraOptions);
     if (refreshResult?.data?.token) {
       const userInfo = api.getState().auth.userInfo;
       const token = refreshResult.data.token;
-      api.dispatch(setCredentials({ userInfo, token }));
+      api.dispatch(setCredentials({ userInfo, token, role: userInfo?.role }));
       return await baseQuery(args, api, extraOptions);
     } else {
       api.dispatch(logout());
+      return { error: { status: 'UNAUTHORIZED', data: 'Refresh token failed' } };
     }
+  } catch (error) {
+    console.error('Error in baseQueryWithReAuth:', error);
   } finally {
     api.dispatch(stopLoading());
   }

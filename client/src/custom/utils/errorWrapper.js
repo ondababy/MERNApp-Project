@@ -4,29 +4,20 @@ const errorWrapper = (fn, onError = () => {}) => {
   try {
     return fn();
   } catch (e) {
-    console.log(e);
-    const errors = e?.data?.errors?.details;
-    if (Array.isArray(errors)) {
-      errors.forEach((error) => {
-        toast.error(error?.msg || 'Error while performing action');
-      });
-    } else toast.error(e?.data?.message || 'Client Broken: Error while performing action.');
+    toast.error(e.message || 'Something went wrong!');
+    console.error(e);
     return onError(e);
   }
 };
 
 const requestError = (error) => {
-  try {
-    const errors = error?.response?.data?.errors?.details;
-    if (Array.isArray(errors)) {
-      errors.forEach((error) => {
-        toast.error(error?.msg || 'Error while performing action');
-      });
-    } else toast.error(error?.response?.data?.message || 'Client Broken: Error while performing action.');
-  } catch (e) {
-    console.log(e);
-    toast.error('Client Broken: Error while performing action.');
-  }
+  const { status = 400, data = {} } = error;
+  const { name = 'Error', errors = {}, message = 'Something went wrong!' } = data;
+  if (errors?.details?.length) {
+    errors?.details?.forEach((error) => {
+      toast.error(error?.msg || 'Error while performing action');
+    });
+  } else toast.error(message || 'Request Error: Something went wrong.');
 };
 
 export { errorWrapper, requestError };

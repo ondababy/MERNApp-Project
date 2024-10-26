@@ -1,6 +1,10 @@
 import * as yup from 'yup';
 
-const passwordRules = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,}$/;
+// HARD
+// const passwordRules = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,}$/;
+// no rules
+const passwordRules = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+
 export const signupValidation = yup.object().shape({
   username: yup.string().min(3, 'Username must be at least 3 characters long').required('*Required'),
 

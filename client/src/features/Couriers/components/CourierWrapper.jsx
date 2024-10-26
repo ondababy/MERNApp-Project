@@ -9,13 +9,7 @@ function CourierWrapper({ children, title, prevUrl }) {
     <>
       <div className="w-full h-full">
         <PageTitle title={title}>
-          <Button
-            color="primary"
-            className="my-4"
-            onClick={() => navigate(prevUrl || '/dashboard/couriers')}
-          >
-            Back
-          </Button>
+
         </PageTitle>
         <div className="p-8">{children}</div>
       </div>

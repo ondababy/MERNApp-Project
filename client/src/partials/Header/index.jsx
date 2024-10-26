@@ -1,67 +1,91 @@
 import { TextRainbow, ThemeToggler } from '@common/components';
-import { AuthLogout } from '@features';
+import { useLogout } from '@custom';
 import { PropTypes } from 'prop-types';
-import { Dropdown, Navbar } from 'react-daisyui';
-import { FaBars, FaCartArrowDown, FaSearch, FaUser } from 'react-icons/fa';
+import { Badge, Button, Card, Dropdown, Indicator, Navbar } from 'react-daisyui';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-const defaultMenus = [
-  { name: 'Search', link: '/', icon: <FaSearch />, },
-  { name: 'Cart', link: '/cart', icon: <FaCartArrowDown /> },
-  { name: 'Profile', link: '/profile', icon: <FaUser /> }
-]
-
-const MenuList = ({ menus = defaultMenus, iconOnly = false }) => {
-  return (
-    <>
-      {menus.map((menu, index) => (
-        <Link
-          key={index}
-          to={menu.link}
-          className="btn btn-ghost rounded-btn group p-0 lg:p-3 hover:text-primary"
-        >
-          <span className="text-lg group-hover:text-primary">
-            {menu.icon}
-          </span>
-          <span className="text-sm">
-            {iconOnly ? '' : menu.name}
-          </span>
-        </Link>
-      ))}
-    </>
-  );
-};
 function Header({ clickLogo }) {
+  const handleLogout = useLogout();
+  const { userInfo, accessToken } = useSelector(state => state.auth)
+  const { items, subTotal, currency } = useSelector(state => state.cart)
+
+
   return (
     <>
-      <Navbar className="sticky z-[69] top-0 w-full bg-base-200">
+      <Navbar className='fixed bg-base-100/10 backdrop-blur-xl'>
         <Navbar.Start>
-          <Dropdown className="lg:hidden">
-            <Dropdown.Toggle>
-              <FaBars />
-            </Dropdown.Toggle>
-            <Dropdown.Menu className="items-center border border-gray-400 rounded border-opacity-30 bg-base-200 w-52">
-              <MenuList />
-              <AuthLogout className="btn btn-ghost rounded-btn group p-0 lg:p-3 hover:text-primary" />
+          <Link>
+            <Button
+              color="ghost"
+            >
+              <TextRainbow
+                text="Shoeshabold"
+                className="text-xl font-extrabold font-display"
+              />
+            </Button>
+          </Link>
+          <ThemeToggler />
+        </Navbar.Start>
+
+        <Navbar.End>
+          <Dropdown end>
+            <Button tag="label" tabIndex={0} color="ghost" shape="circle">
+              <Indicator>
+                <Badge size="sm" className={Indicator.Item.className()}>
+                  {items?.length || 0}
+                </Badge>
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+              </Indicator>
+            </Button>
+            <Dropdown.Menu className="mt-3 z-[1] card card-compact w-52 !p-0">
+              <Card.Body>
+                <span className="font-bold text-lg">{items?.length || 0} Items</span>
+                <span className="text-info">Subtotal: {currency} {subTotal}</span>
+                <Card.Actions>
+                  <Link to="/cart" className='w-full'>
+                    <Button color="primary" fullWidth>
+                      View cart
+                    </Button>
+                  </Link>
+                </Card.Actions>
+              </Card.Body>
             </Dropdown.Menu>
           </Dropdown>
-          <TextRainbow
-            text="ShoeShable"
-            className="text-xl font-extrabold font-display btn btn-ghost "
-            onClick={clickLogo}
-          />
-          <span className='hidden lg:flex'>
-            <ThemeToggler />
-          </span>
-        </Navbar.Start>
-        <Navbar.End className='w-full'>
-          <div className="hidden lg:flex">
-            <MenuList />
-            <AuthLogout />
-          </div>
-          <div className="lg:hidden">
-            <MenuList iconOnly={true} />
-          </div>
+
+          {
+            userInfo?.id && accessToken &&
+            <Dropdown end>
+              <Button tag="label" tabIndex={0} color="ghost" className="avatar" shape="circle">
+                <div className="w-10 rounded-full">
+                  <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+                </div>
+              </Button>
+              <Dropdown.Menu className="mt-3 z-[1] w-52 menu-sm">
+                <li>
+                  <a className="justify-between">
+                    Profile
+                    <Badge className="badge">New</Badge>
+                  </a>
+                </li>
+                <Dropdown.Item>Settings</Dropdown.Item>
+                <Dropdown.Item onClick={handleLogout}>
+                  Logout
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          }
+
+          {!(userInfo?.id && accessToken) && <Button
+            color='primary'
+            variant='outline'
+          >
+            Log in
+          </Button>}
+
+
         </Navbar.End>
       </Navbar>
     </>

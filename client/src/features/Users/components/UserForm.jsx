@@ -1,111 +1,63 @@
+
+
 import { FormikForm } from '@common/components';
-import { PageTitle } from '@partials';
-import isEqual from 'lodash/isEqual';
-import PropTypes from 'prop-types';
-import { useEffect, useMemo, useState } from 'react';
 import { Button } from 'react-daisyui';
-import { useNavigate, useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import { userApi } from '../user.api';
-import { userValidation } from '../user.validation';
+import useUserActions from '../hooks/useUserActions';
+const avatarPlaceholder = {
+  src: "https://placehold.co/600",
+  alt: "n/a",
+};
 
-const UserForm = ({ title = 'User Form', action = 'create' }) => {
-  const { id } = useParams();
-  const [user, setUser] = useState(null);
-  const [userSchema, setUserSchema] = useState([
-    { label: 'Username', name: 'username', type: 'text' },
-    { label: 'Email Address', name: 'email', type: 'email' },
-  ]);
-  const navigate = useNavigate();
-  const [createUser, { isLoading: isCreating }] = userApi.useCreateUserMutation();
-  const [updateUser, { isLoading: isUpdating }] = userApi.useUpdateUserMutation();
-  const [getUser, { isLoading: isFetching }] = userApi.useGetUserMutation();
+export default function UserForm({ id = null, action = 'create', noAvatar = false, ...props }) {
 
-  useEffect(() => {
-    if (action === 'edit' && id) {
-      getUser(id).then((res) => {
-        setUser(res.data.resource);
-      });
-    } else {
-      setUserSchema([
-        { label: 'Username', name: 'username', type: 'text' },
-        { label: 'Email Address', name: 'email', type: 'email' },
-        { label: 'Password', name: 'password', type: 'password' },
-        { label: 'Confirm Password', name: 'confirm_password', type: 'password' },
-      ]);
-    }
-  }, [action, id, getUser]);
+  const {
+    formikProps,
+    userSchema,
+    isCreating,
+    isUpdating,
+    isFetching,
+    handleSubmit,
+    compareValues,
+  } = useUserActions({ id, action, ...props });
 
-  const initialValues = useMemo(
-    () =>
-      userSchema.reduce((acc, field) => {
-        acc[field.name] = action === 'create' ? '' : user?.[field.name] ?? '';
-        return acc;
-      }, {}),
-    [user, userSchema, action]
-  );
 
-  const handleSubmit = (values) => async () => {
-    try {
-      if (action === 'create') {
-        await createUser(values).unwrap();
-        toast.success('User created successfully');
-      } else {
-        await updateUser({ id, user: values }).unwrap();
-        toast.success('User updated successfully');
-      }
-      // navigate('/dashboard/users/table');
-    } catch (e) {
-      const errors = e?.data?.errors?.details;
-      if (Array.isArray(errors)) {
-        errors.forEach((error) => {
-          toast.error(error?.msg || 'test');
-        });
-      } else toast.error(e?.data?.message || e.error);
-    }
-  };
 
   return (
-    <div className="w-full h-full">
-      <PageTitle title={title} />
+    <div className="w-full flex justify-center p-4 lg:p-8">
+      <FormikForm
+        formikProps={formikProps}
+        className="w-full max-w-7xl grid grid-cols-1 md:grid-cols-6 gap-2 lg:gap-4"
+        formSchema={userSchema}
+        element={({ isSubmitting, values }) => {
+          const isFormChanged = !(compareValues(values));
+          const isButtonDisabled = isSubmitting || isCreating || isUpdating || isFetching || !isFormChanged;
 
-      <div className="container p-8">
-        <FormikForm
-          formikProps={{
-            initialValues,
-            validationSchema: userValidation,
-            enableReinitialize: true,
-          }}
-          className="flex flex-wrap gap-8"
-          formSchema={userSchema}
-          element={({ isSubmitting, values }) => {
-            const isFormChanged = !isEqual(initialValues, values);
-            const isButtonDisabled = isSubmitting || isCreating || isUpdating || isFetching || !isFormChanged;
+          return (
+            <>
+              {
+                !noAvatar &&
+                <div className="w-full h-64 p-4 row-start-2 row-span-4 col-span-3 rounded flex justify-center">
+                  <img src={avatarPlaceholder.src} alt={avatarPlaceholder.alt} className='h-full shadow-xl rounded-full object-contain bg-base-100 aspect-square bg-blend-lighten ' />
+                </div>
+              }
 
-            return (
-              <div className="flex w-full">
+              <div className="w-full col-span-3 md:col-span-6">
                 <Button
                   variant="outline"
-                  type="button"
-                  onClick={handleSubmit(values)}
+                  type="submit"
                   color="primary"
                   className="max-w-md"
                   disabled={isButtonDisabled}
                 >
-                  {action === 'create' ? 'Create User' : 'Update User'}
+                  {action === 'create' ? 'Save' : 'Save'}
                 </Button>
               </div>
-            );
-          }}
-        />
-      </div>
+
+            </>
+          );
+        }}
+      />
     </div>
   );
 };
 
-UserForm.propTypes = {
-  action: PropTypes.oneOf(['create', 'edit', 'view']),
-  title: PropTypes.string,
-};
-
-export default UserForm;

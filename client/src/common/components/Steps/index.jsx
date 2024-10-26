@@ -33,7 +33,7 @@ function Steps({
         isActive: index === current,
       }))
     );
-  }, [current, steps]);
+  }, [current]);
 
   const onClick = (index) => {
     onChange(index);
@@ -44,7 +44,7 @@ function Steps({
       <ol
         className={
           componentClass ||
-          `flex items-center justify-center p-3 space-x-2 text-sm font-medium text-center rounded-lg shadow-sm sm:p-4 sm:space-x-4 rtl:space-x-reverse ${addClass}`
+          `flex flex-wrap items-center justify-center p-3 gap-3 text-sm font-medium text-center rounded-lg shadow-sm sm:p-4 sm:space-x-4 rtl:space-x-reverse ${addClass}`
         }
       >
         {steps?.length

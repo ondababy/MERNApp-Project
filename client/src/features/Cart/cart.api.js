@@ -41,7 +41,15 @@ const cartApi = apiSlice.injectEndpoints({
         headers,
       }),
     }),
+    clearCart: build.mutation({
+      query: () => ({
+        url: `${apiUrl}/clear`,
+        method: 'DELETE',
+        headers,
+      }),
+    }),
   }),
 });
 
 export { cartApi };
+

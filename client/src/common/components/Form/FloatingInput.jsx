@@ -1,8 +1,8 @@
 import { PropTypes } from 'prop-types';
 
-function FloatingInput({ label, refer, meta, ...inputProps }) {
+function FloatingInput({ label, refer, meta, outerStyle, ...inputProps }) {
   return (
-    <div>
+    <div className={outerStyle}>
       <div
         className={`relative border ${meta?.touched && meta?.error ? 'border-error' : 'border-primary'} overflow-clip`}
       >

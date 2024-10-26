@@ -1,16 +1,19 @@
 import { authRoutes } from '@features';
-import { DefaultLayout } from '@layouts';
+import { GuestLayout } from '@layouts';
 import * as Screen from '@screens';
 
-const defaultRoutes = [
+const guestRoutes = [
   {
     path: '/',
-    element: <DefaultLayout />,
+    element: <GuestLayout />,
     children: [
       {
         path: '/',
         element: <Screen.Shop />,
-        // element: <Screen.Home />,
+      },
+      {
+        path: '/home',
+        element: <Screen.Home />,
       },
       {
         path: '/shop',
@@ -19,10 +22,6 @@ const defaultRoutes = [
       {
         path: '/cart',
         element: <Screen.Cart />,
-      },
-      {
-        path: '/checkout',
-        element: <Screen.Checkout />,
       },
       {
         path: '/shop/:slug',
@@ -38,4 +37,4 @@ const defaultRoutes = [
   },
 ];
 
-export default defaultRoutes;
+export default guestRoutes;

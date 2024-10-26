@@ -39,7 +39,7 @@ export default [
       {
         path: '/profile',
         method: METHODS.PATCH,
-        controller: [protectAndPermit(READ_WRITE), controller.updateProfile],
+        controller: [protectAndPermit(READ_WRITE), controller.update],
       },
       {
         path: '/:id',
@@ -55,6 +55,21 @@ export default [
         path: '/:id',
         method: METHODS.DELETE,
         controller: [protectAndPermit(READ_WRITE), controller.delete],
+      },
+      {
+        path: '/:id/send-verify-email',
+        method: METHODS.POST,
+        controller: [protectAndPermit(), controller.sendVerifyEmail],
+      },
+      {
+        path: '/:id/verify-email',
+        method: METHODS.POST,
+        controller: [protectAndPermit(), controller.verifyEmail],
+      },
+      {
+        path: '/test/email',
+        method: METHODS.POST,
+        controller: controller.testEmail,
       },
     ],
   },

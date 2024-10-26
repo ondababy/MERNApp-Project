@@ -3,20 +3,20 @@ import PropTypes from 'prop-types';
 import FormikInput from './FormikInput';
 import ImageInput from './ImageInput';
 
-function FormikForm({ formikProps, formSchema, element = () => {}, formClass, ...formProps }) {
+function FormikForm({ formikProps, formSchema, element = () => { }, formClass, ...formProps }) {
   return (
     <Formik {...formikProps}>
       {(props) => (
         <Form
           autoComplete="off"
-          className={'flex flex-col gap-8 ' + formClass}
+          className={'w-full flex flex-col gap-8 ' + formClass}
           {...formProps}
         >
           {formSchema.map((field, idx) => {
             if (field.type === 'image') {
               return (
                 <ImageInput
-                  key={field.name + idx}
+                  key={(field.name ? field.name : Math.random(10000)) + idx}
                   {...field}
                   formik={props}
                 />
@@ -24,7 +24,7 @@ function FormikForm({ formikProps, formSchema, element = () => {}, formClass, ..
             }
             return (
               <FormikInput
-                key={field.name + idx}
+                key={(field.name ? field.name : Math.random(10000)) + idx}
                 {...field}
               />
             );

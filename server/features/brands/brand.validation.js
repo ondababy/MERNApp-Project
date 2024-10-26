@@ -33,10 +33,3 @@ const brandUpdateRules = () => {
   ];
 };
 export { brandCreateRules, brandUpdateRules };
-
-// // USING SCHEMA: BUT i don't like it
-// return checkSchema({
-//   name: {
-//     notEmpty: { errorMessage: 'Name is required!' },
-//   },
-// });

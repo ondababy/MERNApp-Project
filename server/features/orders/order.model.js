@@ -1,12 +1,11 @@
 import { Schema } from '#lib';
-import { ImageSchema } from '#utils';
 
 const Order = new Schema({
   name: 'Order',
   schema: [
     {
       user: { type: Schema.Types.ObjectId, ref: 'User' },
-      status: { type: String, default: 'pending' },
+      status: { type: String, default: 'pending', enum: ['pending', 'processing', 'shipped', 'delivered', 'cancelled'] },
       total: { type: Number, default: 0 },
       note: { type: String, default: '' },
 
@@ -17,14 +16,16 @@ const Order = new Schema({
         },
       ],
       payment: {
-        method: { type: String, default: 'cash' },
-        status: { type: String, default: 'pending' },
+        method: { type: String, default: 'cod', enum: ['cod', 'paypal', 'stripe'] },
+        status: { type: String, default: 'pending', enum: ['pending', 'paid', 'failed'] },
       },
-      delivery: {
-        address: { type: String, default: '' },
-        date: { type: Date, default: Date.now },
+      shipping: {
+        method: { type: String, default: 'std', enum: ['std', 'exp', 'smd'] },
+        address: { type: String, required: true },
+        start_ship_date: { type: Date, default: Date.now },
+        expected_ship_date: { type: Date, default: Date.now },
+        shipped_date: { type: Date, default: Date.now },
       },
-      // images: [ImageSchema], // ?? think about it
     },
     { timestamps: true },
   ],

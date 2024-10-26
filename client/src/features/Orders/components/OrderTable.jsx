@@ -1,55 +1,35 @@
 import { ActionButtons, Table } from '@common';
-import { confirmDelete } from '@custom';
 import { useEffect, useState } from 'react';
 import { Button } from 'react-daisyui';
 import { FaPlus } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { orderApi } from '../order.api';
+import { useOrderActions } from '../hooks/useOrderActions';
 import OrderWrapper from './OrderWrapper';
 
 const allowedColumns = () => [
-  { key: 'name', label: 'Name' },
+  { key: 'customer', label: 'Customer' },
+  { key: 'items', label: 'Items' },
+  { key: 'total', label: 'Total' },
+  { key: 'status', label: 'Status' },
   { key: 'actions', label: '' },
+
   // More columns can be added here
 ];
 
 const OrderTable = () => {
   const navigate = useNavigate();
-  const { useGetOrdersMutation, useDeleteOrderMutation } = orderApi;
   const [orders, setOrders] = useState([]);
-  const [getOrders, { isLoading, isError }] = useGetOrdersMutation();
-  const [deleteOrder, { isLoading: isDeleting }] = useDeleteOrderMutation();
-
-  const handleDelete = async (id) => {
-    try {
-      confirmDelete(async () => {
-        await deleteOrder(id).unwrap();
-        setOrders(orders.filter((order) => order.id !== id));
-        toast.success('Order deleted successfully');
-      });
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
+  const { fetchOrders, handleDelete } = useOrderActions({});
 
   useEffect(() => {
-    const fetchOrders = async () => {
-      const res = await getOrders().unwrap();
-      setOrders(res.resource || []);
-    };
+    fetchOrders().then((res) => {
+      setOrders(res);
+    });
+  }, [])
 
-    return () => {
-      try {
-        fetchOrders();
-      } catch (error) {
-        toast.error(error.message);
-      }
-    };
-  }, [getOrders]);
 
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error loading orders</div>;
+
   if (!orders.length)
     return (
       <div className="flex items-center justify-center space-x-2 font-bold text-center">
@@ -69,11 +49,46 @@ const OrderTable = () => {
         <Table
           data={orders.map((order) => ({
             ...order,
+            customer: (<>
+              <div class="flex items-center gap-3">
+                {order?.user?.info?.avatar && <div class="avatar">
+                  <div class="mask mask-squircle h-12 w-12">
+                    <img
+                      src={order?.user?.info?.avatar || "https://placehold.co/600"}
+                      alt="Avatar Tailwind CSS Component" />
+                  </div>
+                </div>}
+                {!order?.user?.info?.avatar &&
+                  <div class="avatar placeholder">
+                    <div class="bg-neutral text-neutral-content w-16 rounded-full">
+                      <span class="text-xl">{order?.user?.username[0].toUpperCase()}</span>
+                    </div>
+                  </div>}
+                <div>
+                  <div class="font-bold flex gap-2">
+                    <span>
+                      {order?.user?.info?.first_name}
+                    </span>
+                    <span>
+                      {order?.user?.info?.last_name}
+                    </span>
+                  </div>
+                  <div class="text-sm opacity-50">
+                    {order?.user?.email}
+                  </div>
+                  <div class="text-sm opacity-50">
+                    {order?.user?.info?.contact}
+                  </div>
+                </div>
+              </div>
+            </>),
+            items: (<>
+              <span>{order?.products?.length}</span>
+            </>),
             actions: (
               <ActionButtons
                 key={'action_' + order.slug}
                 className="flex justify-end"
-                isLoading={isDeleting}
                 onDelete={() => handleDelete(order.id)}
                 onEdit={() => navigate(`/dashboard/orders/${order.slug}/edit`)}
                 onView={() => navigate(`/dashboard/orders/${order.slug}/view`)}

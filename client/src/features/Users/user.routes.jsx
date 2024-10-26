@@ -1,16 +1,15 @@
 import React from 'react';
-import { UserList, UserPage, UserTable } from '.';
+import { UserPage, UserTable } from '.';
 
-const UserForm = React.lazy(() => import('./components/UserForm'));
+const UserFormPage = React.lazy(() => import('./components/UserFormPage'));
 
 export const userRoutes = [
   { path: '/dashboard/users', element: <UserPage /> },
   { path: '/dashboard/users/table', element: <UserTable /> },
-  { path: '/dashboard/users/list', element: <UserList /> },
   {
     path: '/dashboard/users/:id/edit',
     element: (
-      <UserForm
+      <UserFormPage
         action="edit"
         title="Edit User"
       />
@@ -19,7 +18,7 @@ export const userRoutes = [
   {
     path: '/dashboard/users/:id/view',
     element: (
-      <UserForm
+      <UserFormPage
         action="view"
         title="View User"
       />
@@ -28,7 +27,7 @@ export const userRoutes = [
   {
     path: '/dashboard/users/create',
     element: (
-      <UserForm
+      <UserFormPage
         action="create"
         title="Create User"
       />

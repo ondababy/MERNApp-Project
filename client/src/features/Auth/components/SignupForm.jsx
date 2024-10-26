@@ -31,8 +31,9 @@ function SignupFrom() {
       const res = await register(values).unwrap();
       dispatch(
         setCredentials({
-          userInfo: res.user,
-          token: res.token,
+          userInfo: res?.user,
+          token: res?.token,
+          role: res?.user?.role,
         })
       );
       navigate('/dashboard');

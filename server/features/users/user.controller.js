@@ -1,15 +1,17 @@
 import { Controller } from '#lib';
-import { Errors, getBearerToken, sendEmail, tokenExists } from '#utils';
+import { Errors, getBearerToken, tokenExists } from '#utils';
 import UserResource from './user.resource.js';
 import UserService from './user.service.js';
-import { userCreateRules, userUpdateRules } from './user.validation.js';
+import * as rules from './user.validation.js';
 
 class UserController extends Controller {
   service = UserService;
   resource = UserResource;
   rules = {
-    create: userCreateRules,
-    update: userUpdateRules,
+    create: rules.userCreateRules,
+    update: rules.userUpdateRules,
+    createInfo: rules.userInfoCreateRules,
+    updateInfo: rules.userInfoUpdateRules,
   };
 
   refresh = async (req, res) => {
@@ -75,41 +77,40 @@ class UserController extends Controller {
     });
   };
 
-  updateProfile = async (req, res) => {
-    const validData = await this.validator(req, res, this.rules.update);
-    const user = await this.service.updateUser(req.user._id, validData);
+  update = async (req, res) => {
+    let id = req.params.id || req.params.id || req.user._id;
+    let validData = await this.validator(req, res, this.rules.update);
+    const user = await this.service.updateUser(id, validData);
     if (!user) throw new Errors.BadRequest('Invalid user data!');
+
+    let userInfo;
+    if (req.body?.info && !user?.info?._id) {
+      validData = await this.validator(req, res, this.rules.createInfo);
+      userInfo = await this.service.createUserInfo(user, validData.info);
+    } else if (req.body?.info && user?.info?._id) {
+      validData = await this.validator(req, res, this.rules.updateInfo);
+      userInfo = await this.service.updateUserInfo(user, validData.info);
+    }
+
+    let resource = await this.resource.make(user);
     this.success({
       res,
-      message: 'Profile updated!',
-      user: await this.resource.make(user),
+      message: 'User profile updated!',
+      user: resource,
       token: getBearerToken(req),
     });
   };
 
   forgotPassword = async (req, res) => {
-    const { email } = req.body;
-    const { user, token } = await this.service.forgotPassword(email);
-    const resetUrl = `${req.protocol}://${req.get('host')}/password/reset/${token}`;
-    const message = `Your password reset token is as follow:\n\n${resetUrl}\n\nIf you have not requested this email, then ignore it.`;
+    await this.service.forgotPassword(req.body);
 
-    try {
-      await sendEmail({
-        email: user.email,
-        subject: 'Password Recovery',
-        message,
-      });
-      this.success({ res, message: `Email sent to: ${user.email}` });
-    } catch (error) {
-      user.resetPasswordToken = undefined;
-      user.resetPasswordExpire = undefined;
-      await user.save({ validateBeforeSave: false });
-      throw new Errors.InternalServerError(error.message);
-    }
+    this.success({
+      res,
+      message: 'Password reset sent!',
+    });
   };
 
   resetPassword = async (req, res) => {
-    const validData = await this.validator(req, res, this.rules.update);
     const { password } = req.body;
     const token = req.params.token;
     const { user, token: newToken } = await this.service.resetPassword(token, password);
@@ -120,6 +121,41 @@ class UserController extends Controller {
       user: await this.resource.make(user),
       token: newToken[1],
     });
+  };
+
+  sendVerifyEmail = async (req, res) => {
+    const { redirectUrl } = req.body;
+    const { email } = req.user;
+    await this.service.sendVerifyEmail(email, redirectUrl);
+    this.success({ 
+      res, 
+      message: 'Verification email sent!',
+      user: await this.resource.make(req.user),
+      token: getBearerToken(req),
+     });
+  };
+
+  verifyEmail = async (req, res) => {
+    const { verifyToken } = req.params;
+    const { OTP } = req.body;
+    const { email } = req.user;
+    let result;
+    if (verifyToken) result = await this.service.verifyToken(verifyToken);
+    else if (email && OTP) result = await this.service.verifyOTP(email, OTP);
+    else throw new Errors.BadRequest('Invalid data!');
+    if (!result) throw new Errors.BadRequest('Invalid token!');
+    const { user } = result;
+    this.success({
+      res,
+      message: 'Verified!',
+      user: await this.resource.make(user),
+      token: getBearerToken(req),
+    });
+  };
+
+  testEmail = async (req, res) => {
+    await this.service.testEmail(req.body);
+    this.success({ res, message: 'Email sent!' });
   };
 }
 export default new UserController();
