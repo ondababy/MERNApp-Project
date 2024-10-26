@@ -1,12 +1,12 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaArrowRight } from 'react-icons/fa';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { useCartActions } from '../hooks/useCartActions';
 import CartList from './CartList';
 
 export function CartPage() {
   const [checkoutReady, setCheckoutReady] = useState(false);
-  const { cart: { items, subTotal }, } = useCartActions()
+  const { items, subTotal } = useSelector(state => state.cart)
 
   useEffect(() => {
     setCheckoutReady(items?.length);

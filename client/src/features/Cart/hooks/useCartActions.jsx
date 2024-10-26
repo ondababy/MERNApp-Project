@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { cartApi } from '../cart.api';
 import { addItem, clearCart, removeItem, setItems, setSelected, updateItem } from '../cart.slice';
 
-export function useCartActions() {
+export function useCartActions({ render = false }) {
   /* DECLARATIONS #################################################### */
   const dispatch = useDispatch();
   const { selectedIds, ...cart } = useSelector((state) => state.cart);
@@ -52,8 +52,8 @@ export function useCartActions() {
   }, [dispatch]);
 
   React.useEffect(() => {
-    getItems();
-  }, []);
+    if (render) getItems();
+  }, [render]);
 
   return {
     cart,
