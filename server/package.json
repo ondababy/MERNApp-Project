@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "node api/index.js",
-    "dev": "nodemon --exec tsx api/index.ts -e js,ts,json",
+    "dev": "nodemon api/index.js -e js,ts,json",
     "lint": "eslint . "
   },
   "repository": {
