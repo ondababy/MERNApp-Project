@@ -9,7 +9,7 @@ class OrderService extends Service {
     this.forceFilter = { user: userId };
   }
 
-  async create(data, user) {
+  async create(data) {
     let { userId, products, ...orderData } = data;
     const user = await UserService.getById(userId);
     const productData = products.map(async (product) => ({
