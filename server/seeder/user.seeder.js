@@ -1,11 +1,7 @@
 import { UserModel, UserService } from '#features';
 import { faker } from '@faker-js/faker';
-<<<<<<< HEAD
-import { Seeder } from './seeder.js';
-=======
 import bcrypt from 'bcryptjs';
 import { Seeder } from './seeder';
->>>>>>> main
 
 class UserSeeder extends Seeder {
   constructor(service, count) {
