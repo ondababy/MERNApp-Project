@@ -7,7 +7,6 @@ import CartList from './CartList';
 
 export function CartPage() {
   const [checkoutReady, setCheckoutReady] = useState(false);
-  const terms = useRef(null);
   const {
     cart: { items, subTotal },
     getItems,
@@ -24,12 +23,9 @@ export function CartPage() {
     });
   }
 
-  const handleTerms = () => {
-    setCheckoutReady(terms.current.checked && items?.length);
-  }
 
   useEffect(() => {
-    setCheckoutReady(terms.current.checked && items?.length);
+    setCheckoutReady(items?.length);
   }, [items])
 
 
@@ -52,19 +48,6 @@ export function CartPage() {
         <i className="text-xs font-light">
           *Taxes and shipping calculated at checkout
         </i>
-        {/* Terms and Condition */}
-        <div className="flex items-center my-4">
-          <input
-            ref={terms}
-            onChange={handleTerms}
-            className="checkbox h-4 w-4 text-primary"
-            type="checkbox"
-
-          />
-          <span className="text-xs ml-2">
-            I agree with the terms and conditions
-          </span>
-        </div>
 
         <Link to="/checkout" className={`${!checkoutReady ? 'btn-disabled' : ''} btn btn-outline btn-primary w-full`}>
           Proceed to Checkout
