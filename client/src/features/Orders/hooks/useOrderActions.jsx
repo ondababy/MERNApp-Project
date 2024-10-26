@@ -17,39 +17,31 @@ export function useOrderActions({ cartData = {}, action = 'create' }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { id = null } = useParams()
-  const fields = typeof getFields === 'function' ? getFields() : getFields || [];
-  const altFields = typeof getAltFields === 'function' ? getAltFields() : getAltFields || [];
+
+  const { role } = useSelector((state) => state.auth) || cartData;
   const cart = useSelector((state) => state.cart) || cartData;
   const selectedItems = cart?.items ? cart?.items.filter(item => item?.selected) : [];
   const order = useSelector((state) => state.order);
-  const [orderSchema, setOrderSchema] = useState(fields);
+
   const [createOrder, { isLoading: isCreating }] = orderApi.useCreateOrderMutation();
   const [updateOrder, { isLoading: isUpdating }] = orderApi.useUpdateOrderMutation();
   const [getOrder] = orderApi.useGetOrderMutation();
   const [getOrders] = orderApi.useGetOrdersMutation();
   /* END DECLARATIONS ################################################ */
 
-  const initialValues = useMemo(
-    () =>
-      orderSchema.reduce((acc, field) => {
-        acc[field.name] = action === 'create' ? '' : order?.[field.name] ?? '';
-        return acc;
-      }, {}),
-    [order, orderSchema, action]
-  );
 
   const fetchOrders = useCallback(async () => { })
   const fetchOrder = useCallback(async () => {
     getOrder(id).then((res) => {
       if (res.error) {
         toast.error(res.error.data.message);
-        navigate('/dashboard/orders/table');
+        navigate(role === 'admin' ? '/dashboard/orders/table' : '/');
       } else if (res.data) setOrder(res.data.resource);
     });
   })
   const handleCreate = useCallback(async (values) => {
     await createOrder(values).unwrap();
-    navigate('/dashboard/orders/table');
+    navigate(role === 'admin' ? '/dashboard/orders/table' : '/');
     toast.success('Create successful!');
   })
   const handleUpdate = useCallback(async (values) => {
@@ -83,7 +75,6 @@ export function useOrderActions({ cartData = {}, action = 'create' }) {
     };
 
     if (id) fetchOrder();
-    else setOrderSchema(action === 'create' ? fields : altFields);
   }, [action, id]);
 
   useEffect(() => {
@@ -93,16 +84,6 @@ export function useOrderActions({ cartData = {}, action = 'create' }) {
 
   return {
     order,
-    formikProps: {
-      initialValues,
-      validationSchema: orderValidation,
-      onSubmit: onSubmit,
-      enableReinitialize: true,
-    },
-    initialValues,
-    orderSchema,
-    isCreating,
-    isUpdating,
     fetchOrders,
     fetchOrder,
     handleCreate,
