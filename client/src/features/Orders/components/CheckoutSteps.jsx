@@ -5,15 +5,15 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@common/components/ui/carousel";
-import { CartList } from "@features";
+import { CartList, UserForm, getInfoFields } from "@features";
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import OrderForm from './OrderForm';
 
 
 export default function CheckoutSteps({ onFinish = () => { } }) {
   const { selectedIds } = useSelector((state) => state.cart);
+  const { userInfo } = useSelector((state) => state.auth);
   /* DECLARATIONS #################################################### */
   const initialSteps = [
     { label: 'Cart', isActive: true, },
@@ -22,10 +22,9 @@ export default function CheckoutSteps({ onFinish = () => { } }) {
     { label: 'Payment', },
     { label: 'Complete', },
   ];
-
   const pageComponents = [
     <CartList />,
-    <OrderForm />,
+    <UserForm noAvatar={true} id={userInfo.id} action="edit" fields={getInfoFields()} altFields={getInfoFields()} />,
     <>Choose shipping method</>,
     <>Choose payment method</>,
     <>Finish</>,

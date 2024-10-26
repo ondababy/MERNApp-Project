@@ -11,8 +11,8 @@ import * as validator from '../user.validation';
 
 export default function useUserActions({ id = null, action = "create", fields = null, altFields = null, onSave }) {
   /* DECLARATIONS #################################################### */
-  const _fields = fields || typeof getFields === 'function' ? getFields() : getFields;
-  const _altFields = altFields || typeof getAltFields === 'function' ? getAltFields() : getAltFields;
+  const _fields = fields || (typeof getFields === 'function' ? getFields() : getFields);
+  const _altFields = altFields || (typeof getAltFields === 'function' ? getAltFields() : getAltFields);
   // CAROUSEL
   const images = [
     {
@@ -42,6 +42,7 @@ export default function useUserActions({ id = null, action = "create", fields = 
 
 
   useEffect(() => {
+
     if (action === 'edit' && id) {
       getUser(id).then((res) => {
         const { info, ...values } = res?.data?.resource
@@ -64,7 +65,7 @@ export default function useUserActions({ id = null, action = "create", fields = 
   };
   const handleSubmit = async (values, actions) => {
     const { username, email, password, confirm_password, ...info } = values
-    const payload = { username, email, password, confirm_password, info }
+    const payload = { username, email, password, confirm_password, ...userInfo, info }
     try {
       let res;
       if (action === 'create') {

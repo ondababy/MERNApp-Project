@@ -28,6 +28,13 @@ export const createUser = yup.object().shape({
   ...validatePass,
 });
 
-export const updateUser = yup.object().shape({
-  ...common,
-});
+export const updateUser = yup.object().shape(
+  // make all fields optional except email, username
+  Object.keys(common).reduce((acc, key) => {
+    if (key === 'email' ) 
+      acc[key] = common[key];
+    else
+      acc[key] = common[key].optional();
+    return acc;
+  }, {})
+);
