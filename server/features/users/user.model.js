@@ -54,7 +54,13 @@ const User = new Schema({
 });
 
 User.statics.fillables = ['username', 'email', 'password'];
-User.statics.hidden = ['_id', '__v', 'password', 'resetPassword', 'verifyEmail', 'otp'];
+User.statics.hidden = [
+  '__v',
+  'password',
+  'resetPassword',
+  'verifyEmail',
+  'otp',
+];
 
 User.methods.hashPassword = async function (password) {
   const salt = await bcrypt.genSalt(10);
@@ -67,14 +73,20 @@ User.methods.matchPassword = async function (password) {
 
 User.methods.getResetPasswordToken = function () {
   const resetToken = crypto.randomBytes(20).toString('hex');
-  this.resetPassword.token = crypto.createHash('sha256').update(resetToken).digest('hex');
+  this.resetPassword.token = crypto
+    .createHash('sha256')
+    .update(resetToken)
+    .digest('hex');
   this.resetPassword.expire = Date.now() + 10 * 60 * 1000; // 10 minutes
   return this.resetPassword;
 };
 
 User.methods.getVerifyEmailToken = function () {
   const verifyToken = crypto.randomBytes(20).toString('hex');
-  this.verifyEmail.token = crypto.createHash('sha256').update(verifyToken).digest('hex');
+  this.verifyEmail.token = crypto
+    .createHash('sha256')
+    .update(verifyToken)
+    .digest('hex');
   this.verifyEmail.expire = Date.now() + 10 * 60 * 1000; // 10 minutes
   return this.verifyEmail;
 };
@@ -86,8 +98,10 @@ User.methods.getOTP = function () {
 };
 
 User.pre('save', async function (next) {
-  if (this.isModified('password')) this.password = await this.hashPassword(this.password);
-  if (this.isModified('email') && this.emailVerifiedAt) this.emailVerifiedAt = null;
+  if (this.isModified('password'))
+    this.password = await this.hashPassword(this.password);
+  if (this.isModified('email') && this.emailVerifiedAt)
+    this.emailVerifiedAt = null;
   if (this.isModified('email') && this.verifyEmail.token) this.verifyEmail = {};
   if (this.isModified('email') && this.otp.code) this.otp = {};
   next();

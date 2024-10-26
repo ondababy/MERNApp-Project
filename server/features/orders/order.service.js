@@ -1,5 +1,4 @@
-import { CartModel, ProductModel, UserModel } from '#features';
-import { ObjectId } from 'mongodb';
+import { ProductService, UserService } from '#features';
 
 import { Service } from '#lib';
 import OrderModel from './order.model.js';
@@ -10,15 +9,18 @@ class OrderService extends Service {
     this.forceFilter = { user: userId };
   }
 
-  create(data) {
-    let { user, products, ...orderData } = data;
-    user = new ObjectId(user);
-    products = products.map((prev) => ({ ...prev, product: new ObjectId(prev.product) }));
+  async create(data, user) {
+    let { userId, products, ...orderData } = data;
+    const user = await UserService.getById(userId);
+    const productData = products.map(async (product) => ({
+      product: await ProductService.getById(product.product),
+      quantity: product.quantity,
+    }));
 
-    return this.model.create({ user, products, ...orderData });
+    return this.model.create({ ...orderData, user, products: productData });
   }
 
-  update(data) {}
+  async update(data) {}
 }
 
 export default new OrderService();

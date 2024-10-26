@@ -26,7 +26,7 @@ export default function CheckoutSteps() {
   const dispatch = useDispatch();
   const [currentStep, setCurrentStep] = useState(0);
   const [api, setApi] = useState();
-  const { order, handleShipping, handleCheckout } = useOrderActions({})
+  const { order, handleShipping, handleCheckout } = useOrderActions({ render: true })
   const { selectedIds } = useSelector((state) => state.cart);
   const { userInfo, isChanging } = useSelector((state) => state.auth);
 

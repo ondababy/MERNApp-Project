@@ -14,6 +14,7 @@ export class Schema extends mongoose.Schema {
   }
 
   filterHidden(data) {
+    if (!data) return data;
     if (!this.hidden?.length) return data;
 
     return Object.keys(data).reduce((acc, key) => {

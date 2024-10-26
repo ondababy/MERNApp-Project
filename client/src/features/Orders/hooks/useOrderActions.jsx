@@ -1,5 +1,5 @@
 
-import { confirmSave, requestError, toFormData } from '@custom';
+import { confirmDelete, confirmSave, requestError, toFormData } from '@custom';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -9,7 +9,7 @@ import { setOrder } from '../order.slice';
 import { setShipping } from '../order.slice.js';
 
 
-export function useOrderActions({ cartData = {}, action = 'create' }) {
+export function useOrderActions({ cartData = {}, action = 'create', render = false }) {
 
   /* DECLARATIONS #################################################### */
   const navigate = useNavigate();
@@ -23,12 +23,17 @@ export function useOrderActions({ cartData = {}, action = 'create' }) {
 
   const [createOrder, { isLoading: isCreating }] = orderApi.useCreateOrderMutation();
   const [updateOrder, { isLoading: isUpdating }] = orderApi.useUpdateOrderMutation();
+  const [deleteOrder] = orderApi.useDeleteOrderMutation();
   const [getOrder] = orderApi.useGetOrderMutation();
   const [getOrders] = orderApi.useGetOrdersMutation();
   /* END DECLARATIONS ################################################ */
 
 
-  const fetchOrders = useCallback(async () => { })
+  const fetchOrders = useCallback(async () => {
+    const res = await getOrders().unwrap();
+    return res.resource || [];
+  })
+
   const fetchOrder = useCallback(async () => {
     getOrder(id).then((res) => {
       if (res.error) {
@@ -49,6 +54,18 @@ export function useOrderActions({ cartData = {}, action = 'create' }) {
     const res = await updateOrder({ id: order.id, order: values }).unwrap();
     const updatedOrder = res?.resource || { ...order, ...values };
     toast.success('Update successful!');
+  })
+  const handleDelete = useCallback(async (id) => {
+    confirmDelete(async () => {
+      try {
+        confirmDelete(async () => {
+          await deleteOrder(id).unwrap();
+          toast.success('Order deleted successfully');
+        });
+      } catch (error) {
+        toast.error(error.message);
+      }
+    });
   })
   const handleSubmit = useCallback(async (values) => {
     try {
@@ -92,8 +109,8 @@ export function useOrderActions({ cartData = {}, action = 'create' }) {
   }, [action, id]);
 
   useEffect(() => {
-    dispatch(setOrder(selectedItems));
-  }, [cart]);
+    render && dispatch(setOrder(selectedItems));
+  }, [cart, render]);
 
 
   return {
@@ -102,6 +119,7 @@ export function useOrderActions({ cartData = {}, action = 'create' }) {
     fetchOrder,
     handleCreate,
     handleUpdate,
+    handleDelete,
     handleSubmit,
     onSubmit,
     handleCheckout,
