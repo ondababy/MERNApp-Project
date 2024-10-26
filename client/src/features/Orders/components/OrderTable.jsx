@@ -8,8 +8,12 @@ import { useOrderActions } from '../hooks/useOrderActions';
 import OrderWrapper from './OrderWrapper';
 
 const allowedColumns = () => [
-  { key: 'user.info', label: 'Customer' },
+  { key: 'customer', label: 'Customer' },
+  { key: 'items', label: 'Items' },
+  { key: 'total', label: 'Total' },
+  { key: 'status', label: 'Status' },
   { key: 'actions', label: '' },
+
   // More columns can be added here
 ];
 
@@ -45,6 +49,42 @@ const OrderTable = () => {
         <Table
           data={orders.map((order) => ({
             ...order,
+            customer: (<>
+              <div class="flex items-center gap-3">
+                {order?.user?.info?.avatar && <div class="avatar">
+                  <div class="mask mask-squircle h-12 w-12">
+                    <img
+                      src={order?.user?.info?.avatar || "https://placehold.co/600"}
+                      alt="Avatar Tailwind CSS Component" />
+                  </div>
+                </div>}
+                {!order?.user?.info?.avatar &&
+                  <div class="avatar placeholder">
+                    <div class="bg-neutral text-neutral-content w-16 rounded-full">
+                      <span class="text-xl">{order?.user?.username[0].toUpperCase()}</span>
+                    </div>
+                  </div>}
+                <div>
+                  <div class="font-bold flex gap-2">
+                    <span>
+                      {order?.user?.info?.first_name}
+                    </span>
+                    <span>
+                      {order?.user?.info?.last_name}
+                    </span>
+                  </div>
+                  <div class="text-sm opacity-50">
+                    {order?.user?.email}
+                  </div>
+                  <div class="text-sm opacity-50">
+                    {order?.user?.info?.contact}
+                  </div>
+                </div>
+              </div>
+            </>),
+            items: (<>
+              <span>{order?.products?.length}</span>
+            </>),
             actions: (
               <ActionButtons
                 key={'action_' + order.slug}

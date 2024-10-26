@@ -86,7 +86,7 @@ export function useOrderActions({ cartData = {}, action = 'create', render = fal
   const handleCheckout = () => {
     const payload = {
       userId: userInfo.id,
-      products: selectedItems.map(item => ({ product: item.id, quantity: item.quantity })),
+      products: selectedItems.map(item => ({ product: item.product.id, quantity: item.quantity })),
       payment: {
         method: order.payment.key,
         status: 'pending',
