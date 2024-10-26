@@ -52,15 +52,18 @@ export default function CheckoutSteps() {
 
   /* END DECLARATIONS ################################################ */
   const handleStepClick = (index) => {
-    if (rules[index - 1] && !rules[index - 1]?.condition) {
-      rules[index - 1] && toast.error(rules[index - 1]?.message);
+    if (!rules[currentStep]) return;
+    if (!rules[currentStep]?.condition) {
+      toast.error(rules[currentStep].message);
       return;
     }
+
     setCurrentStep(index - 1);
     api && api.scrollTo(index - 1);
   }
 
   const handleContinue = () => {
+    if (!rules[currentStep]) return;
     if (!rules[currentStep]?.condition) {
       toast.error(rules[currentStep].message);
       return;
@@ -98,17 +101,20 @@ export default function CheckoutSteps() {
   ]
 
   useEffect(() => {
-    Object.entries(rules).map(([index, rule]) => {
-      if (!rule.condition) {
-        toast.error(rule.message);
-        return;
+    let quickStep = 0;
+    for (let i = 0; i < initialSteps.length; i++) {
+      if (rules[i]?.condition) {
+        quickStep = i;
+        i > 1 && toast.error(rules[i]?.message);
+        break;
       }
-      setCurrentStep(index == 3 ? parseInt(index) + 1 : parseInt(index));
-      api && api.scrollTo(index == 3 ? parseInt(index) + 1 : parseInt(index));
-    })
+    }
+
+    setCurrentStep(quickStep - 1);
+    api && api.scrollTo(quickStep - 1);
 
 
-  }, [userInfo]);
+  }, [userInfo, api]);
 
   useEffect(() => {
     if (currentStep == pageComponents.length - 1)
