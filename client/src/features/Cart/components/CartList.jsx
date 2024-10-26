@@ -11,7 +11,7 @@ export default function CartList() {
     getItems,
     removeItem,
     selectItem,
-  } = useCartActions({ render: true })
+  } = useCartActions(true)
 
 
   const handleRemove = async (cartItem) => {
