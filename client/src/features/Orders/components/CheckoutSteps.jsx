@@ -4,30 +4,50 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@common/components/ui/carousel";
 
 import React from 'react';
-const initialSteps = [
-  { label: 'Fill up information', isActive: true, },
-  { label: 'Choose shipping method', },
-  { label: 'Confirm Items', },
-];
+import { toast } from 'react-toastify';
+
 
 export default function CheckoutSteps({ onFinish = () => { } }) {
+  /* DECLARATIONS #################################################### */
+  const initialSteps = [
+    { label: 'Fill up information', isActive: true, },
+    { label: 'Choose shipping method', },
+    { label: 'Confirm Items', },
+  ];
+
+  const pageComponents = [
+    <>Fill up information</>,
+    <>Choose shipping method</>,
+    <>Confirm Items</>,
+  ]
+
   const [currentStep, setCurrentStep] = React.useState(0);
   const [api, setApi] = React.useState();
+  /* END DECLARATIONS ################################################ */
 
+
+  const handleStepClick = (index) => {
+    if (index - 1 < currentStep) {
+      setCurrentStep(index - 1);
+      api && api.scrollTo(index - 1);
+    } else if (index - 1 > currentStep) {
+      toast.error('Please complete the current step!');
+    }
+  }
 
   const handleContinue = () => {
     if (currentStep < initialSteps.length - 1) {
+      api && api.scrollTo(currentStep + 1);
       setCurrentStep(currentStep + 1);
     }
   };
 
   const handleBack = () => {
     if (currentStep > 0) {
+      api && api.scrollTo(currentStep - 1);
       setCurrentStep(currentStep - 1);
     }
   };
@@ -36,13 +56,11 @@ export default function CheckoutSteps({ onFinish = () => { } }) {
     onFinish();
   }
 
-  // React.useEffect(() => {
-  //   if (api) {
-  //     api.setActiveIndex(currentStep);
-  //   }
-  // }, [api]);
-
-
+  React.useEffect(() => {
+    if (!api) {
+      return;
+    }
+  }, [api]);
 
   return (
     <div className="flex flex-col min-h-96 bg-base-200/50 p-8 container mx-auto h-screen">
@@ -54,12 +72,31 @@ export default function CheckoutSteps({ onFinish = () => { } }) {
       {/* STEP COMPONENT */}
       <Steps
         stepList={initialSteps}
-        onChange={(index) => setCurrentStep(index - 1)}
+        onChange={handleStepClick}
         current={currentStep}
       />
 
 
-
+      {/* CAROUSEL CONTENT */}
+      <Carousel
+        className="w-full h-full"
+        opts={{ watchDrag: false }}
+        setApi={setApi}
+      >
+        <CarouselContent className="h-full">
+          {pageComponents.map((page, index) => (
+            <CarouselItem key={index} >
+              <div className="p-1 h-full">
+                <Card className="h-full">
+                  <CardContent className=" flex items-center justify-center p-6">
+                    {page}
+                  </CardContent>
+                </Card>
+              </div>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+      </Carousel>
 
       {/* ACTIONS */}
       <div className="flex items-center justify-end gap-4 mt-auto">
@@ -89,29 +126,6 @@ export default function CheckoutSteps({ onFinish = () => { } }) {
           )
         }
       </div>
-
-
-
-
-      {/* CAROUSEL CONTENT */}
-      {/* <Carousel
-        className="w-full h-full"
-        setApi={setApi}
-      >
-        <CarouselContent className="h-full">
-          {Array.from({ length: initialSteps.length }).map((_, index) => (
-            <CarouselItem key={index} >
-              <div className="p-1 h-full">
-                <Card className="h-full">
-                  <CardContent className=" flex items-center justify-center p-6">
-                    <span className=" text-4xl font-semibold">{index + 1}</span>
-                  </CardContent>
-                </Card>
-              </div>
-            </CarouselItem>
-          ))}
-        </CarouselContent>
-      </Carousel> */}
     </div >
   )
 }

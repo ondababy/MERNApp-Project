@@ -32,9 +32,9 @@ function UserOnboarding() {
     } else if (index - 1 > currentStep) {
       toast.error('Please complete the current step!');
     }
-
   }
   const handleContinue = () => {
+
     if (currentStep < initialSteps.length - 1) {
       setCurrentStep(currentStep + 1);
     } else {

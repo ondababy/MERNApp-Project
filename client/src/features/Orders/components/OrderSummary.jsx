@@ -50,7 +50,7 @@ export default function OrderSummary({ order, checkoutFinished = false, onCheckO
         </i>
         {/* Terms and Condition */}
         <div className="flex items-center my-4">
-          <input type="checkbox" />
+          <input type="checkbox" className='checkbox checkbox-xs checkbox-primary' />
           <span className="text-xs ml-2">
             I agree with the terms and conditions
           </span>
