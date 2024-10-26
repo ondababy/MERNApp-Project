@@ -14,22 +14,22 @@ import { setCompleted } from '../order.slice.js';
 import CheckoutShipping from './CheckoutShipping';
 import OrderSummary from './OrderSummary.jsx';
 
-
+const initialSteps = [
+  { label: 'Cart', isActive: true, },
+  { label: 'Order Info', },
+  { label: 'Shipping', },
+  { label: 'Payment', },
+  { label: 'Complete', },
+];
 export default function CheckoutSteps() {
+  /* DECLARATIONS #################################################### */
   const dispatch = useDispatch();
+  const [currentStep, setCurrentStep] = useState(0);
+  const [api, setApi] = useState();
   const { order, handleShipping, handleCheckout } = useOrderActions({})
   const { selectedIds } = useSelector((state) => state.cart);
   const { userInfo, isChanging } = useSelector((state) => state.auth);
-  /* DECLARATIONS #################################################### */
-  const initialSteps = [
-    { label: 'Cart', isActive: true, },
-    { label: 'Order Info', },
-    { label: 'Shipping', },
-    { label: 'Payment', },
-    { label: 'Complete', },
-  ];
-  const [currentStep, setCurrentStep] = useState(0);
-  const [api, setApi] = useState();
+
   // Step rules
   const rules = {
     0: {
