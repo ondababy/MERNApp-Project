@@ -8,14 +8,15 @@ import { CartList, UserForm, getInfoFields } from "@features";
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { setShipping } from '../order.slice.js';
+import { setCompleted, setShipping } from '../order.slice.js';
 
 import CheckoutShipping from './CheckoutShipping';
+import OrderSummary from './OrderSummary.jsx';
 
 
-export default function CheckoutSteps({ onFinish = () => { } }) {
+export default function CheckoutSteps() {
   const dispatch = useDispatch();
-  const { shipping, payment } = useSelector((state) => state.order);
+  const order = useSelector((state) => state.order);
   const { selectedIds } = useSelector((state) => state.cart);
   const { userInfo, isChanging } = useSelector((state) => state.auth);
   /* DECLARATIONS #################################################### */
@@ -39,11 +40,11 @@ export default function CheckoutSteps({ onFinish = () => { } }) {
       message: 'Please fill out the form and save the changes!',
     },
     2: {
-      condition: shipping?.method,
+      condition: order?.shipping?.method,
       message: 'Please choose a shipping method!',
     },
     3: {
-      condition: payment?.method,
+      condition: order?.payment?.method,
       message: 'Please choose a payment method!',
     },
   }
@@ -78,9 +79,6 @@ export default function CheckoutSteps({ onFinish = () => { } }) {
     }
   };
 
-  const handleFinished = () => {
-    onFinish();
-  }
 
   const handleShipping = (shipping) => {
     dispatch(setShipping(shipping));
@@ -98,7 +96,7 @@ export default function CheckoutSteps({ onFinish = () => { } }) {
     <UserForm noAvatar={true} id={userInfo.id} action="edit" fields={getInfoFields()} altFields={getInfoFields()} />,
     <CheckoutShipping onSelect={handleShipping} />,
     <>Choose payment method</>,
-    <>Finish</>,
+    <OrderSummary />,
   ]
 
   useEffect(() => {
@@ -111,7 +109,15 @@ export default function CheckoutSteps({ onFinish = () => { } }) {
       api && api.scrollTo(index == 3 ? parseInt(index) + 1 : parseInt(index));
     })
 
+
   }, [userInfo]);
+
+  useEffect(() => {
+    if (currentStep == pageComponents.length - 1)
+      dispatch(setCompleted(true));
+    else
+      dispatch(setCompleted(false));
+  }, [currentStep]);
 
   return (
     <div className="flex flex-col min-h-96 bg-base-200/50 p-8 container mx-auto max-h-[200%]">
@@ -120,19 +126,11 @@ export default function CheckoutSteps({ onFinish = () => { } }) {
       </h1>
       <div className="divider"></div>
 
-      {/* STEP COMPONENT */}
-      <Steps
-        stepList={initialSteps}
-        onChange={handleStepClick}
-        current={currentStep}
-      />
-
-
       {/* ACTIONS */}
       <div className="flex items-center justify-between gap-4 mt-auto">
         {
           currentStep > 0 && (
-            <button className="btn btn-outline" onClick={handleBack}>
+            <button className="btn btn-ghost" onClick={handleBack}>
               Back
             </button>
           )
@@ -146,16 +144,15 @@ export default function CheckoutSteps({ onFinish = () => { } }) {
           )
         }
 
-        {
-          currentStep === initialSteps.length - 1 && (
-            <button
-              onClick={handleFinished}
-              className="ml-auto btn btn-outline btn-success">
-              Finish
-            </button>
-          )
-        }
       </div>
+
+      {/* STEP COMPONENT */}
+      <Steps
+        stepList={initialSteps}
+        onChange={handleStepClick}
+        current={currentStep}
+      />
+
 
       {/* CAROUSEL CONTENT */}
       <Carousel

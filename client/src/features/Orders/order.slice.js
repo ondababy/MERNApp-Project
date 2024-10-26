@@ -31,6 +31,7 @@ const initialState = {
   taxTotal: 0,
   currency: 'PHP',
   payment:  paymentMethods.cod,
+  completed: false,
 };
 
 // const calculateTaxTotal = (subTotal) => {
@@ -60,6 +61,9 @@ export const orderSlice = createSlice({
     },
     getShippingMethods: (state) => {
       return shippingMethods;
+    },
+    setCompleted: (state, action) => {
+      state.completed = action.payload
     }
 
   },
@@ -69,6 +73,7 @@ export const {
   setOrder,
   setShipping,
   getShippingMethods,
+  setCompleted,
 
    } = orderSlice.actions;
 export const orderReducer = orderSlice.reducer;
