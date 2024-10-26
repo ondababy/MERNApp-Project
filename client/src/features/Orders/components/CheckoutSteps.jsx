@@ -85,6 +85,10 @@ export default function CheckoutSteps() {
     dispatch(setShipping(shipping));
   }
 
+  const handleCheckout = () => {
+    alert(JSON.stringify(order, null, 2));
+  }
+
   useEffect(() => {
     if (!api) {
       return;
@@ -97,7 +101,7 @@ export default function CheckoutSteps() {
     <UserForm noAvatar={true} id={userInfo.id} action="edit" fields={getInfoFields()} altFields={getInfoFields()} />,
     <CheckoutShipping onSelect={handleShipping} />,
     <>Choose payment method</>,
-    <OrderSummary />,
+    <OrderSummary onConfirm={handleCheckout} />,
   ]
 
   useEffect(() => {

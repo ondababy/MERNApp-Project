@@ -1,15 +1,10 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 
-export default function OrderSummary() {
+export default function OrderSummary({ onConfirm = () => { } }) {
   const order = useSelector((state) => state.order);
   const [terms, setTerms] = useState(false);
   const { userInfo: user } = useSelector((state) => state.auth);
-
-  const handleCheckOut = () => {
-    onCheckOut()
-  }
-
 
 
   return !order.items?.length ? '' : (
@@ -122,7 +117,7 @@ export default function OrderSummary() {
         </div>
 
         <button
-          onClick={handleCheckOut}
+          onClick={onConfirm}
           className={`${!order.items?.length || !order?.completed || !terms ? 'btn-disabled' : ''} btn btn-outline btn-primary w-full`}>
           Confirm Order
         </button>
