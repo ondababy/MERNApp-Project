@@ -10,8 +10,10 @@ class OrderService extends Service {
   }
 
   validate(data) {}
-  checkout() {}
+  create() {}
   update() {}
+
+
 }
 
 export default new OrderService();

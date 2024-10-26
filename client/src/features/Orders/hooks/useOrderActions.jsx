@@ -16,10 +16,10 @@ export function useOrderActions({ cartData = {}, action = 'create' }) {
   const dispatch = useDispatch();
   const { id = null } = useParams()
 
-  const { role } = useSelector((state) => state.auth) || cartData;
+  const { userInfo, role } = useSelector((state) => state.auth) || cartData;
   const cart = useSelector((state) => state.cart) || cartData;
-  const selectedItems = cart?.items ? cart?.items.filter(item => item?.selected) : [];
   const order = useSelector((state) => state.order);
+  const selectedItems = cart?.items ? cart?.items.filter(item => item?.selected) : [];
 
   const [createOrder, { isLoading: isCreating }] = orderApi.useCreateOrderMutation();
   const [updateOrder, { isLoading: isUpdating }] = orderApi.useUpdateOrderMutation();
@@ -64,7 +64,20 @@ export function useOrderActions({ cartData = {}, action = 'create' }) {
     dispatch(setShipping(shipping));
   }
   const handleCheckout = () => {
-    alert(JSON.stringify(order, null, 2));
+    const payload = {
+      userId: userInfo.id,
+      products: selectedItems.map(item => ({ product: item.id, quantity: item.quantity })),
+      payment: {
+        method: order.payment.method,
+        status: 'pending',
+      },
+      shipping: {
+        method: order.shipping.method,
+        address: [userInfo.info.address, userInfo.info.city, userInfo.info.state, userInfo.info.zip_code].join(', '),
+      },
+      total: order.total,
+    }
+    handleCreate(payload);
   }
 
 
