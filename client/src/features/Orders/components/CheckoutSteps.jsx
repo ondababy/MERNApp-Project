@@ -8,6 +8,7 @@ import { CartList, UserForm, getInfoFields } from "@features";
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import { useOrderActions } from '../hooks/useOrderActions';
 import { setCompleted, setShipping } from '../order.slice.js';
 
 import CheckoutShipping from './CheckoutShipping';
@@ -16,7 +17,7 @@ import OrderSummary from './OrderSummary.jsx';
 
 export default function CheckoutSteps() {
   const dispatch = useDispatch();
-  const order = useSelector((state) => state.order);
+  const { order } = useOrderActions({})
   const { selectedIds } = useSelector((state) => state.cart);
   const { userInfo, isChanging } = useSelector((state) => state.auth);
   /* DECLARATIONS #################################################### */

@@ -1,11 +1,11 @@
 import React from 'react';
-import { useOrderActions } from '../hooks/useOrderActions';
+import { useSelector } from 'react-redux';
 import CheckoutSteps from './CheckoutSteps';
 import OrderSummary from './OrderSummary';
 
 
 export default function CheckoutPage() {
-  const { order } = useOrderActions({})
+  const order = useSelector((state) => state.order);
 
 
   return (
