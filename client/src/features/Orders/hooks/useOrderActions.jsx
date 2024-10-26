@@ -70,11 +70,11 @@ export function useOrderActions({ cartData = {}, action = 'create' }) {
     confirmSave(async () => handleSubmit(values));
   })
 
-  const handleCheckout = () => {
-    alert(JSON.stringify(order, null, 2));
-  }
   const handleShipping = (shipping) => {
     dispatch(setShipping(shipping));
+  }
+  const handleCheckout = () => {
+    alert(JSON.stringify(order, null, 2));
   }
 
 
