@@ -10,7 +10,6 @@ export default function CheckoutPage() {
   const { order } = useOrderActions({})
 
 
-
   return (
     <>
       <CheckoutSteps />

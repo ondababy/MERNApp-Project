@@ -1,5 +1,4 @@
 import { Steps } from '@common';
-import { Card, CardContent } from "@common/components/ui/card";
 import {
   Carousel,
   CarouselContent,
@@ -7,11 +6,16 @@ import {
 } from "@common/components/ui/carousel";
 import { CartList, UserForm, getInfoFields } from "@features";
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import { setShipping } from '../order.slice.js';
+
+import CheckoutShipping from './CheckoutShipping';
 
 
 export default function CheckoutSteps({ onFinish = () => { } }) {
+  const dispatch = useDispatch();
+  const { shipping, payment } = useSelector((state) => state.order);
   const { selectedIds } = useSelector((state) => state.cart);
   const { userInfo, isChanging } = useSelector((state) => state.auth);
   /* DECLARATIONS #################################################### */
@@ -22,47 +26,39 @@ export default function CheckoutSteps({ onFinish = () => { } }) {
     { label: 'Payment', },
     { label: 'Complete', },
   ];
-  const pageComponents = [
-    <CartList />,
-    <UserForm noAvatar={true} id={userInfo.id} action="edit" fields={getInfoFields()} altFields={getInfoFields()} />,
-    <>Choose shipping method</>,
-    <>Choose payment method</>,
-    <>Finish</>,
-  ]
-
   const [currentStep, setCurrentStep] = useState(0);
   const [api, setApi] = useState();
+  // Step rules
+  const rules = {
+    0: {
+      condition: selectedIds.length,
+      message: 'Please add items to your cart!',
+    },
+    1: {
+      condition: !isChanging,
+      message: 'Please fill out the form and save the changes!',
+    },
+    2: {
+      condition: shipping?.method,
+      message: 'Please choose a shipping method!',
+    },
+    3: {
+      condition: payment?.method,
+      message: 'Please choose a payment method!',
+    },
+  }
+
   /* END DECLARATIONS ################################################ */
   const handleStepClick = (index) => {
-    if (index - 1 < currentStep) {
-      setCurrentStep(index - 1);
-      api && api.scrollTo(index - 1);
-    } else if (index - 1 > currentStep) {
-      toast.error('Please complete the current step!');
+    if (!rules[index - 1]?.condition) {
+      toast.error(rules[currentStep].message);
+      return;
     }
+    setCurrentStep(index - 1);
+    api && api.scrollTo(index - 1);
   }
 
   const handleContinue = () => {
-    // Step rules
-    const rules = {
-      0: {
-        condition: selectedIds.length,
-        message: 'Please add items to your cart!',
-      },
-      1: {
-        condition: !isChanging,
-        message: 'Please fill out the form and save the changes!',
-      },
-      2: {
-        condition: true,
-        message: 'Please choose a shipping method!',
-      },
-      3: {
-        condition: true,
-        message: 'Please choose a payment method!',
-      },
-    }
-
     if (!rules[currentStep]?.condition) {
       toast.error(rules[currentStep].message);
       return;
@@ -75,9 +71,10 @@ export default function CheckoutSteps({ onFinish = () => { } }) {
   };
 
   const handleBack = () => {
+    console.log(currentStep)
     if (currentStep > 0) {
-      api && api.scrollTo(currentStep - 1);
       setCurrentStep(currentStep - 1);
+      api && api.scrollTo(currentStep - 1);
     }
   };
 
@@ -85,12 +82,36 @@ export default function CheckoutSteps({ onFinish = () => { } }) {
     onFinish();
   }
 
+  const handleShipping = (shipping) => {
+    dispatch(setShipping(shipping));
+  }
 
   useEffect(() => {
     if (!api) {
       return;
     }
   }, [api]);
+
+
+  const pageComponents = [
+    <CartList />,
+    <UserForm noAvatar={true} id={userInfo.id} action="edit" fields={getInfoFields()} altFields={getInfoFields()} />,
+    <CheckoutShipping onSelect={handleShipping} />,
+    <>Choose payment method</>,
+    <>Finish</>,
+  ]
+
+  useEffect(() => {
+    Object.entries(rules).map(([index, rule]) => {
+      if (!rule.condition) {
+        toast.error(rule.message);
+        return;
+      }
+      setCurrentStep(index == 3 ? parseInt(index) + 1 : parseInt(index));
+      api && api.scrollTo(index == 3 ? parseInt(index) + 1 : parseInt(index));
+    })
+
+  }, [userInfo]);
 
   return (
     <div className="flex flex-col min-h-96 bg-base-200/50 p-8 container mx-auto max-h-[200%]">
@@ -146,11 +167,7 @@ export default function CheckoutSteps({ onFinish = () => { } }) {
           {pageComponents.map((page, index) => (
             <CarouselItem key={`${initialSteps[index]?.label}_${index}`} >
               <div className="p-1 h-full overflow-y-auto">
-                <Card className="h-full overflow-y-auto">
-                  <CardContent className=" flex items-center justify-center p-6">
-                    {page}
-                  </CardContent>
-                </Card>
+                {page}
               </div>
             </CarouselItem>
           ))}

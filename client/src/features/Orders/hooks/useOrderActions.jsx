@@ -6,6 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { orderApi } from '../order.api';
 import { getAltFields, getFields } from '../order.fields';
+import { setOrder } from '../order.slice';
 import { orderValidation } from '../order.validation';
 
 
@@ -17,8 +18,9 @@ export function useOrderActions({ cartData = {}, action = 'create' }) {
   const { id = null } = useParams()
   const fields = typeof getFields === 'function' ? getFields() : getFields || [];
   const altFields = typeof getAltFields === 'function' ? getAltFields() : getAltFields || [];
-  const order = useSelector((state) => state.cart) || cartData;
-  const selectedItems = order?.items ? order?.items.filter(item => item?.selected) : [];
+  const cart = useSelector((state) => state.cart) || cartData;
+  const selectedItems = cart?.items ? cart?.items.filter(item => item?.selected) : [];
+  const order = useSelector((state) => state.order);
   const [orderSchema, setOrderSchema] = useState(fields);
   const [createOrder, { isLoading: isCreating }] = orderApi.useCreateOrderMutation();
   const [updateOrder, { isLoading: isUpdating }] = orderApi.useUpdateOrderMutation();
@@ -74,12 +76,14 @@ export function useOrderActions({ cartData = {}, action = 'create' }) {
     if (id) fetchOrder();
     else setOrderSchema(action === 'create' ? fields : altFields);
   }, [action, id]);
+
+  useEffect(() => {
+    dispatch(setOrder(selectedItems));
+  }, [cart]);
+
+
   return {
-    order: {
-      ...order,
-      items: selectedItems,
-      subTotal: selectedItems.reduce((acc, item) => acc + item.price, 0),
-    },
+    order,
     formikProps: {
       initialValues,
       validationSchema: orderValidation,
@@ -96,6 +100,5 @@ export function useOrderActions({ cartData = {}, action = 'create' }) {
     handleUpdate,
     handleSubmit,
     onSubmit,
-
   }
 }

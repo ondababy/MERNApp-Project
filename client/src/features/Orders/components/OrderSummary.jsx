@@ -24,16 +24,16 @@ export default function OrderSummary({ order, checkoutFinished = false, onCheckO
         <div className="flex justify-between my-4">
           <span className="text-gray-600">Shipping Fee</span>
           <span className="font-semibold">
-            {order.items?.length && order?.currency || ''} {order?.shipping.fee || 0}
+            {order.items?.length && order?.currency || ''} {order?.shipping?.fee || 0}
           </span>
         </div>
 
-        <div className="flex justify-between my-4">
+        {/* <div className="flex justify-between my-4">
           <span className="text-gray-600">Tax Total</span>
           <span className="font-semibold">
             {order.items?.length && order?.currency || ''} {order?.taxTotal || 0}
           </span>
-        </div>
+        </div> */}
 
         <div className="divider"></div>
 
