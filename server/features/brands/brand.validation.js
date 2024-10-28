@@ -69,8 +69,5 @@ const brandUpdateRules = () => {
       .withMessage('Email address must be unique!'),
   ];
 };
-<<<<<<< HEAD
 
-=======
->>>>>>> 0a2d2f128af238db41dd5c3d42da424613aabb15
 export { brandCreateRules, brandUpdateRules };
