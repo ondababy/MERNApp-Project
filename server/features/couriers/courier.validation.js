@@ -9,17 +9,24 @@ const commonRules = () => {
       .withMessage('Name is required!')
       .matches(/^[a-zA-Z0-9 ]+$/)
       .withMessage('Name must be alphanumeric!'),
-      check('contactNumber')
+    check('contactPerson')
+      .notEmpty()
+      .withMessage('Contact person is required!'),
+    check('contactNumber')
       .notEmpty()
       .withMessage('Contact number is required!'),
     check('serviceArea')
       .notEmpty()
-      .withMessage('Service area is required!')
+      .withMessage('Service area is required!'),
+    check('emailAddress')
+      .notEmpty()
+      .withMessage('Email address is required!')
+      .isEmail()
+      .withMessage('Must be a valid email address!'),
   ];
 };
 
 const courierCreateRules = () => {
-  // METHOD CHAINING
   return [
     ...commonRules(),
     check('name')
@@ -28,9 +35,9 @@ const courierCreateRules = () => {
     check('contactNumber')
       .custom((value) => unique(CourierModel, 'contactNumber', value))
       .withMessage('Contact number has already been used!'),
-    // check('serviceArea')
-    //   .custom((value) => unique(CourierModel, 'contactNumber', value))
-    //   .withMessage('Service area has already been used!'),
+    check('emailAddress')
+      .custom((value) => unique(CourierModel, 'emailAddress', value))
+      .withMessage('Email address must be unique!'),
   ];
 };
 
@@ -47,13 +54,13 @@ const courierUpdateRules = () => {
         unique(CourierModel, 'contactNumber', value, req?.params?.id)
       )
       .withMessage('Contact number has already been used!'),
+    
+    check('emailAddress')
+      .custom((value, { req }) =>
+        unique(CourierModel, 'emailAddress', value, req?.params?.id)
+      )
+      .withMessage('Email address must be unique!'),
   ];
 };
-export { courierCreateRules, courierUpdateRules };
 
-// // USING SCHEMA: BUT i don't like it
-// return checkSchema({
-//   name: {
-//     notEmpty: { errorMessage: 'Name is required!' },
-//   },
-// });
+export { courierCreateRules, courierUpdateRules };

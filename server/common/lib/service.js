@@ -130,6 +130,7 @@ export class Service {
     this.applyForceFilter();
     return this.query.findOne(filter);
   }
+  
   async create(body) {
     this._checkModel();
     const data = Array.isArray(body)
