@@ -1,4 +1,4 @@
-import { FaPlus, FaTable, FaUsers } from 'react-icons/fa';
+import { FaPlus, FaTable } from 'react-icons/fa';
 
 export const userMenus = [
   {
@@ -9,7 +9,6 @@ export const userMenus = [
     subLinks: [
       { to: '/dashboard/users/table', label: 'Users Table', icon: <FaTable /> },
       { to: '/dashboard/users/create', label: 'Creat Users', icon: <FaPlus /> },
-      { to: '/dashboard/users/list', label: 'Users List', icon: <FaUsers /> },
     ],
   },
 ];

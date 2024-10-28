@@ -2,7 +2,6 @@ import { useCheckAuth } from '@custom';
 import PropTypes from 'prop-types';
 import { Hero } from 'react-daisyui';
 import AuthLogin from './AuthLogin';
-import AuthOnboarding from './AuthOnboarding';
 import AuthSignup from './AuthSignup';
 function Auth({ page = 'login' }) {
   const { userInfo } = useCheckAuth();
@@ -11,9 +10,6 @@ function Auth({ page = 'login' }) {
   switch (page) {
     case 'signup':
       pageComponent = <AuthSignup />;
-      break;
-    case 'onboarding':
-      pageComponent = <AuthOnboarding />;
       break;
   }
 

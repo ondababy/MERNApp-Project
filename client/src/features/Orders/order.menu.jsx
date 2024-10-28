@@ -1,4 +1,4 @@
-import { FaPlus, FaTable, FaUsers } from 'react-icons/fa';
+import { FaTable } from 'react-icons/fa';
 import { dashUrl as mainUrl } from './order.api';
 
 export const orderMenus = [
@@ -9,7 +9,6 @@ export const orderMenus = [
     icon: <FaTable />,
     subLinks: [
       { to: `${mainUrl}/table`, label: 'Orders Table', icon: <FaTable /> },
-      { to: `${mainUrl}/create`, label: 'Create Orders', icon: <FaPlus /> },
     ],
   },
 ];

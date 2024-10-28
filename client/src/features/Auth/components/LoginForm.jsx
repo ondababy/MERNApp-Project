@@ -32,6 +32,7 @@ function LoginForm() {
         setCredentials({
           userInfo: res.user,
           token: res.token,
+          role: res.user.role,
         })
       );
       navigate('/');

@@ -1,6 +1,6 @@
 import { CartService, ProductModel as Product, UserModel as User } from '#features';
 import { faker } from '@faker-js/faker';
-import { Seeder } from './seeder';
+import { Seeder } from './seeder.js';
 
 class CartSeeder extends Seeder {
   constructor(service, count) {

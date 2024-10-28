@@ -1,16 +1,21 @@
 import { useField } from 'formik';
 import PropTypes from 'prop-types';
+import BirthdateInput from './BirthdateInput';
 import FloatingInput from './FloatingInput';
+import FormDivider from './FormDivider';
 import FormInput from './FormInput';
 import LongText from './LongText';
 
 
 function FormikInput({ label, variant, ...props }) {
-  const [field, meta] = useField(props);
+  const [field, meta] = useField({ ...props, name: props.name ?? Math.random(1000) });
   switch (variant) {
     case 'divider':
       return (
-        <div className="divider"></div>
+        <FormDivider
+          label={label}
+          {...props}
+        />
       )
     case 'textarea':
       return (
@@ -30,6 +35,15 @@ function FormikInput({ label, variant, ...props }) {
           {...props}
         />
       );
+    case 'birthdate':
+      return (
+        <BirthdateInput
+          label={label}
+          meta={meta}
+          {...field}
+          {...props}
+        />
+      )
 
     default:
       return (

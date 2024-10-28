@@ -18,29 +18,29 @@ const commonrules = {
 };
 
 const userinforules = {
-  first_name: () =>
-    check('first_name')
+  'info.first_name': () =>
+    check('info.first_name')
       .notEmpty()
       .withMessage('First name is required')
       .matches(/^[a-zA-Z ]+$/)
       .withMessage('First name must be alphabetic'),
-  last_name: () =>
-    check('last_name')
+  'info.last_name': () =>
+    check('info.last_name')
       .notEmpty()
       .withMessage('Last name is required')
       .matches(/^[a-zA-Z ]+$/)
       .withMessage('Last name must be alphabetic'),
-  contact: () =>
-    check('contact')
+  'info.contact': () =>
+    check('info.contact')
       .notEmpty()
       .withMessage('Contact is required')
       .matches(/^[0-9]{10}$/)
       .withMessage('Contact must be 10 digits'),
-  address: () => check('address').notEmpty().withMessage('Address is required'),
-  birthdate: () => check('birthdate').isISO8601().withMessage('Birthdate is invalid').optional(),
-  city: () => check('city').notEmpty().withMessage('City is required'),
-  region: () => check('region').notEmpty().withMessage('Region is required'),
-  zip_code: () => check('zip_code').withMessage('Zip code is invalid'),
+  'info.address': () => check('info.address').notEmpty().withMessage('Address is required'),
+  'info.birthdate': () => check('info.birthdate'),
+  'info.city': () => check('info.city').notEmpty().withMessage('City is required'),
+  'info.region': () => check('info.region').notEmpty().withMessage('Region is required'),
+  'info.zip_code': () => check('info.zip_code'),
 };
 
 const matchPassword = (value, { req }) => {
@@ -58,4 +58,8 @@ const userUpdateRules = () => {
     check('id').notEmpty().withMessage('ID is required'),
   ];
 };
-export { userCreateRules, userUpdateRules };
+
+const userInfoCreateRules = () => [...Object.values(userinforules).map((rule) => rule())];
+const userInfoUpdateRules = () => [...Object.values(userinforules).map((rule) => rule().optional())];
+
+export { userCreateRules, userInfoCreateRules, userInfoUpdateRules, userUpdateRules };

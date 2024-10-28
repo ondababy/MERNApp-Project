@@ -24,9 +24,9 @@ const loadingSlice = createSlice({
 });
 
 export const { startLoading, stopLoading } = loadingSlice.actions;
-
+const API = '/api/v1';
 const baseQuery = fetchBaseQuery({
-  baseUrl: '/api/v1',
+  baseUrl: API,
   credentials: 'include',
   prepareHeaders: (headers, { getState }) => {
     const token = getState().auth.accessToken;
@@ -57,7 +57,7 @@ const baseQueryWithReAuth = async (args, api, extraOptions) => {
     if (refreshResult?.data?.token) {
       const userInfo = api.getState().auth.userInfo;
       const token = refreshResult.data.token;
-      api.dispatch(setCredentials({ userInfo, token }));
+      api.dispatch(setCredentials({ userInfo, token, role: userInfo?.role }));
       return await baseQuery(args, api, extraOptions);
     } else {
       api.dispatch(logout());

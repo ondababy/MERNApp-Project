@@ -1,3 +1,4 @@
+import { cn } from "@common/lib/utils";
 import { Counter } from '@custom';
 import React from 'react';
 import { Link } from 'react-router-dom';
@@ -14,11 +15,10 @@ const itemDefault = {
   total: 0,
 }
 
-export function CartCard({ item = itemDefault, onRemove = () => { }, ...props }) {
+export function CartCard({ item = itemDefault, onRemove = () => { }, onSelect = () => { }, className, ...props }) {
   const [product, setProduct] = React.useState(item?.product || itemDefault.product);
   const [cartItem, setCartItem] = React.useState(item || itemDefault);
   const { updateItem } = useCartActions();
-
   const handleQuantity = (value) => {
     const payload = {
       id: cartItem.id,
@@ -42,7 +42,7 @@ export function CartCard({ item = itemDefault, onRemove = () => { }, ...props })
 
 
   return cartItem && cartItem.id != -1 && (
-    <div {...props} className="flex flex-col lg:min-h-64 lg:h-64 lg:flex-row items-center justify-between border border-gray-400">
+    <div {...props} className={cn("flex flex-col lg:min-h-64 lg:h-64 lg:flex-row items-center justify-between border border-gray-400", className)}>
       <div className="container flex flex-col lg:flex-row lg:items-start items-center ">
         <img
           className="w-1/2 lg:max-w-64 lg:w-2/5 aspect-square object-contain"
@@ -54,7 +54,7 @@ export function CartCard({ item = itemDefault, onRemove = () => { }, ...props })
           <div className="ml-4 my-8 text-lg">
             <Link to={`/shop/${product.slug}`} className="group">
               <h1 className="font-bold text-primary group-hover:link transition-all ease-in">
-                {product.name}
+                {product.name} {product.selected}
               </h1>
             </Link>
             <div className="flex text-sm gap-2">
@@ -84,12 +84,19 @@ export function CartCard({ item = itemDefault, onRemove = () => { }, ...props })
           />
         </div>
       </div>
+      <div className="flex lg:flex-col items-center w-full lg:w-fit lg:h-full">
+        <button
+          onClick={onSelect}
+          className="rounded-none btn btn-ghost w-full flex-1">
+          Select
+        </button>
 
-      <button
-        onClick={handlRemove}
-        className="lg:h-full btn btn-ghost text-red-500 flex-1">
-        Remove
-      </button>
+        <button
+          onClick={handlRemove}
+          className="rounded-none btn btn-ghost text-red-500 w-full flex-1">
+          Remove
+        </button>
+      </div>
     </div>
   )
 }

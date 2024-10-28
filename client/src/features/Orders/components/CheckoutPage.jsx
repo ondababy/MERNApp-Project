@@ -1,23 +1,18 @@
-import { useCartActions } from '@features';
 import React from 'react';
-import { useOrderActions } from '../hooks/useOrderActions';
+import { useSelector } from 'react-redux';
 import CheckoutSteps from './CheckoutSteps';
 import OrderSummary from './OrderSummary';
 
 
 export default function CheckoutPage() {
-  const [checkoutStatus, setCheckoutStatus] = React.useState(false)
-  const { getItems } = useCartActions()
-  const { order } = useOrderActions()
-
+  const order = useSelector((state) => state.order);
 
 
   return (
     <>
       <CheckoutSteps />
-
-      <OrderSummary order={order} checkoutFinished={checkoutStatus} />
-
+      {order?.completed ? '' :
+        <OrderSummary />}
     </>
   )
 }

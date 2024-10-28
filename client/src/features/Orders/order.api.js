@@ -18,9 +18,16 @@ const orderApi = apiSlice.injectEndpoints({
         headers,
       }),
     }),
+    getOrders: build.mutation({
+      query: (id) => ({
+        url: `${apiUrl}/`,
+        method: 'GET',
+        headers,
+      }),
+    }),
     getOrder: build.mutation({
-      query: (slug) => ({
-        url: `${apiUrl}/slug/${slug}`,
+      query: (id) => ({
+        url: `${apiUrl}/${id}`,
         method: 'GET',
         headers,
       }),
@@ -53,3 +60,4 @@ const orderApi = apiSlice.injectEndpoints({
 });
 
 export { orderApi };
+

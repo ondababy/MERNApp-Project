@@ -1,10 +1,12 @@
 import EmailTemplate from '#common/lib/email-template';
 import { Service } from '#lib';
 import { destroyToken, Errors, generateToken, sendEmail } from '#utils';
+import UserInfo from './user-info.model.js';
 import UserModel from './user.model.js';
 
 class UserService extends Service {
   model = UserModel;
+  info = UserInfo;
   authToken = 'jwt';
 
   async getAuthenticatedUser(userId) {
@@ -53,6 +55,20 @@ class UserService extends Service {
     return user;
   }
 
+  async createUserInfo(user, info) {
+    console.log(info);
+    const data = this.info?.filterFillables(info);
+    const userInfo = await this.info?.create(data);
+    user.info = userInfo._id;
+    await user.save();
+    return userInfo;
+  }
+  async updateUserInfo(user, info) {
+    const data = this.info?.filterFillables(info);
+    const userInfo = await this.info?.findByIdAndUpdate(user.info, data, { new: true });
+    return userInfo;
+  }
+
   async forgotPassword({ email, redirectUrl }) {
     const user = await this.model?.findOne({ email: email });
     if (!user) throw new Errors.NotFound('User not found!');
@@ -98,14 +114,16 @@ class UserService extends Service {
   async sendVerifyEmail(email, redirectUrl) {
     const user = await this.model.findOne({ email });
     if (!user) throw new Errors.NotFound('User not found!');
-    const token = user.getVerifyEmailToken();
-    const OTP = user.getOTP();
-    const message = `Your OTP is <strong> ${OTP} </strong> `;
+    const { token } = user.getVerifyEmailToken();
+    const { code } = user.getOTP();
+    user.emailVerifiedAt = null;
+    await user.save({ validateBeforeSave: false, new: true });
+    let redirect = redirectUrl ? `${redirectUrl}?verifyToken=${token}&otp=${code}` : '';
+    const message = `Your OTP is <strong> ${code} </strong> `;
     const altMessage = redirectUrl
       ? `Or click on the following link to verify your email:
-    \n\n <a href="${redirectUrl}?verifyToken=${token}">${redirectUrl}?verifyToken=${token}</a>`
+    \n\n <a href="${redirect}">${redirect}</a>`
       : '';
-
     try {
       await sendEmail({
         email: user.email,
@@ -145,21 +163,20 @@ class UserService extends Service {
     if (!user) throw new Errors.BadRequest('Invalid verify token!');
 
     user = await this.verifyUser(user);
-    const generatedToken = generateToken(user._id, this.authToken);
-    return { user, token: generatedToken };
+    return { user };
   }
 
   async verifyOTP(email, OTP) {
     const dt = Date.now();
     let user = await this.model.findOne({ email });
-
     if (!user) throw new Errors.BadRequest('Invalid verify token!');
-    if (user.otp.code !== OTP) throw new Errors.BadRequest('Invalid OTP!');
+
+    console.log(user.otp, user.verifyEmail, OTP, user.otp.code != parseInt(OTP));
+    if (user.otp.code != parseInt(OTP)) throw new Errors.BadRequest('Invalid OTP!');
     if (user.otp.expire < dt) throw new Errors.BadRequest('Your OTP expired! Please try again!');
 
     user = await this.verifyUser(user);
-    const generatedToken = generateToken(user._id, this.authToken);
-    return { user, token: generatedToken };
+    return { user };
   }
 
   async testEmail({ email }) {
