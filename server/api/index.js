@@ -3,4 +3,4 @@ import { run } from '../server.js';
 
 run();
 // run only once pls
-RunSeeders();
+// RunSeeders();
