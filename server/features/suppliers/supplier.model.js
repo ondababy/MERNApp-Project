@@ -13,15 +13,22 @@ const Supplier = new Schema({
       slug: {
         type: String,
       },
+      contactPerson: {
+        type: String,
+        required: [true, 'Contact person is required'],
+      },
       emailAddress: {
         type: String,
-        required: [true, 'Please enter supplier email address'],
-        maxLength: [20, 'Courier service area cannot exceed 20 characters'],
+        required: [true, 'Email address is required'],
+        unique: [true, 'Email already exists'],
       },
       contactNumber: {
         type: String,
         required: [true, 'Please enter supplier contact number'],
-        // maxLength: [11, 'Courier contact number cannot exceed 11 characters']
+        maxLength: [11, 'Supplier contact number cannot exceed 11 characters']
+      },
+      description: {
+        type: String,
       },
       images: [ImageSchema],
     },

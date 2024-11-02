@@ -1,5 +1,6 @@
 import { Schema } from '#lib';
 import { ImageSchema } from '#utils';
+import mongoose from 'mongoose';
 
 const Product = new Schema({
   name: 'Product',
@@ -23,6 +24,14 @@ const Product = new Schema({
       stock: {
         type: Number,
         required: [true, 'Product price is required!'],
+      },
+      brand: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Brands',
+      },
+      supplier: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Suppliers',
       },
 
       images: [ImageSchema],

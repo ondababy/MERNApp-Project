@@ -10,8 +10,10 @@ import BrandWrapper from './BrandWrapper';
 
 const allowedColumns = () => [
   { key: 'name', label: 'Name' },
+  { key: 'description', label: 'Description' },
+  { key: 'websiteUrl', label: 'Website Url' },
+  { key: 'emailAddress', label: 'Email Address' },
   { key: 'actions', label: '' },
-  // More columns can be added here
 ];
 
 const BrandTable = () => {

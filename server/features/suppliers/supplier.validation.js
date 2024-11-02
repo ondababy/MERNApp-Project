@@ -16,9 +16,12 @@ const commonRules = () => {
       .withMessage('Must be a valid email address!'),
     check('contactNumber')
       .notEmpty()
-      .withMessage('Contact Number is required!')
-      // .matches(/^[0-9]{11}$/)
-      // .withMessage('Contact number must be a valid 11-digit number!'),
+      .withMessage('Contact Number is required!'),
+    check('contactPerson')
+      .notEmpty()
+      .withMessage('Contact person is required!')
+      .matches(/^[a-zA-Z ]+$/)
+      .withMessage('Contact person must contain only alphabetic characters and spaces!')
   ];
 };
 
@@ -40,19 +43,16 @@ const supplierCreateRules = () => {
 const supplierUpdateRules = () => {
   return [
     ...commonRules(),
-
     check('name')
       .custom((value, { req }) =>
         unique(SupplierModel, 'name', value, req?.params?.id)
       )
       .withMessage('Name must be unique!'),
-      
     check('emailAddress')
       .custom((value, { req }) =>
         unique(SupplierModel, 'emailAddress', value, req?.params?.id)
       )
       .withMessage('Email address has already been used!'),
-
     check('contactNumber')
       .custom((value, { req }) =>
         unique(SupplierModel, 'contactNumber', value, req?.params?.id)
@@ -62,5 +62,3 @@ const supplierUpdateRules = () => {
 };
 
 export { supplierCreateRules, supplierUpdateRules };
-
-

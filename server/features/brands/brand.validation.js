@@ -9,16 +9,41 @@ const commonRules = () => {
       .withMessage('Name is required!')
       .matches(/^[a-zA-Z0-9 ]+$/)
       .withMessage('Name must be alphanumeric!'),
+
+    check('description')
+      .notEmpty()
+      .withMessage('Description is required!')
+      .isLength({ max: 500 })
+      .withMessage('Description cannot exceed 500 characters!'),
+
+    check('websiteUrl')
+      .notEmpty()
+      .withMessage('Website URL is required!')
+      .isURL()
+      .withMessage('Must be a valid URL!'),
+
+    check('emailAddress')
+      .notEmpty()
+      .withMessage('Email address is required!')
+      .isEmail()
+      .withMessage('Must be a valid email address!'),
   ];
 };
 
 const brandCreateRules = () => {
-  // METHOD CHAINING
   return [
     ...commonRules(),
     check('name')
       .custom((value) => unique(BrandModel, 'name', value))
-      .withMessage('Name must be unique!'),
+      .withMessage('Brand name must be unique!'),
+
+    check('websiteUrl')
+      .custom((value) => unique(BrandModel, 'websiteUrl', value))
+      .withMessage('Website URL must be unique!'),
+
+    check('emailAddress')
+      .custom((value) => unique(BrandModel, 'emailAddress', value))
+      .withMessage('Email address must be unique!'),
   ];
 };
 
@@ -29,7 +54,20 @@ const brandUpdateRules = () => {
       .custom((value, { req }) =>
         unique(BrandModel, 'name', value, req?.params?.id, { slug: { $ne: req?.params?.slug } })
       )
-      .withMessage('Name must be unique!'),
+      .withMessage('Brand name must be unique!'),
+
+    check('websiteUrl')
+      .custom((value, { req }) =>
+        unique(BrandModel, 'websiteUrl', value, req?.params?.id)
+      )
+      .withMessage('Website URL must be unique!'),
+
+    check('emailAddress')
+      .custom((value, { req }) =>
+        unique(BrandModel, 'emailAddress', value, req?.params?.id)
+      )
+      .withMessage('Email address must be unique!'),
   ];
 };
+
 export { brandCreateRules, brandUpdateRules };
