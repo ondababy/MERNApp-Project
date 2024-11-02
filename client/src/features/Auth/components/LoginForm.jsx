@@ -1,6 +1,5 @@
 import { FormikForm } from '@common/components';
-import { useGoogleLogin } from '@react-oauth/google';
-import { useState } from 'react';
+import { useGoogleAuth } from '@custom';
 import { Button } from 'react-daisyui';
 import { FaFacebook, FaGoogle } from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
@@ -9,9 +8,6 @@ import { toast } from 'react-toastify';
 import { authApi } from '../auth.api';
 import { setCredentials } from '../auth.slice';
 import { loginValidation } from '../auth.validation.js';
-
-
-const googleEndpoint = 'https://www.googleapis.com/oauth2/v1/userinfo?access_token=';
 
 const loginSchema = [
   { label: 'Email Address', name: 'email', type: 'email' },
@@ -29,24 +25,8 @@ function LoginForm() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [login, { isLoading }] = authApi.useLoginMutation();
-  const [googleToken, setGoogleToken] = useState(null);
 
-  const googleLogin = useGoogleLogin({
-    onSuccess: tokenResponse => {
-      setGoogleToken(tokenResponse.access_token);
-      fetch(googleEndpoint + tokenResponse.access_token)
-        .then(response => response.json())
-        .then(data => {
-          console.log(data);
-          // handleLogin({
-          //   email: data.email,
-          //   password: data.id,
-          //   googleLogin: true,
-          // });
-        });
-    },
-
-  });
+  const { googleLogin } = useGoogleAuth();
 
   const handleLogin = async (values) => {
     try {
