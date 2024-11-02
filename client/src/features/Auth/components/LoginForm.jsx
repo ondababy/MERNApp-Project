@@ -1,4 +1,5 @@
 import { FormikForm } from '@common/components';
+import { useGoogleLogin } from '@react-oauth/google';
 import { Button } from 'react-daisyui';
 import { FaFacebook, FaGoogle } from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
@@ -7,6 +8,7 @@ import { toast } from 'react-toastify';
 import { authApi } from '../auth.api';
 import { setCredentials } from '../auth.slice';
 import { loginValidation } from '../auth.validation.js';
+
 
 const loginSchema = [
   { label: 'Email Address', name: 'email', type: 'email' },
@@ -24,6 +26,10 @@ function LoginForm() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [login, { isLoading }] = authApi.useLoginMutation();
+
+  const googleLogin = useGoogleLogin({
+    onSuccess: tokenResponse => console.log(tokenResponse),
+  });
 
   const handleLogin = async (values) => {
     try {
@@ -59,10 +65,11 @@ function LoginForm() {
 
             <div className="divider my-0">or</div>
             <div className="social-media login flex gap-2 justify-center">
+
               <Button onClick={() => { }}>
                 <FaGoogle />
               </Button>
-              <Button onClick={() => { }}>
+              <Button onClick={() => googleLogin()}>
                 <FaFacebook />
               </Button>
             </div>

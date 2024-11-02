@@ -78,12 +78,16 @@ function Header({ clickLogo }) {
             </Dropdown>
           }
 
-          {!(userInfo?.id && accessToken) && <Button
-            color='primary'
-            variant='outline'
-          >
-            Log in
-          </Button>}
+          {!(userInfo?.id && accessToken) &&
+            <Link to="/login">
+              <Button
+                color='primary'
+                variant='outline'
+              >
+                Log in
+              </Button>
+            </Link>
+          }
 
 
         </Navbar.End>
