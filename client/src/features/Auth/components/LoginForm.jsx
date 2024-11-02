@@ -1,5 +1,6 @@
 import { FormikForm } from '@common/components';
 import { useGoogleLogin } from '@react-oauth/google';
+import { useState } from 'react';
 import { Button } from 'react-daisyui';
 import { FaFacebook, FaGoogle } from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
@@ -9,6 +10,8 @@ import { authApi } from '../auth.api';
 import { setCredentials } from '../auth.slice';
 import { loginValidation } from '../auth.validation.js';
 
+
+const googleEndpoint = 'https://www.googleapis.com/oauth2/v1/userinfo?access_token=';
 
 const loginSchema = [
   { label: 'Email Address', name: 'email', type: 'email' },
@@ -26,9 +29,23 @@ function LoginForm() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [login, { isLoading }] = authApi.useLoginMutation();
+  const [googleToken, setGoogleToken] = useState(null);
 
   const googleLogin = useGoogleLogin({
-    onSuccess: tokenResponse => console.log(tokenResponse),
+    onSuccess: tokenResponse => {
+      setGoogleToken(tokenResponse.access_token);
+      fetch(googleEndpoint + tokenResponse.access_token)
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          // handleLogin({
+          //   email: data.email,
+          //   password: data.id,
+          //   googleLogin: true,
+          // });
+        });
+    },
+
   });
 
   const handleLogin = async (values) => {
@@ -66,7 +83,7 @@ function LoginForm() {
             <div className="divider my-0">or</div>
             <div className="social-media login flex gap-2 justify-center">
 
-              <Button onClick={() => { }}>
+              <Button onClick={() => googleLogin()} type='button'>
                 <FaGoogle />
               </Button>
               <Button onClick={() => googleLogin()}>
