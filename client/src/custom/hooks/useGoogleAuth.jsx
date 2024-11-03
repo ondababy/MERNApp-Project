@@ -1,6 +1,6 @@
 
 import { useGoogleLogin } from '@react-oauth/google';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 
 // Callback
@@ -21,7 +21,7 @@ const googleEndpoint = 'https://www.googleapis.com/oauth2/v1/userinfo?access_tok
 
 export default function useGoogleAuth() {
   const [googleToken, setGoogleToken] = useState(null);
-  const [data, setData] = useState(null);
+  const [googleData, setGoogleData] = useState(null);
 
   const googleLogin = useGoogleLogin({
     onSuccess: tokenResponse => {
@@ -29,7 +29,7 @@ export default function useGoogleAuth() {
       fetch(googleEndpoint + tokenResponse.access_token)
         .then(response => response.json())
         .then(data => {
-          setData(data);
+          setGoogleData(data);
         });
     },
   });
@@ -40,6 +40,6 @@ export default function useGoogleAuth() {
   return {
     googleLogin,
     googleToken,
-    googleData: data,
+    googleData,
   }
 }
