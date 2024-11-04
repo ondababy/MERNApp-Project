@@ -1,16 +1,18 @@
 import { Schema } from '#lib';
-import { ImageSchema } from '#utils';
+import mongoose from 'mongoose';
 
 const Wishlist = new Schema({
+  name: 'Wishlist',
   user: { 
-    type: Schema.Types.ObjectId, 
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true,
   },
-  products: [{ 
-    type: Schema.Types.ObjectId, 
+  product: { 
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'Product',
-  }],
+    required: true,
+  },
 }, {
   timestamps: true,
 });

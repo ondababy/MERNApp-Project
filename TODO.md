@@ -9,7 +9,12 @@
 - [ ] Cloudinary: User Avatar
 
 - [ ] Tranasaction: Cart
-- [ ] CRUD
+- [x] CRUD - Backend
 - [ ] Charts
 - [ ] Formik and yup validation
-- [ ] Order Table
+- [ ] Order DataTable
+
+- [ ] Wishlist
+- [ ] Reviews
+- [ ] Infinite Scroll
+- [ ] Filter/mask bad words from reviews. bad words package

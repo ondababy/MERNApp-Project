@@ -10,7 +10,6 @@ const v1 = [
   ...features.productRoutes,
   ...features.courierRoutes,
   ...features.supplierRoutes,
-  ...features.categoryRoutes,
   ...features.userRoutes,
 ];
 

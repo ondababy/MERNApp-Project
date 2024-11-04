@@ -17,7 +17,6 @@ const privateRoutes = [
       ...features.productRoutes,
       ...features.courierRoutes,
       ...features.supplierRoutes,
-      ...features.categoryRoutes,
       ...features.userRoutes,
     ],
   },

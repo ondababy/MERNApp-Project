@@ -15,7 +15,6 @@ const makeMenu = () => [
   ...features.productMenus,
   ...features.courierMenus,
   ...features.supplierMenus,
-  ...features.categoryMenus,
   ...features.userMenus,
 ].sort((a, b) => a.label.localeCompare(b.label));
 
