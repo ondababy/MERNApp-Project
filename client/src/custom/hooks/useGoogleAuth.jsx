@@ -36,6 +36,7 @@ export default function useGoogleAuth() {
   useEffect(() => {
     console.log(googleData);
   }, [googleData]);
+  
 
   return {
     googleLogin,
