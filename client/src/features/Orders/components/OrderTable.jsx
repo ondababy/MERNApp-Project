@@ -19,13 +19,10 @@ const allowedColumns = () => [
 
 const OrderTable = () => {
   const navigate = useNavigate();
-  const [orders, setOrders] = useState([]);
-  const { fetchOrders, handleDelete } = useOrderActions({});
+  const { fetchOrders, handleDelete, orders } = useOrderActions({});
 
   useEffect(() => {
-    fetchOrders().then((res) => {
-      setOrders(res);
-    });
+    fetchOrders()
   }, [])
 
 

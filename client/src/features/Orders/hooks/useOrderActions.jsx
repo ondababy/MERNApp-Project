@@ -21,6 +21,7 @@ export function useOrderActions({ cartData = {}, action = 'create', render = fal
   const order = useSelector((state) => state.order);
   const selectedItems = cart?.items ? cart?.items.filter(item => item?.selected) : [];
 
+  const [orders, setOrders] = useState([]);
   const [createOrder, { isLoading: isCreating }] = orderApi.useCreateOrderMutation();
   const [updateOrder, { isLoading: isUpdating }] = orderApi.useUpdateOrderMutation();
   const [deleteOrder] = orderApi.useDeleteOrderMutation();
@@ -31,6 +32,7 @@ export function useOrderActions({ cartData = {}, action = 'create', render = fal
 
   const fetchOrders = useCallback(async () => {
     const res = await getOrders().unwrap();
+    setOrders(res?.resource || []);
     return res.resource || [];
   })
 
@@ -58,10 +60,9 @@ export function useOrderActions({ cartData = {}, action = 'create', render = fal
   const handleDelete = useCallback(async (id) => {
     confirmDelete(async () => {
       try {
-        confirmDelete(async () => {
-          await deleteOrder(id).unwrap();
-          toast.success('Order deleted successfully');
-        });
+        await deleteOrder(id).unwrap();
+        toast.success('Order deleted successfully');
+        setOrders(orders.filter((order) => order.id !== id));
       } catch (error) {
         toast.error(error.message);
       }
@@ -115,6 +116,7 @@ export function useOrderActions({ cartData = {}, action = 'create', render = fal
 
   return {
     order,
+    orders,
     fetchOrders,
     fetchOrder,
     handleCreate,
