@@ -13,7 +13,7 @@ function Header({ clickLogo }) {
 
   return (
     <>
-      <Navbar className='fixed bg-base-100/10 backdrop-blur-xl z-[1000]'>
+      <Navbar className='bg-base-100/10 backdrop-blur-xl z-[1000]'>
         <Navbar.Start>
           <Link>
             <Button

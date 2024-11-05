@@ -61,7 +61,7 @@ const OrderTable = () => {
                 {!order?.user?.info?.avatar &&
                   <div class="avatar placeholder">
                     <div class="bg-neutral text-neutral-content w-16 rounded-full">
-                      <span class="text-xl">{order?.user?.username[0].toUpperCase()}</span>
+                      <span class="text-xl">{order?.user?.username && order?.user?.username[0].toUpperCase() || 'Anon'}</span>
                     </div>
                   </div>}
                 <div>
