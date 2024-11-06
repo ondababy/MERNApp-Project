@@ -14,6 +14,7 @@ const privateRoutes = [
       ...features.orderRoutes,
       // ...features._exampleRoutes,
       ...features.brandRoutes,
+      ...features.categoryRoutes,
       ...features.productRoutes,
       ...features.courierRoutes,
       ...features.supplierRoutes,

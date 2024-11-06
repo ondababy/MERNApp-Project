@@ -2,6 +2,7 @@ import * as features from '#features';
 
 const v1 = [
   // NEW ROUTE HERE ->
+    ...features.categoryRoutes,
     ...features.wishlistRoutes,
     ...features.orderRoutes,
     ...features.cartRoutes,
