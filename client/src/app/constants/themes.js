@@ -1,4 +1,4 @@
 export const THEMES = {
-  DARK: 'night',
-  LIGHT: 'nord',
+  DARK: 'business',
+  LIGHT: 'corporate',
 };
