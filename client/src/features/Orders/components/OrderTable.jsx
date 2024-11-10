@@ -84,11 +84,11 @@ const OrderTable = () => {
             </>),
             actions: (
               <ActionButtons
-                key={'action_' + order.slug}
+                key={'action_' + order.id}
                 className="flex justify-end"
                 onDelete={() => handleDelete(order.id)}
-                onEdit={() => navigate(`/dashboard/orders/${order.slug}/edit`)}
-                onView={() => navigate(`/dashboard/orders/${order.slug}/view`)}
+                onEdit={() => navigate(`/dashboard/orders/${order.id}/edit`)}
+                onView={() => navigate(`/dashboard/orders/${order.id}/view`)}
               />
             ),
           }))}
