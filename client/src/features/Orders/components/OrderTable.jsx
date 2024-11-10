@@ -47,22 +47,22 @@ const OrderTable = () => {
           data={orders.map((order) => ({
             ...order,
             customer: (<>
-              <div class="flex items-center gap-3">
-                {order?.user?.info?.avatar && <div class="avatar">
-                  <div class="mask mask-squircle h-12 w-12">
+              <div className="flex items-center gap-3">
+                {order?.user?.info?.avatar && <div className="avatar">
+                  <div className="mask mask-squircle h-12 w-12">
                     <img
                       src={order?.user?.info?.avatar || "https://placehold.co/600"}
                       alt="Avatar Tailwind CSS Component" />
                   </div>
                 </div>}
                 {!order?.user?.info?.avatar &&
-                  <div class="avatar placeholder">
-                    <div class="bg-neutral text-neutral-content w-16 rounded-full">
-                      <span class="text-xl">{order?.user?.username && order?.user?.username[0].toUpperCase() || 'Anon'}</span>
+                  <div className="avatar placeholder">
+                    <div className="bg-neutral text-neutral-content w-16 rounded-full">
+                      <span className="text-xl">{order?.user?.username && order?.user?.username[0].toUpperCase() || 'Anon'}</span>
                     </div>
                   </div>}
                 <div>
-                  <div class="font-bold flex gap-2">
+                  <div className="font-bold flex gap-2">
                     <span>
                       {order?.user?.info?.first_name}
                     </span>
@@ -70,10 +70,10 @@ const OrderTable = () => {
                       {order?.user?.info?.last_name}
                     </span>
                   </div>
-                  <div class="text-sm opacity-50">
+                  <div className="text-sm opacity-50">
                     {order?.user?.email}
                   </div>
-                  <div class="text-sm opacity-50">
+                  <div className="text-sm opacity-50">
                     {order?.user?.info?.contact}
                   </div>
                 </div>

@@ -1,15 +1,24 @@
+import { toggleSideBar } from '@app/slices/theme.slice';
 import { useToggle } from '@common';
 import { useCheckAuth } from '@custom';
 import { DashboardHeader, FooterWrapper, Sidebar } from '@partials';
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Navigate, Outlet } from 'react-router-dom';
 
 
 export function PrivateLayout() {
+  const dispatch = useDispatch();
+  const { sideBarToggle } = useSelector(state => state.theme);
   const [visible, toggleVisible] = useToggle(true);
   const { isAdmin, userInfo } = useCheckAuth(true) || {
     name: 'Private User',
   };
+
+  useEffect(() => {
+    // console.log(visible, sideBarToggle);
+  }, [visible]);
+
   return (
     !isAdmin ? <Navigate to="/login" /> : (
       <div
@@ -18,7 +27,7 @@ export function PrivateLayout() {
       >
         <Sidebar
           visible={visible}
-          noOverlay={true}
+          noOverlay={visible}
           toggleVisible={toggleVisible}
         >
           <DashboardHeader
