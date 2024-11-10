@@ -38,8 +38,8 @@ export function useOrderActions({ cartData = {}, action = 'create', render = fal
 
   const fetchOrder = useCallback(async () => {
     return getOrder(id).then((res) => {
-      if (res.error) {
-        toast.error(res.error.data.message);
+      if (res?.error) {
+        toast.error(res?.error?.data?.message);
         navigate(role === 'admin' ? '/dashboard/orders/table' : '/');
       } else if (res.data) {
         setOrder(res.data.resource)

@@ -1,3 +1,4 @@
+import admin from 'firebase-admin';
 import { initializeApp } from 'firebase/app';
 
 const firebaseConfig = {

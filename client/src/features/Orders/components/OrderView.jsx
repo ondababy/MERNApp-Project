@@ -31,7 +31,6 @@ export default function OrderView() {
   }, [])
 
   useEffect(() => {
-    console.clear()
     console.log(order);
   }, [order])
 

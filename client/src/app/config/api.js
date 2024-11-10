@@ -1,6 +1,6 @@
+import { startLoading, stopLoading } from '@app/slices';
 import { logout, setCredentials } from '@features';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { startLoading, stopLoading } from '../slices/loading.slice';
 
 
 const API = '/api/v1';

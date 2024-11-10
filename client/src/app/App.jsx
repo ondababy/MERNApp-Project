@@ -1,5 +1,6 @@
 import router from '@app/routes';
 import { Spinner } from '@common';
+import { useNotification } from '@custom';
 import 'animate.css';
 import React from 'react';
 import { useSelector } from 'react-redux';
@@ -9,6 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
 
 function App() {
+  useNotification();
   const isLoading = useSelector(state => state.loading.isLoading);
   return (
     <React.StrictMode>

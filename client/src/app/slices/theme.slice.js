@@ -22,4 +22,4 @@ const themeSlice = createSlice({
 
 
 export const { toggleTheme, toggleSideBar } = themeSlice.actions;
-export default themeSlice.reducer;
+export const themeReducer =  themeSlice.reducer;
