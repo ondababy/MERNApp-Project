@@ -187,7 +187,6 @@ class ProductController extends Controller {
     this.success({ res, message: 'Data updated!', resource });
   };
 
-  // Method to create a product review
   createProductReview = async (req, res) => {
     const { rating, comment, productId } = req.body;
     const review = {
