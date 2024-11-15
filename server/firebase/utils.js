@@ -6,4 +6,6 @@ admin.initializeApp({
   databaseURL: process.env.FIREBASE_DATABASE
 });
 
+console.log(serviceAccount)
+
 export default admin;

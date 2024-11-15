@@ -5,10 +5,12 @@ import NotificationModel from './notification.model.js';
 class NotificationService extends Service {
   model = NotificationModel;
 
-  async sendNotification({deviceToken, title, body, type='info'}) {
+  async saveDevice({ user, fcmToken }) {}
+
+  async sendNotification({deviceToken, title = '', body='' }) {
     const message = {
       notification: {
-        title, body, type
+        title, body
       },
       token: deviceToken
     }
@@ -17,14 +19,19 @@ class NotificationService extends Service {
       const res = await admin.messaging().send(message);
       return res;
     } catch (e) {
-      throw e
+      if (e.code === 'app/invalid-credential') {
+        // Handle specific error related to invalid credentials
+        throw new Error('Failed to send notification due to invalid credentials. Please check your Firebase configuration.');
+      } else if (e.message.includes('getaddrinfo EAI_AGAIN')) {
+        // Handle network error
+        throw new Error('Network error while sending notification. Please check your internet connection.');
+      } else {
+        throw e;
+      }
     }
   }
   
   async sendNotifications() {}
-  
-
-
 }
 
 export default new NotificationService();

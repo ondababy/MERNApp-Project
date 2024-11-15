@@ -7,12 +7,14 @@ class NotificationController extends Controller {
   resource = NotificationResource;
   
   sendNotification = async (req, res) => {
-    const result = await this.service.sendNotification(req.body);
+    const {type, ...message} = req.body
+    const result = await this.service.sendNotification(message);
 
     this.success({
       res,
       message: "Notification sent.",
-      success: true
+      success: true,
+      type
     })
 
   }
