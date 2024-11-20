@@ -7,6 +7,7 @@ const initialState = {
   accessToken: accessToken || null,
   role: null,
   isChanging: false,
+  showProfile: false,
 };
 
 export const authSlice = createSlice({
@@ -31,10 +32,13 @@ export const authSlice = createSlice({
       localStorage.removeItem('userInfo');
       localStorage.removeItem('accessToken');
     },
+    setShowProfile: (state) => {
+      state.showProfile = !state.showProfile;
+    }
   },
 });
 
-export const { setCredentials, logout, setIsChanging } = authSlice.actions;
+export const { setCredentials, logout, setIsChanging, setShowProfile } = authSlice.actions;
 export const authReducer = authSlice.reducer;
 export const selectCurrentUser = (state) => state.auth.userInfo;
 export const selectAccessToken = (state) => state.auth.accessToken;

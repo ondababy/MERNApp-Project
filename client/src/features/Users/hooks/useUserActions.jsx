@@ -74,6 +74,7 @@ export default function useUserActions({ id = null, action = "create", fields = 
   const onSubmit = async (values, actions) => {
     confirmSave(async () => handleSubmit(values, actions));
   };
+
   const handleSubmit = async (values, actions) => {
     const { username, email, password, confirm_password, ...info } = values
     const payload = { username, email, password, confirm_password, ...userInfo, info }

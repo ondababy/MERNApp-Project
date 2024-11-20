@@ -10,7 +10,6 @@ function Header({ clickLogo }) {
   const { userInfo, accessToken } = useSelector(state => state.auth)
   const { items, subTotal, currency } = useSelector(state => state.cart)
 
-
   return (
     <>
       <Navbar className='bg-base-100/10 backdrop-blur-xl z-[1000]'>
@@ -65,10 +64,9 @@ function Header({ clickLogo }) {
               </Button>
               <Dropdown.Menu className="mt-3 z-[1] w-52 menu-sm">
                 <li>
-                  <a className="justify-between">
+                  <Link to="/profile" className="justify-between">
                     Profile
-                    <Badge className="badge">New</Badge>
-                  </a>
+                  </Link>
                 </li>
                 <Dropdown.Item>Settings</Dropdown.Item>
                 <Dropdown.Item onClick={handleLogout}>

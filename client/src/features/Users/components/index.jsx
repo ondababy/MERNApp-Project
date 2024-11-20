@@ -4,6 +4,7 @@ export { default as UserFormPage } from './UserFormPage';
 export { default as UserModal } from './UserModal';
 export { default as UserOnboarding } from './UserOnboarding';
 export { default as UserPage } from './UserPage';
+export { default as UserProfile } from './UserProfile';
 export { default as UserTable } from './UserTable';
 
 

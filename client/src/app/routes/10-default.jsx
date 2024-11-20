@@ -19,6 +19,10 @@ const defaultRoutes = [
         path: '/orders',
         element: <Screen.OrdersDisplay />,
       },
+      {
+        path: '/profile',
+        element: <Screen.Profile />,
+      },
     ],
   },
 ];

@@ -12,6 +12,7 @@ import './App.css';
 function App() {
   useNotification();
   const isLoading = useSelector(state => state.loading.isLoading);
+
   return (
     <React.StrictMode>
       <ToastContainer
