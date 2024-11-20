@@ -57,10 +57,10 @@ class EmailTemplate {
             <h1>Hello, ${this.userName}!</h1>
           </div>
           <div class="content">
-            <p>${this.message}</p>
+            <p>${this.message || ''}</p>
 
             <p style="font-style: italic; font-size: 12px;">
-            ${this.altMessage}
+            ${this.altMessage || ''}
             </p>
           </div>
           <div class="footer">

@@ -1,4 +1,6 @@
+import EmailTemplate from '#common/lib/email-template';
 import { NotificationService, ProductModel, ProductService, UserService } from '#features';
+import { sendEmail } from '#utils';
 
 import { Service } from '#lib';
 import OrderModel from './order.model.js';
@@ -65,15 +67,20 @@ class OrderService extends Service {
     if (!updatedOrder) throw new Error('Order not found');
     if (status === 'shipped') this.manageStock(products);
 
-    console.clear()
-    console.log(user.fcmToken)
 
     if (user.fcmToken){
+      const message = `Your order ${id} has been ${status}!`;
+      const title = 'Order Status';
       NotificationService.sendNotification({
         deviceToken: user.fcmToken,
-        title: 'Order Status',
-        body: `Your order ${updatedOrder.id} has been ${status}`
+        title,
+        body: message,
       });
+      sendEmail({
+        email: user.email,
+        subject: title,
+        message:  new EmailTemplate({ userName: user.username, message }).generate(),
+      })
     }
 
     return updatedOrder;

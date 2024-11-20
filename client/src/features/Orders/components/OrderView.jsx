@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Swal from 'sweetalert2';
 import { useOrderActions } from '../hooks/useOrderActions';
 import { paymentMethods, shippingMethods } from '../order.slice';
 import OrderWrapper from './OrderWrapper';
@@ -12,6 +13,7 @@ const badgeColor = {
   delivered: 'bg-green-500',
   cancelled: 'bg-red-500',
 }
+
 
 const ProcessButton = ({ order, handleUpdate }) => {
   let payload = {
@@ -44,19 +46,32 @@ export default function OrderView() {
 
   }, [])
 
-  useEffect(() => {
-    // console.log(order);
-  }, [order])
-
-  const updateOrder = (props) => {
-    return handleUpdate(props).then((res) => {
-      console.log(res)
-    });
+  const updateOrder = async (props) => {
+    return Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, do it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        return handleUpdate(props).then(res => {
+          setOrder(res.resource)
+          Swal.fire(
+            'Updated!',
+            'Order has been updated.',
+            'success'
+          )
+        })
+      }
+    })
   }
 
 
 
-  return !order ? '' : <>
+  return !order?.id ? '' : <>
     <OrderWrapper title="Manage Order">
       <div className="flex justify-center">
         <div className="container max-w-6xl mx-auto">
@@ -69,8 +84,8 @@ export default function OrderView() {
                 Order Summary
               </h1>
             </div>
-            <div className={`badge ${badgeColor[order?.status]} rounded-full`}>
-              {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+            <div className={`badge ${badgeColor[order?.status]} rounded-full uppercase`}>
+              {order?.status}
             </div>
           </div>
           <div className="divider"></div>

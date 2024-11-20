@@ -88,7 +88,7 @@ const OrderTable = () => {
                 className="flex justify-end"
                 onDelete={() => handleDelete(order.id)}
                 onEdit={() => navigate(`/dashboard/orders/${order.id}/edit`)}
-                onView={() => navigate(`/dashboard/orders/${order.id}/view`)}
+                showView={false}
               />
             ),
           }))}

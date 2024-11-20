@@ -56,9 +56,10 @@ export function useOrderActions({ cartData = {}, action = 'create', render = fal
     });
   })
   const handleUpdate = useCallback(async (values) => {
-    const res = await updateOrder(values).unwrap();
-    const updatedOrder = res?.resource || { ...order, ...values };
-    toast.success('Update successful!');
+    return updateOrder(values).unwrap().then(res => {
+      toast.success('Update successful!');
+      return res;
+    });
   })
   const handleDelete = useCallback(async (id) => {
     confirmDelete(async () => {
