@@ -8,13 +8,25 @@ import OrderWrapper from './OrderWrapper';
 const ProcessButton = ({ order, handleUpdate }) => {
   switch (order.status) {
     case 'pending':
-      return <button onClick={() => handleUpdate({ status: 'processing' })}>Process Order</button>
+      return <button
+        className='btn bg-blue-400'
+        onClick={() => handleUpdate({ status: 'processing' })}>
+        Process Order
+      </button>
 
     case 'processing':
-      return <button onClick={() => handleUpdate({ status: 'shipped' })}>Ship Order</button>
+      return <button
+        className='btn bg-yellow-400'
+        onClick={() => handleUpdate({ status: 'shipped' })}>
+        Ship Order
+      </button>
 
     case 'shipped':
-      return <button onClick={() => handleUpdate({ status: 'delivered' })}>Mark as Delivered</button>
+      return <button
+        className='btn bg-green-400'
+        onClick={() => handleUpdate({ status: 'delivered' })}>
+        Mark as
+        Delivered</button>
   }
 }
 
@@ -193,8 +205,12 @@ export default function OrderView() {
         <div className="container max-w-6xl mx-auto">
           <div className="divider"></div>
           <div className="flex justify-between">
+            <button
+              className='btn btn-outline btn-error'
+              onClick={() => handleUpdate({ status: 'cancelled' })}>
+              Cancel Order
+            </button>
             <ProcessButton order={order} handleUpdate={handleUpdate} />
-            <button onClick={() => handleUpdate({ status: 'cancelled' })}>Cancel Order</button>
           </div>
         </div>
       </div>
