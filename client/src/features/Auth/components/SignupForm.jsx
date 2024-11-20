@@ -2,7 +2,7 @@ import { FormikForm } from '@common/components';
 import { useGoogleAuth } from '@custom';
 import { Button } from 'react-daisyui';
 import { FaFacebook, FaGoogle } from 'react-icons/fa';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { authApi } from '../auth.api';
@@ -23,6 +23,7 @@ const signupFormik = {
   validationSchema: signupValidation,
 };
 function SignupFrom() {
+  const { token: fcmToken } = useSelector(state => state.notifications);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [register, { isLoading }] = authApi.useRegisterMutation();
@@ -31,7 +32,7 @@ function SignupFrom() {
 
   const handleSignup = async (values) => {
     try {
-      const res = await register(values).unwrap();
+      const res = await register({ ...values, fcmToken }).unwrap();
       dispatch(
         setCredentials({
           userInfo: res?.user,

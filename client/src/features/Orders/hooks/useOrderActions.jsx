@@ -56,7 +56,7 @@ export function useOrderActions({ cartData = {}, action = 'create', render = fal
     });
   })
   const handleUpdate = useCallback(async (values) => {
-    const res = await updateOrder({ id: order.id, order: values }).unwrap();
+    const res = await updateOrder(values).unwrap();
     const updatedOrder = res?.resource || { ...order, ...values };
     toast.success('Update successful!');
   })

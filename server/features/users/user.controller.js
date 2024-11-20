@@ -32,6 +32,10 @@ class UserController extends Controller {
     const validData = await this.validator(req, res, this.rules.create);
     const { user, token } = await this.service.registerUser(validData);
     if (!user._id) throw new Errors.BadRequest('Invalid user data!');
+    if (req.body.fcmToken) {
+      user.fcmToken = req.body.fcmToken;
+      await user.save();
+    }
 
     res.cookie(...token);
     this.success({
@@ -48,6 +52,10 @@ class UserController extends Controller {
     const { email, password } = req.body;
     const { user, token } = await this.service.authenticate(email, password);
     if (!user?._id) throw new Errors.BadRequest('Invalid credentials!');
+    if (req.body.fcmToken) {
+      user.fcmToken = req.body.fcmToken;
+      await user.save();
+    }
 
     res.cookie(...token);
     this.success({

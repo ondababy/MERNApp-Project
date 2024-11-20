@@ -38,6 +38,7 @@ class UserService extends Service {
     return { user, token };
   }
 
+
   async logout() {
     return destroyToken(this.authToken);
   }

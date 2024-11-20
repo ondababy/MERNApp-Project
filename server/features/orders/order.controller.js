@@ -15,6 +15,7 @@ class OrderController extends Controller {
   };
   update = async (req, res) => {
     const order = await this.service.update(req.body);
+    console.log(order);
     if (!order?.id) return this.error({ res, message: 'Order not updated' });
 
     const resource = await this.resource.make(order);

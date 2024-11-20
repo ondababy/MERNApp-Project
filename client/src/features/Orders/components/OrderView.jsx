@@ -5,16 +5,30 @@ import OrderWrapper from './OrderWrapper';
 
 // ['pending', 'processing', 'shipped', 'delivered', 'cancelled']
 
+const badgeColor = {
+  pending: 'bg-yellow-500',
+  processing: 'bg-blue-500',
+  shipped: 'bg-green-500',
+  delivered: 'bg-green-500',
+  cancelled: 'bg-red-500',
+}
+
 const ProcessButton = ({ order, handleUpdate }) => {
+  let payload = {
+    user: order.user._id,
+    order
+  }
+
+
   switch (order.status) {
     case 'pending':
-      return <button onClick={() => handleUpdate({ status: 'processing' })}>Process Order</button>
+      return <button className='btn btn-primary' onClick={() => handleUpdate({ ...payload, status: 'processing' })}>Process Order</button>
 
     case 'processing':
-      return <button onClick={() => handleUpdate({ status: 'shipped' })}>Ship Order</button>
+      return <button className='btn btn-info' onClick={() => handleUpdate({ ...payload, status: 'shipped' })}>Ship Order</button>
 
     case 'shipped':
-      return <button onClick={() => handleUpdate({ status: 'delivered' })}>Mark as Delivered</button>
+      return <button className='btn btn-success' onClick={() => handleUpdate({ ...payload, status: 'delivered' })}>Mark as Delivered</button>
   }
 }
 
@@ -31,8 +45,14 @@ export default function OrderView() {
   }, [])
 
   useEffect(() => {
-    console.log(order);
+    // console.log(order);
   }, [order])
+
+  const updateOrder = (props) => {
+    return handleUpdate(props).then((res) => {
+      console.log(res)
+    });
+  }
 
 
 
@@ -40,12 +60,19 @@ export default function OrderView() {
     <OrderWrapper title="Manage Order">
       <div className="flex justify-center">
         <div className="container max-w-6xl mx-auto">
-          <span className='text-xs italic text-gray-500'>
-            Order ID: {order.id}
-          </span>
-          <h1 className="font-bold text-xl">
-            Order Summary
-          </h1>
+          <div className="flex items-center justify-between">
+            <div>
+              <span className='text-xs italic text-gray-500'>
+                Order ID: {order.id}
+              </span>
+              <h1 className="font-bold text-xl">
+                Order Summary
+              </h1>
+            </div>
+            <div className={`badge ${badgeColor[order?.status]} rounded-full`}>
+              {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+            </div>
+          </div>
           <div className="divider"></div>
           <div className="grid grid-cols-1 md:grid-cols-2">
             {/* Customer */}
@@ -163,7 +190,7 @@ export default function OrderView() {
             <div className="flex justify-between p-2 border-b border-gray-200">
               <div>
                 <h3 className="font-bold text-lg">
-                  Shipping
+                  Shippingdelivered
                 </h3>
               </div>
               <div>
@@ -193,8 +220,15 @@ export default function OrderView() {
         <div className="container max-w-6xl mx-auto">
           <div className="divider"></div>
           <div className="flex justify-between">
-            <ProcessButton order={order} handleUpdate={handleUpdate} />
-            <button onClick={() => handleUpdate({ status: 'cancelled' })}>Cancel Order</button>
+
+            {
+              order.status !== 'delivered' && order.status !== 'cancelled' && <button className='btn btn-danger' onClick={() => updateOrder({ ...order, status: 'cancelled' })}>Cancel Order</button>
+            }
+
+            {
+              order.status !== 'delivered' && <ProcessButton order={order} handleUpdate={updateOrder} />
+            }
+
           </div>
         </div>
       </div>

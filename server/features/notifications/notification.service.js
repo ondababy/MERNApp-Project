@@ -20,10 +20,8 @@ class NotificationService extends Service {
       return res;
     } catch (e) {
       if (e.code === 'app/invalid-credential') {
-        // Handle specific error related to invalid credentials
         throw new Error('Failed to send notification due to invalid credentials. Please check your Firebase configuration.');
       } else if (e.message.includes('getaddrinfo EAI_AGAIN')) {
-        // Handle network error
         throw new Error('Network error while sending notification. Please check your internet connection.');
       } else {
         throw e;
