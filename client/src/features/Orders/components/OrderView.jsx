@@ -248,8 +248,6 @@ export default function OrderView() {
         </div>
       </div>
 
-
-
     </OrderWrapper>
 
 

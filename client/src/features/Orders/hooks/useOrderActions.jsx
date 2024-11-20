@@ -52,7 +52,7 @@ export function useOrderActions({ cartData = {}, action = 'create', render = fal
       // dispatch(clearCart());
       // dispatch(clearOrder());
       toast.success('Create successful!');
-      navigate(role === 'admin' ? '/dashboard/orders/table' : '/');
+      navigate(role === 'admin' ? '/dashboard/orders/table' : '/orders');
     });
   })
   const handleUpdate = useCallback(async (values) => {
@@ -70,6 +70,12 @@ export function useOrderActions({ cartData = {}, action = 'create', render = fal
       } catch (error) {
         toast.error(error.message);
       }
+    });
+  })
+  const handleCancel = useCallback(async (values) => {
+    return updateOrder({ ...values, status: 'cancelled' }).unwrap().then(res => {
+      toast.success('Order cancelled successfully');
+      return res;
     });
   })
   const handleSubmit = useCallback(async (values) => {
@@ -128,6 +134,7 @@ export function useOrderActions({ cartData = {}, action = 'create', render = fal
     handleDelete,
     handleSubmit,
     onSubmit,
+    handleCancel,
     handleCheckout,
     handleShipping,
   }
