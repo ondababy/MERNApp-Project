@@ -48,7 +48,7 @@ export class Service {
 
   applyForceFilter() {
     this._checkModel();
-    console.log('Applying force filter: ', this.forceFilter);
+    // console.log('Applying force filter: ', this.forceFilter);
 
     if (!this.query) this.query = this.model.find({});
     if (this.forceFilter && !this.forceFilterApplied) {
