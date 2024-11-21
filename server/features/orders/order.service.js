@@ -42,6 +42,30 @@ class OrderService extends Service {
     });
   }
 
+  makeAltMessage(order) {
+    return `
+    <div class="order-summary">
+      <h3>Order Summary</h3>
+      <ul>
+        ${order.products.map((product) => `
+          <li>
+            ${product.quantity} x ${product.name} - $${product.price}
+          </li>
+        `).join('')}
+      </ul>
+      <p>
+        Subtotal: $${order.subtotal}
+      </p>
+      <p>
+        Shipping: $${order.shipping.fee}  
+      </p>
+      <p>
+        Total: $${order.total}  
+      </p>
+    </div>
+    `;
+  }
+
   async update(data) {
     let { 
       user:userId, 
@@ -76,10 +100,11 @@ class OrderService extends Service {
         title,
         body: message,
       });
+      const altMessage = this.makeAltMessage(updatedOrder);
       sendEmail({
         email: user.email,
         subject: title,
-        message:  new EmailTemplate({ userName: user.username, message }).generate(),
+        message:  new EmailTemplate({ userName: user.username, message, altMessage }).generate(),
       })
     }
 

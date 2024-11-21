@@ -65,7 +65,6 @@ export function DataTable({ data, columns, rowCount, selectionFunc = () => { } }
     onRowSelectionChange: setRowSelection,
     onPaginationChange: setPagination,
     state: {
-      rowSelection,
       sorting,
       columnFilters,
       columnVisibility,
