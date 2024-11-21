@@ -1,10 +1,6 @@
 "use client"
 
 import {
-  ColumnDef,
-  ColumnFiltersState,
-  SortingState,
-  VisibilityState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
@@ -70,7 +66,6 @@ const data = [
 ]
 
 
-
 export const columns = [
   {
     id: "select",
@@ -82,6 +77,7 @@ export const columns = [
         }
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
         aria-label="Select all"
+        className="cursor-pointer border border-primary"
       />
     ),
     cell: ({ row }) => (
@@ -89,6 +85,7 @@ export const columns = [
         checked={row.getIsSelected()}
         onCheckedChange={(value) => row.toggleSelected(!!value)}
         aria-label="Select row"
+        className="cursor-pointer border border-primary"
       />
     ),
     enableSorting: false,
@@ -122,7 +119,6 @@ export const columns = [
     cell: ({ row }) => {
       const amount = parseFloat(row.getValue("amount"))
 
-      // Format the amount as a dollar amount
       const formatted = new Intl.NumberFormat("en-US", {
         style: "currency",
         currency: "USD",
@@ -163,12 +159,9 @@ export const columns = [
 ]
 
 export function DataTable() {
-  const [sorting, setSorting] = React.useState < SortingState > ([])
-  const [columnFilters, setColumnFilters] = React.useState < ColumnFiltersState > (
-    []
-  )
-  const [columnVisibility, setColumnVisibility] =
-    React.useState < VisibilityState > ({})
+  const [sorting, setSorting] = React.useState([])
+  const [columnFilters, setColumnFilters] = React.useState([])
+  const [columnVisibility, setColumnVisibility] = React.useState({})
   const [rowSelection, setRowSelection] = React.useState({})
 
   const table = useReactTable({
@@ -191,7 +184,8 @@ export function DataTable() {
   })
 
   return (
-    <div className="w-full">
+    <div className="w-full text-base-content">
+
       <div className="flex items-center py-4">
         <Input
           placeholder="Filter emails..."
@@ -201,13 +195,15 @@ export function DataTable() {
           }
           className="max-w-sm"
         />
+
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
+            <Button variant="outline" className="ml-auto text-base-content bg-base-100">
               Columns <ChevronDown />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
+          <DropdownMenuContent align="end" className="text-base-content bg-base-100">
             {table
               .getAllColumns()
               .filter((column) => column.getCanHide())
@@ -228,14 +224,16 @@ export function DataTable() {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+
+
       <div className="rounded-md border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
+              <TableRow key={headerGroup.id} className="hover:bg-base-content/10">
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead key={header.id} className="text-base-cont font-bold uppercase ">
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -254,9 +252,10 @@ export function DataTable() {
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  className={"hover:bg-base-content/10"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell key={cell.id} >
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
@@ -278,15 +277,21 @@ export function DataTable() {
           </TableBody>
         </Table>
       </div>
+
       <div className="flex items-center justify-end space-x-2 py-4">
+
+
         <div className="flex-1 text-sm text-muted-foreground">
           {table.getFilteredSelectedRowModel().rows.length} of{" "}
           {table.getFilteredRowModel().rows.length} row(s) selected.
         </div>
+
+
         <div className="space-x-2">
           <Button
             variant="outline"
             size="sm"
+            className="ml-auto text-base-content bg-base-100"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
@@ -295,12 +300,15 @@ export function DataTable() {
           <Button
             variant="outline"
             size="sm"
+            className="ml-auto text-base-content bg-primary"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
             Next
           </Button>
         </div>
+
+
       </div>
     </div>
   )
