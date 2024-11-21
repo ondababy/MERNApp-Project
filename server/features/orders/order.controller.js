@@ -10,8 +10,6 @@ class OrderController extends Controller {
   getAll = async (req, res) => {
     const { user } = req;
     if (!user?._id) return this.error({ res, message: 'User not found!' });
-    console.clear()
-    console.log(user.role !== ROLES.ADMIN)
     if (user.role !== ROLES.ADMIN)
       this.service.setUserId(user._id);
 

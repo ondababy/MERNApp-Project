@@ -1,3 +1,4 @@
+import { ROLES } from '#common';
 import EmailTemplate from '#common/lib/email-template';
 import { Service } from '#lib';
 import { destroyToken, Errors, generateToken, sendEmail } from '#utils';
@@ -43,11 +44,24 @@ class UserService extends Service {
     return destroyToken(this.authToken);
   }
 
+  async setRole(user, role) {
+    if (user.role === role) return user;
+    if (user.role === 'admin' && role !== 'admin') {
+      const adminCount = await this.model.countDocuments({ role: 'admin' });
+      if (adminCount === 1) throw new Errors.BadRequest('Cannot remove the only admin user!');
+    }
+    user.role = role;
+    await user.save();
+    return user;
+  }
+
   async updateUser(id, body) {
+    const role = body.role;
+    delete body.role;
+    
     const userExists = await this.checkIfExists({
       email: body.email,
       _id: { $ne: id },
-
     });
     if (userExists) throw new Errors.BadRequest('User with that email already exists!');
 
@@ -55,16 +69,23 @@ class UserService extends Service {
     if (data.password) data.password = await this.model?.hashPassword(data.password);
 
     const user = await this.model?.findByIdAndUpdate(id, data, { new: true });
+
+    if (role && req.user.role === ROLES.ADMIN) await this.setRole(user, role);
+
     return user;
   }
 
-  async contactExists(contact) {
-    const user = await this.info?.findOne({ contact });
+  async contactExists(contact, exceptUser) {
+    const user = await this.info?.findOne({ 
+      contact,
+      _id: { $ne: exceptUser.info },
+     });
+
     if (user) throw new Errors.BadRequest('Contact already exists!');
   }
 
   async createUserInfo(user, info) {
-    await this.contactExists(info.contact);
+    await this.contactExists(info.contact, user);
     try {
       const data = this.info?.filterFillables(info);
       const userInfo = await this.info?.create(data);
@@ -76,7 +97,7 @@ class UserService extends Service {
     }
   }
   async updateUserInfo(user, info) {
-    await this.contactExists(info.contact);
+    await this.contactExists(info.contact, user);
     try {
       const data = this.info?.filterFillables(info);
       const userInfo = await this.info?.findByIdAndUpdate(user.info, data, { new: true });
