@@ -25,3 +25,11 @@ package-lock.json
 *.sln
 *.sw?
 .vercel
+
+certification
+certificates
+cert
+certs
+.pem
+.key
+.crt

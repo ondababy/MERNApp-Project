@@ -14,6 +14,7 @@ export const useLogoutAction = () => {
 
   const action = useCallback(async () => {
     await logout();
+    await signOut();
     dispatch(logoutAction());
   }, [dispatch, logout]);
 
@@ -23,18 +24,20 @@ export const useLogoutAction = () => {
 const useLogout = () => {
   const logout = useLogoutAction();
   const navigate = useNavigate();
+  const { signOut } = useFirebaseAuth();
   const handleLogout = useCallback(
     async (e) => {
       e?.preventDefault();
       confirmLogout(async () => {
         try {
           await logout();
+          await signOut();
           navigate('/login');
           toast.success('Logged out successfully');
-          await signOut();
         } catch (error) {
           if ([401, 403].includes(error?.status)) return toast.error('Logged out due to unauthorized access');
           toast.error(error?.data?.message || 'Logout failed');
+          console.error('Error:', error);
         }
       });
     },

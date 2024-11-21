@@ -30,6 +30,7 @@ export default function useFirebaseAuth() {
     return () => unsubscribe();
   }, []);
 
+
   const signIn = async (email, password) => {
     setLoading(true);
     return signInWithEmailAndPassword(firebaseAuth, email, password)
@@ -83,29 +84,6 @@ export default function useFirebaseAuth() {
       })
       .catch(async (error) => {
         setLoading(false);
-        if (error.code === 'auth/account-exists-with-different-credential') {
-          const email = error.customData.email;
-          const pendingCred = FacebookAuthProvider.credentialFromError(error);
-          return fetchSignInMethodsForEmail(firebaseAuth, email)
-            .then((methods) => {
-              if (methods.includes(EmailAuthProvider.PROVIDER_ID)) {
-                const password = prompt('Please enter your password for ' + email);
-                return signInWithEmailAndPassword(firebaseAuth, email, password)
-                  .then((userCredential) => {
-                    return linkWithCredential(userCredential.user, pendingCred);
-                  });
-              } else if (methods.includes(GoogleAuthProvider.PROVIDER_ID)) {
-                const googleProvider = new GoogleAuthProvider();
-                return signInWithPopup(firebaseAuth, googleProvider)
-                  .then((userCredential) => {
-                    return linkWithCredential(userCredential.user, pendingCred);
-                  });
-              }
-            });
-        } else {
-          console.error('Error signing in with Facebook:', error);
-          throw error;
-        }
       });
   };
 
@@ -114,6 +92,7 @@ export default function useFirebaseAuth() {
     return signOut(firebaseAuth)
       .then(() => {
         setLoading(false);
+        setUser(null);
       })
       .catch((error) => {
         setLoading(false);
