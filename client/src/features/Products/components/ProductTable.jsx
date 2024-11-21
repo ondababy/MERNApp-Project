@@ -44,6 +44,7 @@ const makeColumns = (navigate, toggleExpand) => [
       />
     ),
     enableSorting: false,
+    enableHiding: false,
   },
   // IMAGE COLUMN
   {
@@ -51,6 +52,8 @@ const makeColumns = (navigate, toggleExpand) => [
     header: "Image",
     cell: ({ row }) => <img src={row.getValue("image")} alt="Product" className="w-16 h-16" />,
     enableSorting: false,
+    enableHiding: false,
+    enableCustomFilter: false,
   },
   // INTERACTIVE COLUMNS
   ...["name", "stock", "price"].map((key) => ({
@@ -66,19 +69,24 @@ const makeColumns = (navigate, toggleExpand) => [
     ),
     cell: ({ row }) => <p className="px-3">{row.getValue(key)}</p>,
   })),
-  // DETAILS EXPANSION
+  // DETAILS EXPANSION / DESCRIPTION
   {
     id: "expand",
     header: "Details",
     cell: ({ row }) => (
-      <Button
-        className="btn-sm"
-        onClick={() => row.original.toggleExpand(row.original.id)}
-      >
-        {row.original.isExpanded ? "Collapse" : "Expand"}
-      </Button>
+      <>
+        <Button
+          className="btn-sm"
+          onClick={() => row.original.toggleExpand(row.original.id)}
+        >
+          {row.original.isExpanded ? "Collapse" : "Expand"}
+        </Button>
+        {/* if expanded show the product description below the row as an expanded or collapse content */}
+        {row.original.isExpanded && <p>{row.original.description}</p>}
+      </>
     ),
     enableSorting: false,
+    enableHiding: false,
   },
   // ACTIONS
   {
@@ -92,6 +100,7 @@ const makeColumns = (navigate, toggleExpand) => [
       />
     ),
     enableSorting: false,
+    enableHiding: false,
   },
 ];
 

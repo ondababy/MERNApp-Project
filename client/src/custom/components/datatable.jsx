@@ -90,58 +90,7 @@ export function DataTable({ data, columns, rowCount, selectionFunc = () => { } }
 
   // Print functionality
   const handlePrint = React.useCallback(() => {
-    const printWindow = window.open('', '', 'width=900,height=700');
-
-    if (printWindow) {
-      // Create a print-friendly table
-      const printContent = `
-        <html>
-          <head>
-            <title>Print Table</title>
-            <style>
-              table { 
-                width: 100%; 
-                border-collapse: collapse; 
-                font-family: Arial, sans-serif; 
-              }
-              th, td { 
-                border: 1px solid #ddd; 
-                padding: 8px; 
-                text-align: left; 
-              }
-              th { 
-                background-color: #f2f2f2; 
-              }
-            </style>
-          </head>
-          <body>
-            <table>
-              <thead>
-                <tr>
-                  ${table.getHeaderGroups()[0].headers.map(header =>
-        `<th>${header.column.columnDef.header || header.column.id}</th>`
-      ).join('')}
-                </tr>
-              </thead>
-              <tbody>
-                ${table.getRowModel().rows.map(row =>
-        `<tr>
-                    ${row.getVisibleCells().map(cell =>
-          `<td>${cell.renderValue() ?? ''}</td>`
-        ).join('')}
-                  </tr>`
-      ).join('')}
-              </tbody>
-            </table>
-          </body>
-        </html>
-      `;
-
-      printWindow.document.write(printContent);
-      printWindow.document.close();
-      printWindow.print();
-      printWindow.close();
-    }
+    alert("Todo Print");
   }, [table]);
 
   // CSV Download functionality
