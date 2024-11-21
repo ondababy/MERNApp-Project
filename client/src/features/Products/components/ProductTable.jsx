@@ -11,6 +11,7 @@ import { productApi } from "../product.api";
 import ProductWrapper from "./ProductWrapper";
 
 const makeData = (products, handleDelete, toggleExpand) => {
+  console.log(products);
   return products.map((product) => ({
     id: product.id,
     name: product.name,

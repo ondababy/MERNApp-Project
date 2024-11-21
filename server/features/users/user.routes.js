@@ -1,5 +1,6 @@
 import { METHODS, READ_WRITE } from '#constants';
 import { protectAndPermit } from '#middlewares/auth.middleware';
+import { upload } from '#middlewares/upload.middleware';
 import controller from './user.controller.js';
 
 export default [
@@ -39,7 +40,7 @@ export default [
       {
         path: '/profile',
         method: METHODS.PATCH,
-        controller: [protectAndPermit(READ_WRITE), controller.update],
+        controller: [protectAndPermit(READ_WRITE), upload.single('avatar'), controller.update],
       },
       {
         path: '/:id',
@@ -49,7 +50,7 @@ export default [
       {
         path: '/:id',
         method: METHODS.PATCH,
-        controller: [protectAndPermit(READ_WRITE), controller.update],
+        controller: [protectAndPermit(READ_WRITE), upload.single('avatar'), controller.update],
       },
       {
         path: '/:id',

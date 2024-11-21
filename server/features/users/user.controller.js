@@ -1,5 +1,6 @@
 import { Controller } from '#lib';
 import { Errors, getBearerToken, tokenExists } from '#utils';
+import UserInfoModel from './user-info.model.js';
 import UserResource from './user.resource.js';
 import UserService from './user.service.js';
 import * as rules from './user.validation.js';
@@ -32,6 +33,7 @@ class UserController extends Controller {
     const validData = await this.validator(req, res, this.rules.create);
     const { user, token } = await this.service.registerUser(validData);
     if (!user._id) throw new Errors.BadRequest('Invalid user data!');
+
     if (req.body.fcmToken) {
       user.fcmToken = req.body.fcmToken;
       await user.save();
@@ -40,6 +42,7 @@ class UserController extends Controller {
     //   const validInfo = await this.validator(req, res, this.rules.createInfo);
     //   await this.service.createUserInfo(user, validInfo.info);
     // }
+
 
     res.cookie(...token);
     this.success({
@@ -107,6 +110,12 @@ class UserController extends Controller {
     } else if (req.body?.info && user?.info?._id) {
       validData = await this.validator(req, res, this.rules.updateInfo);
       userInfo = await this.service.updateUserInfo(user, validData.info);
+    }
+    console.log(req.file || req.files)
+    if (req.file || req.files && (userInfo && UserInfoModel.schema.paths['avatar'])) {
+      const avatar = this.addImage(req);
+      userInfo.avatar = avatar[0];
+      await userInfo.save();
     }
 
     let resource = await this.resource.make(user);
