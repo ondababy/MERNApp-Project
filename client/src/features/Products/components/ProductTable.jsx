@@ -76,13 +76,12 @@ const makeColumns = (navigate, toggleExpand) => [
     cell: ({ row }) => (
       <>
         <Button
-          className="btn-sm"
+          className="btn-xs"
           onClick={() => row.original.toggleExpand(row.original.id)}
         >
           {row.original.isExpanded ? "Collapse" : "Expand"}
         </Button>
-        {/* if expanded show the product description below the row as an expanded or collapse content */}
-        {row.original.isExpanded && <p>{row.original.description}</p>}
+        {row.original.isExpanded && <p className="px-3 text-sm break-all">{row.original.description}</p>}
       </>
     ),
     enableSorting: false,
