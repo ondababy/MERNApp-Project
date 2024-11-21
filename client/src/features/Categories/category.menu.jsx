@@ -10,7 +10,6 @@ export const categoryMenus = [
     subLinks: [
       { to: `${mainUrl}/table`, label: 'Categories Table', icon: <FaTable /> },
       { to: `${mainUrl}/create`, label: 'Create Categories', icon: <FaPlus /> },
-      { to: `${mainUrl}/list`, label: 'Categories List', icon: <FaUsers /> },
     ],
   },
 ];

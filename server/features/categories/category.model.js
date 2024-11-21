@@ -23,4 +23,3 @@ Category.statics.fillables = [];
 Category.statics.hidden = [];
 
 export default Category.makeModel();
-

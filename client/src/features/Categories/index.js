@@ -4,4 +4,3 @@ export * from './category.routes';
 export * from './category.slice';
 export * from './category.validation';
 export * from './components';
-
