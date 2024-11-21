@@ -8,7 +8,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
+import { ArrowUpDown, ChevronDown, MoreHorizontal, Printer, Download } from "lucide-react";
 import * as React from "react";
 
 import { Button } from "@common/components/ui/button";
@@ -31,20 +31,28 @@ import {
   TableRow,
 } from "@common/components/ui/table";
 
-export function DataTable({ data, columns }) {
+export function DataTable({ data, columns, rowCount }) {
+  // Validate input data
   if (!columns || !Array.isArray(columns) || columns.length === 0) {
-    return;
+    return null;
   }
 
+  // State management
   const [sorting, setSorting] = React.useState([]);
   const [columnFilters, setColumnFilters] = React.useState([]);
   const [columnVisibility, setColumnVisibility] = React.useState({});
   const [rowSelection, setRowSelection] = React.useState({});
   const [selectedFilter, setSelectedFilter] = React.useState("");
+  const [pagination, setPagination] = React.useState({
+    pageIndex: 0,
+    pageSize: 5,
+  });
 
+  // Table configuration
   const table = useReactTable({
     data,
     columns,
+    rowCount,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
@@ -53,18 +61,113 @@ export function DataTable({ data, columns }) {
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
+    onPaginationChange: setPagination,
     state: {
       sorting,
       columnFilters,
       columnVisibility,
       rowSelection,
+      pagination,
     },
   });
+
+  // Print functionality
+  const handlePrint = React.useCallback(() => {
+    const printWindow = window.open('', '', 'width=900,height=700');
+    
+    if (printWindow) {
+      // Create a print-friendly table
+      const printContent = `
+        <html>
+          <head>
+            <title>Print Table</title>
+            <style>
+              table { 
+                width: 100%; 
+                border-collapse: collapse; 
+                font-family: Arial, sans-serif; 
+              }
+              th, td { 
+                border: 1px solid #ddd; 
+                padding: 8px; 
+                text-align: left; 
+              }
+              th { 
+                background-color: #f2f2f2; 
+              }
+            </style>
+          </head>
+          <body>
+            <table>
+              <thead>
+                <tr>
+                  ${table.getHeaderGroups()[0].headers.map(header => 
+                    `<th>${header.column.columnDef.header || header.column.id}</th>`
+                  ).join('')}
+                </tr>
+              </thead>
+              <tbody>
+                ${table.getRowModel().rows.map(row => 
+                  `<tr>
+                    ${row.getVisibleCells().map(cell => 
+                      `<td>${cell.renderValue() ?? ''}</td>`
+                    ).join('')}
+                  </tr>`
+                ).join('')}
+              </tbody>
+            </table>
+          </body>
+        </html>
+      `;
+      
+      printWindow.document.write(printContent);
+      printWindow.document.close();
+      printWindow.print();
+      printWindow.close();
+    }
+  }, [table]);
+
+  // CSV Download functionality
+  const handleDownloadCSV = React.useCallback(() => {
+    // Extract header names
+    const headers = table.getHeaderGroups()[0].headers.map(
+      header => header.column.columnDef.header || header.column.id
+    );
+
+    // Extract row data
+    const rows = table.getRowModel().rows.map(row => 
+      row.getVisibleCells().map(cell => {
+        // Convert cell value to string, handling potential nested objects
+        const value = cell.renderValue();
+        return typeof value === 'object' 
+          ? JSON.stringify(value) 
+          : value;
+      })
+    );
+
+    // Combine headers and rows
+    const csvContent = [
+      headers.join(','),
+      ...rows.map(row => row.join(','))
+    ].join('\n');
+
+    // Create and download CSV file
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    
+    link.setAttribute('href', url);
+    link.setAttribute('download', `export_${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }, [table]);
 
   return (
     <div className="w-full text-base-content">
       <div className="flex items-center py-4">
-        <div className="flex gap-2">
+        <div className="flex gap-2 items-center">
           <Input
             placeholder="Filter by..."
             value={!selectedFilter ? '' : table.getColumn(selectedFilter)?.getFilterValue() ?? ""}
@@ -91,7 +194,7 @@ export function DataTable({ data, columns }) {
                 .getAllColumns()
                 .filter((column) => column.getCanFilter())
                 .map((column) => {
-                  if (column.excludeFromFilter) return;
+                  if (column.excludeFromFilter) return null;
                   return (
                     <DropdownMenuItem
                       key={column.id}
@@ -104,10 +207,45 @@ export function DataTable({ data, columns }) {
                 })}
             </DropdownMenuContent>
           </DropdownMenu>
+          <select
+            value={pagination.pageSize}
+            className="ml-auto text-base-content bg-base-100 select select-bordered select-sm"
+            onChange={e => {
+              const newPageSize = Number(e.target.value);
+              setPagination(prev => ({
+                ...prev,
+                pageSize: newPageSize,
+                pageIndex: 0 // Reset to first page when changing page size
+              }));
+            }}
+          >
+            {[5, 10, 20, 30, 40, 50].map(pageSize => (
+              <option key={pageSize} value={pageSize}>
+                {pageSize}
+              </option>
+            ))}
+          </select>
+
+          {/* Print and Download Buttons */}
+          <div className="flex gap-2">
+            <Button 
+              variant="outline" 
+              size="icon" 
+              onClick={handlePrint}
+              title="Print Table"
+            >
+              <Printer className="h-4 w-4" />
+            </Button>
+            <Button 
+              variant="outline" 
+              size="icon" 
+              onClick={handleDownloadCSV}
+              title="Download CSV"
+            >
+              <Download className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
-
-
-
 
         {/* Select Columns */}
         <DropdownMenu>
@@ -142,9 +280,7 @@ export function DataTable({ data, columns }) {
               })}
           </DropdownMenuContent>
         </DropdownMenu>
-
       </div>
-
 
       {/* MAIN TABLE */}
       <div className="rounded-md border">

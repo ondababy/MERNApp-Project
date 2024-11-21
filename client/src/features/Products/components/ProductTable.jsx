@@ -35,7 +35,7 @@ const makeColumns = (navigate) => {
           </Button>
         );
       },
-      cell: ({ row }) => <p className='break-all px-3'>{row.getValue(key)}</p>
+      cell: ({ row }) => <p className='break-all px-3'>{row.getValue(key)}</p>,
     }
   });
   return [
@@ -69,6 +69,7 @@ const makeColumns = (navigate) => {
       cell: <>image here</>,
       enableColumnFilter: false,
       enableSorting: false,
+      enableHiding: false,
 
     },
     ...interactiveColumns,
@@ -84,20 +85,28 @@ const makeColumns = (navigate) => {
       ),
       enableColumnFilter: false,
       enableSorting: false,
+      enableHiding: false,
     }
   ]
 };
 
 const ProductTable = () => {
+  // ###################################################################################
   const navigate = useNavigate();
   const { useGetProductsMutation, useDeleteProductMutation } = productApi;
   const [products, setProducts] = useState([]);
+  const [getProducts, { isLoading, isError }] = useGetProductsMutation();
+  const [deleteProduct, { isLoading: isDeleting }] = useDeleteProductMutation();
+  // ###################################################################################
+
+  // ###################################################################################
+  // TABLE OPTIONS
   const [table, setTable] = useState({
     data: null,
     columns: null,
+    rowCount: 0,
   })
-  const [getProducts, { isLoading, isError }] = useGetProductsMutation();
-  const [deleteProduct, { isLoading: isDeleting }] = useDeleteProductMutation();
+  // ###################################################################################
 
   const handleDelete = async (id) => {
     try {
@@ -127,10 +136,12 @@ const ProductTable = () => {
   }, [getProducts]);
 
   useEffect(() => {
-    setTable({
+    setTable(prev => ({
+      ...prev,
       data: makeData(products, handleDelete),
       columns: makeColumns(navigate),
-    });
+      rowCount: products.length,
+    }));
   }, [products]);
 
   if (isLoading) return <div>Loading...</div>;
