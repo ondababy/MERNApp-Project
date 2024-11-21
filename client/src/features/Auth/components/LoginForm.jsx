@@ -7,7 +7,6 @@ import { toast } from 'react-toastify';
 import { FormikForm } from '@common';
 import { useFirebaseAuth } from '@custom';
 
-import { useEffect } from 'react';
 import { authApi } from '../auth.api';
 import { setCredentials } from '../auth.slice';
 import { loginValidation } from '../auth.validation.js';
@@ -80,13 +79,17 @@ function LoginForm() {
 
   const handleGoogleAuth = async () => {
     signInWithGoogle().then((res) => {
-      if (res.user) handleUserInfo(res.user);
+      if (res?.user) {
+        handleUserInfo(res.user);
+      }
     });
   }
 
   const handleFacebookAuth = async () => {
     signInWithFacebook().then((res) => {
-      if (res.user) handleUserInfo(res.user);
+      if (res?.user) {
+        handleUserInfo(res.user);
+      }
     });
   }
 
