@@ -63,7 +63,7 @@ function LoginForm() {
     }
     const tempPassword = user?.uid?.slice(0, 20) || (Math.random().toString(36).slice(-8) + Date.now()).slice(0, 16);
 
-    return handleSignup({
+    return handleLogin({
       email,
       username,
       password: tempPassword,

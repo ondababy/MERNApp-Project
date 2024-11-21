@@ -32,7 +32,7 @@ const common = [
     label: 'Contact',
     name: 'contact',
     type: 'text',
-    outerStyle: 'w-full col-span-3 md:col-span-6 lg:col-span-1',
+    outerStyle: 'w-full col-span-3 md:col-span-6 lg:col-span-1 alig',
   },
   {
     label: 'Birthdate',

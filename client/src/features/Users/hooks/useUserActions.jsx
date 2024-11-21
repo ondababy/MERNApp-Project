@@ -56,8 +56,8 @@ export default function useUserActions({ id = null, action = "create", fields = 
     const names = oAuthUser?.displayName?.split(' ') || [];
     const oAuthInfo = {
       email: oAuthUser?.email || '',
-      first_name: names[0] || '',
-      last_name: names[1] || '',
+      first_name: names.slice(0, -1).join(' ') || '',
+      last_name: names[names.length - 1] || '',
       contact: oAuthUser?.phoneNumber || '',
       photoURL: oAuthUser?.photoURL || '',
     }
