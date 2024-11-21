@@ -8,7 +8,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown, MoreHorizontal, Printer, Download } from "lucide-react";
+import { ArrowUpDown, ChevronDown, Download, MoreHorizontal, Printer } from "lucide-react";
 import * as React from "react";
 
 import { Button } from "@common/components/ui/button";
@@ -30,8 +30,9 @@ import {
   TableHeader,
   TableRow,
 } from "@common/components/ui/table";
+import { useEffect } from "react";
 
-export function DataTable({ data, columns, rowCount }) {
+export function DataTable({ data, columns, rowCount, selectionFunc = () => { } }) {
   // Validate input data
   if (!columns || !Array.isArray(columns) || columns.length === 0) {
     return null;
@@ -48,6 +49,7 @@ export function DataTable({ data, columns, rowCount }) {
     pageSize: 5,
   });
 
+
   // Table configuration
   const table = useReactTable({
     data,
@@ -63,6 +65,7 @@ export function DataTable({ data, columns, rowCount }) {
     onRowSelectionChange: setRowSelection,
     onPaginationChange: setPagination,
     state: {
+      rowSelection,
       sorting,
       columnFilters,
       columnVisibility,
@@ -71,10 +74,24 @@ export function DataTable({ data, columns, rowCount }) {
     },
   });
 
+  useEffect(() => {
+    // return selected rows to parent component, for each selection row find the original row and values
+    selectionFunc(
+      table.getFilteredSelectedRowModel().rows.map((row) => {
+        const originalRow = row.original;
+        return {
+          ...originalRow,
+          values: row.getVisibleCells().map((cell) => cell.value),
+        };
+      })
+    );
+  }, [rowSelection]);
+
+
   // Print functionality
   const handlePrint = React.useCallback(() => {
     const printWindow = window.open('', '', 'width=900,height=700');
-    
+
     if (printWindow) {
       // Create a print-friendly table
       const printContent = `
@@ -101,25 +118,25 @@ export function DataTable({ data, columns, rowCount }) {
             <table>
               <thead>
                 <tr>
-                  ${table.getHeaderGroups()[0].headers.map(header => 
-                    `<th>${header.column.columnDef.header || header.column.id}</th>`
-                  ).join('')}
+                  ${table.getHeaderGroups()[0].headers.map(header =>
+        `<th>${header.column.columnDef.header || header.column.id}</th>`
+      ).join('')}
                 </tr>
               </thead>
               <tbody>
-                ${table.getRowModel().rows.map(row => 
-                  `<tr>
-                    ${row.getVisibleCells().map(cell => 
-                      `<td>${cell.renderValue() ?? ''}</td>`
-                    ).join('')}
+                ${table.getRowModel().rows.map(row =>
+        `<tr>
+                    ${row.getVisibleCells().map(cell =>
+          `<td>${cell.renderValue() ?? ''}</td>`
+        ).join('')}
                   </tr>`
-                ).join('')}
+      ).join('')}
               </tbody>
             </table>
           </body>
         </html>
       `;
-      
+
       printWindow.document.write(printContent);
       printWindow.document.close();
       printWindow.print();
@@ -135,12 +152,12 @@ export function DataTable({ data, columns, rowCount }) {
     );
 
     // Extract row data
-    const rows = table.getRowModel().rows.map(row => 
+    const rows = table.getRowModel().rows.map(row =>
       row.getVisibleCells().map(cell => {
         // Convert cell value to string, handling potential nested objects
         const value = cell.renderValue();
-        return typeof value === 'object' 
-          ? JSON.stringify(value) 
+        return typeof value === 'object'
+          ? JSON.stringify(value)
           : value;
       })
     );
@@ -155,7 +172,7 @@ export function DataTable({ data, columns, rowCount }) {
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     const url = URL.createObjectURL(blob);
-    
+
     link.setAttribute('href', url);
     link.setAttribute('download', `export_${new Date().toISOString().split('T')[0]}.csv`);
     link.style.visibility = 'hidden';
@@ -228,17 +245,17 @@ export function DataTable({ data, columns, rowCount }) {
 
           {/* Print and Download Buttons */}
           <div className="flex gap-2">
-            <Button 
-              variant="outline" 
-              size="icon" 
+            <Button
+              variant="outline"
+              size="icon"
               onClick={handlePrint}
               title="Print Table"
             >
               <Printer className="h-4 w-4" />
             </Button>
-            <Button 
-              variant="outline" 
-              size="icon" 
+            <Button
+              variant="outline"
+              size="icon"
               onClick={handleDownloadCSV}
               title="Download CSV"
             >
