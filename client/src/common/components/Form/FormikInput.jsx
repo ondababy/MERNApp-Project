@@ -47,13 +47,21 @@ function FormikInput({ label, variant, ...props }) {
 
     default:
       return (
-        <FormInput
+        <FloatingInput
           label={label}
           meta={meta}
           {...field}
           {...props}
         />
       );
+    // return (
+    //   <FormInput
+    //     label={label}
+    //     meta={meta}
+    //     {...field}
+    //     {...props}
+    //   />
+    // );
   }
 }
 

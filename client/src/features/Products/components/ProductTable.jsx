@@ -1,5 +1,5 @@
 import { ActionButtons, Table } from '@common';
-import { confirmDelete } from '@custom';
+import { confirmDelete, DataTable } from '@custom';
 import { useEffect, useState } from 'react';
 import { Button } from 'react-daisyui';
 import { FaPlus } from 'react-icons/fa';
@@ -66,7 +66,7 @@ const ProductTable = () => {
   return (
     <>
       <ProductWrapper title="Products Table">
-        <Table
+        {/* <Table
           data={products.map((product) => ({
             ...product,
             actions: (
@@ -81,7 +81,8 @@ const ProductTable = () => {
             ),
           }))}
           columns={allowedColumns()}
-        />
+        /> */}
+        <DataTable />
       </ProductWrapper>
     </>
   );
