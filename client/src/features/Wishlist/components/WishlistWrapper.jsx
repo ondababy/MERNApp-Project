@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Button } from 'react-daisyui';
 import { useNavigate } from 'react-router-dom';
 
-function CategoryWrapper({ children, title, prevUrl }) {
+function WishlistWrapper({ children, title, prevUrl }) {
   const navigate = useNavigate();
   return (
     <>
@@ -12,7 +12,7 @@ function CategoryWrapper({ children, title, prevUrl }) {
           <Button
             color="primary"
             className="my-4"
-            onClick={() => navigate(prevUrl || '/dashboard/categories')}
+            onClick={() => navigate(prevUrl || '/dashboard/wishlists')}
           >
             Back
           </Button>
@@ -23,11 +23,11 @@ function CategoryWrapper({ children, title, prevUrl }) {
   );
 }
 
-CategoryWrapper.propTypes = {
+WishlistWrapper.propTypes = {
   children: PropTypes.node,
   title: PropTypes.string,
   prevUrl: PropTypes.string,
 };
 
-export default CategoryWrapper;
+export default WishlistWrapper;
 
