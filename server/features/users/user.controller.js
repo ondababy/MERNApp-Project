@@ -103,15 +103,18 @@ class UserController extends Controller {
     const user = await this.service.updateUser(id, validData);
     if (!user) throw new Errors.BadRequest('Invalid user data!');
 
+    let info = JSON.parse(req?.body?.info) || null;
     let userInfo;
     if (req.body?.info && !user?.info?._id) {
       validData = await this.validator(req, res, this.rules.createInfo);
-      userInfo = await this.service.createUserInfo(user, validData.info);
+      userInfo = await this.service.createUserInfo(user, info);
     } else if (req.body?.info && user?.info?._id) {
       validData = await this.validator(req, res, this.rules.updateInfo);
-      userInfo = await this.service.updateUserInfo(user, validData.info);
+      userInfo = await this.service.updateUserInfo(user, info);
     }
+
     console.log(req.file || req.files)
+
     if (req.file || req.files && (userInfo && UserInfoModel.schema.paths['avatar'])) {
       const avatar = this.addImage(req);
       userInfo.avatar = avatar[0];

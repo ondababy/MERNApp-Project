@@ -1,7 +1,7 @@
 
 import isEqual from 'lodash/isEqual';
 
-import { confirmSave, useFirebaseAuth } from '@custom';
+import { confirmSave, toFormData, useFirebaseAuth } from '@custom';
 import { setCredentials, setIsChanging } from '@features';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -57,15 +57,27 @@ export default function useUserActions({ id = null, action = "create", fields = 
   };
 
   const handleSubmit = async (values, actions) => {
-    const { username, email, password, confirm_password, ...info } = values
-    const payload = { username, email, password, confirm_password, ...userInfo, info }
+    const { username, email, password, confirm_password, avatar, ...info } = values
+
+    let payload = {
+      username,
+      email,
+      password,
+      confirm_password,
+      avatar,
+      info
+    }
+
+
     try {
       let res;
       if (action === 'create') {
+        payload = toFormData(payload);
         res = await createUser(payload).unwrap();
         toast.success('User created successfully');
       } else {
-        res = await updateUser({ id, user: payload }).unwrap();
+        payload = toFormData(payload);
+        res = await updateUser({ id: userInfo.id, user: payload }).unwrap();
         toast.success('User updated successfully');
       }
       const userData = res?.user;

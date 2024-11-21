@@ -32,6 +32,7 @@ const userApi = apiSlice.injectEndpoints({
         url: `/users/${id}`,
         method: 'PATCH',
         body: user,
+        formData: true,
       }),
     }),
     sendVerifyEmail: build.mutation({
@@ -52,3 +53,4 @@ const userApi = apiSlice.injectEndpoints({
 });
 
 export { userApi };
+
