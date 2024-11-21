@@ -11,6 +11,7 @@ import { toast } from 'react-toastify';
 import { useOrderActions } from '../hooks/useOrderActions';
 import { setCompleted } from '../order.slice.js';
 
+// import CheckoutPayment from './CheckoutPayment.jsx';
 import CheckoutShipping from './CheckoutShipping';
 import OrderSummary from './OrderSummary.jsx';
 
@@ -52,7 +53,11 @@ export default function CheckoutSteps() {
 
   /* END DECLARATIONS ################################################ */
   const handleStepClick = (index) => {
-    if (!rules[currentStep]) return setCurrentStep(0);
+    if (!rules[currentStep]) {
+      setCurrentStep(0)
+      api && api.scrollTo(0);
+      return;
+    };
     if (!rules[currentStep]?.condition) {
       toast.error(rules[currentStep].message);
       return;
@@ -96,7 +101,7 @@ export default function CheckoutSteps() {
     <CartList />,
     <UserForm noAvatar={true} id={userInfo.id} action="edit" fields={getInfoFields()} altFields={getInfoFields()} />,
     <CheckoutShipping onSelect={handleShipping} />,
-    <>Choose payment method</>,
+    <span>payment</span>,
     <OrderSummary onConfirm={handleCheckout} />,
   ]
 

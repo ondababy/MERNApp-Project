@@ -1,10 +1,10 @@
 import { METHODS, PATHS, READ_WRITE } from '#constants';
 import { protectAndPermit } from '#middlewares/auth.middleware';
 import { upload } from '#middlewares/upload.middleware';
-import controller from './category.controller.js';
+import controller from './wishlist.controller.js';
 export default [
   {
-    url: '/categories',
+    url: '/wishlists',
     router: [
       {
         path: PATHS.ALL,

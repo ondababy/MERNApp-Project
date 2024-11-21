@@ -9,12 +9,12 @@ import { useEffect, useMemo, useState } from 'react';
 import { Button } from 'react-daisyui';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { categoryApi } from '../category.api';
-import { getAltFields, getFields } from '../category.fields';
-import { categoryValidation } from '../category.validation';
-import CategoryWrapper from './CategoryWrapper';
+import { wishlistApi } from '../wishlist.api';
+import { getAltFields, getFields } from '../wishlist.fields';
+import { wishlistValidation } from '../wishlist.validation';
+import WishlistWrapper from './WishlistWrapper';
 
-const CategoryForm = ({ title = 'Category Form', action = 'create' }) => {
+const WishlistForm = ({ title = 'Wishlist Form', action = 'create' }) => {
 
   /* DECLARATIONS #################################################### */
   const fields = typeof getFields === 'function' ? getFields() : getFields || [];
@@ -28,33 +28,33 @@ const CategoryForm = ({ title = 'Category Form', action = 'create' }) => {
 
   /* DECLARATIONS #################################################### */
   const navigate = useNavigate();
-  const [category, setCategory] = useState(null);
-  const [categorySchema, setCategorySchema] = useState(fields);
-  const [createCategory, { isLoading: isCreating }] = categoryApi.useCreateCategoryMutation();
-  const [updateCategory, { isLoading: isUpdating }] = categoryApi.useUpdateCategoryMutation();
-  const [getCategory, { isLoading: isFetching }] = categoryApi.useGetCategoryMutation();
+  const [wishlist, setWishlist] = useState(null);
+  const [wishlistSchema, setWishlistSchema] = useState(fields);
+  const [createWishlist, { isLoading: isCreating }] = wishlistApi.useCreateWishlistMutation();
+  const [updateWishlist, { isLoading: isUpdating }] = wishlistApi.useUpdateWishlistMutation();
+  const [getWishlist, { isLoading: isFetching }] = wishlistApi.useGetWishlistMutation();
   const { slug, setSlug } = useSlug();
   /* END DECLARATIONS ################################################ */
 
   const initialValues = useMemo(
     () =>
-      categorySchema.reduce((acc, field) => {
-        acc[field.name] = action === 'create' ? '' : category?.[field.name] ?? '';
+      wishlistSchema.reduce((acc, field) => {
+        acc[field.name] = action === 'create' ? '' : wishlist?.[field.name] ?? '';
         return acc;
       }, {}),
-    [category, categorySchema, action]
+    [wishlist, wishlistSchema, action]
   );
 
   const handleCreate = async (values) => {
-    await createCategory(values).unwrap();
-    navigate('/dashboard/categories/table');
+    await createWishlist(values).unwrap();
+    navigate('/dashboard/wishlists/table');
     toast.success('Create successful!');
   };
 
   const handleUpdate = async (values) => {
-    const res = await updateCategory({ id: category.id, category: values }).unwrap();
-    const updatedCategory = res?.resource || { ...category, ...values };
-    setSlug(updatedCategory.slug);
+    const res = await updateWishlist({ id: wishlist.id, wishlist: values }).unwrap();
+    const updatedWishlist = res?.resource || { ...wishlist, ...values };
+    setSlug(updatedWishlist.slug);
     toast.success('Update successful!');
   };
 
@@ -73,23 +73,23 @@ const CategoryForm = ({ title = 'Category Form', action = 'create' }) => {
   };
 
   useEffect(() => {
-    const fetchCategory = async () => {
-      getCategory(slug).then((res) => {
+    const fetchWishlist = async () => {
+      getWishlist(slug).then((res) => {
         if (res.error) {
           toast.error(res.error.data.message);
-          navigate('/dashboard/categories/table');
-        } else if (res.data) setCategory(res.data.resource);
+          navigate('/dashboard/wishlists/table');
+        } else if (res.data) setWishlist(res.data.resource);
       });
     };
 
-    if (slug) fetchCategory();
-    else setCategorySchema(action === 'create' ? fields : altFields);
-  }, [action, slug, getCategory, navigate]);
+    if (slug) fetchWishlist();
+    else setWishlistSchema(action === 'create' ? fields : altFields);
+  }, [action, slug, getWishlist, navigate]);
 
   return (
-    <CategoryWrapper
+    <WishlistWrapper
       title={title}
-      prevUrl="/dashboard/categories/table"
+      prevUrl="/dashboard/wishlists/table"
     >
 
       <div className="flex flex-col gap-4 lg:flex-row items-center lg:items-start">
@@ -97,17 +97,17 @@ const CategoryForm = ({ title = 'Category Form', action = 'create' }) => {
         {/* CAROUSEL */}
         <div className="container lg:w-1/3 w-96">
           <CarouselComponent images={
-            category?.images?.length ?
-              category?.images.map((image) => ({ src: image.url, alt: image.alt }))
+            wishlist?.images?.length ?
+              wishlist?.images.map((image) => ({ src: image.url, alt: image.alt }))
               : images} />
         </div>
 
         <div className="container w-2/3">
           <FormikForm
-            formSchema={categorySchema}
+            formSchema={wishlistSchema}
             formikProps={{
               initialValues,
-              validationSchema: categoryValidation,
+              validationSchema: wishlistValidation,
               onSubmit: onSubmit,
               enableReinitialize: true,
             }}
@@ -127,7 +127,7 @@ const CategoryForm = ({ title = 'Category Form', action = 'create' }) => {
                     disabled={isButtonDisabled}
                   >
                     {isProcessing && <span className="loading loading-spinner"></span>}
-                    {action === 'create' ? 'Create Category' : 'Update Category'}
+                    {action === 'create' ? 'Create Wishlist' : 'Update Wishlist'}
                   </Button>
                 </div>
               );
@@ -135,13 +135,13 @@ const CategoryForm = ({ title = 'Category Form', action = 'create' }) => {
           />
         </div>
       </div>
-    </CategoryWrapper>
+    </WishlistWrapper>
   );
 };
 
-CategoryForm.propTypes = {
+WishlistForm.propTypes = {
   action: PropTypes.oneOf(['create', 'edit', 'view']),
   title: PropTypes.string,
 };
 
-export default CategoryForm;
+export default WishlistForm;

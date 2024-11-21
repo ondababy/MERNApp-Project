@@ -1,6 +1,6 @@
 import { unique } from '#utils';
 import { check } from 'express-validator';
-import CategoryModel from './category.model.js';
+import WishlistModel from './wishlist.model.js';
 
 const commonRules = {
   name: () =>
@@ -11,13 +11,13 @@ const commonRules = {
       .withMessage('Name must be alphanumeric!'),
 };
 
-const categoryCreateRules = () => {
+const wishlistCreateRules = () => {
   return [
     ...Object.entries(commonRules).map(([field, rule]) => {
       switch (field) {
         case 'name':
           return rule()
-            .custom((value) => unique(CategoryModel, 'name', value))
+            .custom((value) => unique(WishlistModel, 'name', value))
             .withMessage('Name must be unique!');
 
         default:
@@ -27,14 +27,14 @@ const categoryCreateRules = () => {
   ];
 };
 
-const categoryUpdateRules = () => {
+const wishlistUpdateRules = () => {
   return [
     ...Object.entries(commonRules).map(([field, rule]) => {
       switch (field) {
         case 'name':
           return rule()
             .custom((value, { req }) =>
-              unique(CategoryModel, 'name', value, req?.params?.id, { slug: { $ne: req?.params?.slug } })
+              unique(WishlistModel, 'name', value, req?.params?.id, { slug: { $ne: req?.params?.slug } })
             )
             .withMessage('Name must be unique!');
 
@@ -44,4 +44,4 @@ const categoryUpdateRules = () => {
     }),
   ];
 };
-export { categoryCreateRules, categoryUpdateRules };
+export { wishlistCreateRules, wishlistUpdateRules };

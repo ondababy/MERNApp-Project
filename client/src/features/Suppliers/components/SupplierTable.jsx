@@ -19,9 +19,10 @@ const allowedColumns = () => [
 
 const SupplierTable = () => {
   const navigate = useNavigate();
+  const { useGetSuppliersMutation, useDeleteSupplierMutation } = supplierApi;
   const [suppliers, setSuppliers] = useState([]);
-  const [getSuppliers, { isLoading, isError }] = supplierApi.useGetSuppliersMutation();
-  const [deleteSupplier, { isLoading: isDeleting }] = supplierApi.useDeleteSupplierMutation();
+  const [getSuppliers, { isLoading, isError }] = useGetSuppliersMutation();
+  const [deleteSupplier, { isLoading: isDeleting }] = useDeleteSupplierMutation();
 
   const handleDelete = async (id) => {
     try {
@@ -187,4 +188,3 @@ export default SupplierTable;
 // };
 
 // export default SupplierTable;
-

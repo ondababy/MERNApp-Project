@@ -9,13 +9,13 @@ const makeMenu = () => [
     icon: <FaHome />,
   },
   // NEW ROUTE HERE ->
+    ...features.categoryMenus,
     ...features.orderMenus,
   // ...features._exampleMenus,
   ...features.brandMenus,
   ...features.productMenus,
   ...features.courierMenus,
   ...features.supplierMenus,
-  ...features.categoryMenus,
   ...features.userMenus,
 ].sort((a, b) => a.label.localeCompare(b.label));
 
