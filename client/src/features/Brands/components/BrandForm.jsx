@@ -29,12 +29,24 @@ const BrandForm = ({ title = 'Brand Form', action = 'create' }) => {
   const navigate = useNavigate();
   const [brand, setBrand] = useState(null);
   const [brandSchema, setBrandSchema] = useState(fields);
+  const [previewImages, setPreviewImages] = useState(images);
   const [createBrand, { isLoading: isCreating }] = brandApi.useCreateBrandMutation();
   const [updateBrand, { isLoading: isUpdating }] = brandApi.useUpdateBrandMutation();
   const [getBrand, { isLoading: isFetching }] = brandApi.useGetBrandMutation();
   const { slug, setSlug } = useSlug();
   /* END DECLARATIONS ################################################ */
+  const handleImageInput = (e) => {
+    const files = e.target.files;
+    const images = Array.from(files).map((file) => {
+      return {
+        src: URL.createObjectURL(file),
+        alt: file.name,
+        file,
+      };
+    });
 
+    setPreviewImages(images);
+  }
   const initialValues = useMemo(
     () =>
       brandSchema.reduce((acc, field) => {
@@ -98,12 +110,12 @@ const BrandForm = ({ title = 'Brand Form', action = 'create' }) => {
           <CarouselComponent imageList={
             brand?.images?.length ?
               brand?.images.map((image) => ({ src: image.url, alt: image.alt }))
-              : images} />
+              : previewImages} />
         </div>
 
         <div className="container w-2/3">
           <FormikForm
-            formSchema={brandSchema}
+            formSchema={brandSchema.map(f => f.name === 'image' ? { ...f, onChange: handleImageInput } : f)}
             formikProps={{
               initialValues,
               validationSchema: brandValidation,
