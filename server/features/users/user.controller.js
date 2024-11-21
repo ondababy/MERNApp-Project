@@ -36,6 +36,10 @@ class UserController extends Controller {
       user.fcmToken = req.body.fcmToken;
       await user.save();
     }
+    // if (req.body?.info) {
+    //   const validInfo = await this.validator(req, res, this.rules.createInfo);
+    //   await this.service.createUserInfo(user, validInfo.info);
+    // }
 
     res.cookie(...token);
     this.success({
@@ -56,6 +60,11 @@ class UserController extends Controller {
       user.fcmToken = req.body.fcmToken;
       await user.save();
     }
+
+    // if (req.body?.info) {
+    //   const validInfo = await this.validator(req, res, this.rules.createInfo);
+    //   await this.service.updateUserInfo(user, validInfo.info);
+    // }
 
     res.cookie(...token);
     this.success({

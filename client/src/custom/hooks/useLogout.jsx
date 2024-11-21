@@ -1,3 +1,4 @@
+import { useFirebaseAuth } from '@custom';
 import { confirmLogout } from '@custom/utils';
 import { authApi, logout as logoutAction } from '@features';
 import { useCallback } from 'react';
@@ -6,8 +7,10 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 export const useLogoutAction = () => {
+
   const dispatch = useDispatch();
   const [logout] = authApi.useLogoutMutation();
+  const { signOut } = useFirebaseAuth();
 
   const action = useCallback(async () => {
     await logout();
@@ -28,6 +31,7 @@ const useLogout = () => {
           await logout();
           navigate('/login');
           toast.success('Logged out successfully');
+          await signOut();
         } catch (error) {
           if ([401, 403].includes(error?.status)) return toast.error('Logged out due to unauthorized access');
           toast.error(error?.data?.message || 'Logout failed');

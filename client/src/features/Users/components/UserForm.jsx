@@ -3,10 +3,7 @@
 import { FormikForm } from '@common/components';
 import { Button } from 'react-daisyui';
 import useUserActions from '../hooks/useUserActions';
-const avatarPlaceholder = {
-  src: "https://placehold.co/600",
-  alt: "n/a",
-};
+
 
 export default function UserForm({ id = null, action = 'create', noAvatar = false, ...props }) {
 
@@ -18,6 +15,7 @@ export default function UserForm({ id = null, action = 'create', noAvatar = fals
     isFetching,
     handleSubmit,
     compareValues,
+    avatarPlaceholder,
   } = useUserActions({ id, action, ...props });
 
 

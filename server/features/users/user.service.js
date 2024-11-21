@@ -152,16 +152,19 @@ class UserService extends Service {
   async sendVerifyEmail(email, redirectUrl) {
     const user = await this.model.findOne({ email });
     if (!user) throw new Errors.NotFound('User not found!');
+
     const { token } = user.getVerifyEmailToken();
     const { code } = user.getOTP();
     user.emailVerifiedAt = null;
     await user.save({ validateBeforeSave: false, new: true });
+    
     let redirect = redirectUrl ? `${redirectUrl}?verifyToken=${token}&otp=${code}` : '';
     const message = `Your OTP is <strong> ${code} </strong> `;
     const altMessage = redirectUrl
       ? `Or click on the following link to verify your email:
     \n\n <a href="${redirect}">${redirect}</a>`
       : '';
+
     try {
       await sendEmail({
         email: user.email,
@@ -173,7 +176,7 @@ class UserService extends Service {
       throw new Errors.InternalServerError('Email could not be sent!');
     }
 
-    return { user, token, OTP };
+    return { user, token, OTP: code };
   }
 
   async verifyUser(user) {
