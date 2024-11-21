@@ -1,29 +1,8 @@
+import { startLoading, stopLoading } from '@app/slices';
 import { logout, setCredentials } from '@features';
-import { createSlice } from '@reduxjs/toolkit';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-// Global loading slice
-const loadingSlice = createSlice({
-  name: 'loading',
-  initialState: {
-    isLoading: false,
-    activeRequests: 0,
-  },
-  reducers: {
-    startLoading: (state) => {
-      state.activeRequests++;
-      state.isLoading = true;
-    },
-    stopLoading: (state) => {
-      state.activeRequests--;
-      if (state.activeRequests === 0) {
-        state.isLoading = false;
-      }
-    },
-  },
-});
 
-export const { startLoading, stopLoading } = loadingSlice.actions;
 const API = '/api/v1';
 const baseQuery = fetchBaseQuery({
   baseUrl: API,
@@ -77,4 +56,3 @@ export const apiSlice = createApi({
   endpoints: (builder) => ({}),
 });
 
-export const loadingReducer = loadingSlice.reducer;

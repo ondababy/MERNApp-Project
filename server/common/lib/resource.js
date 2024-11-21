@@ -25,6 +25,7 @@ export class Resource {
   }
 
   formatDate(date, format = 'D, M d, Y - H:m:s a') {
+    if (!date) return '';
     const formatMapping = {
       M: { month: 'short' }, // Jan
       d: { day: '2-digit' }, // 01

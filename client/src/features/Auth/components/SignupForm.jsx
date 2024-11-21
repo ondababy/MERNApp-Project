@@ -1,4 +1,5 @@
 import { FormikForm } from '@common/components';
+import { useGoogleAuth } from '@custom';
 import { Button } from 'react-daisyui';
 import { FaFacebook, FaGoogle } from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
@@ -25,6 +26,8 @@ function SignupFrom() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [register, { isLoading }] = authApi.useRegisterMutation();
+
+  const { googleLogin } = useGoogleAuth();
 
   const handleSignup = async (values) => {
     try {
@@ -60,10 +63,10 @@ function SignupFrom() {
 
             <div className="divider my-0">or</div>
             <div className="social-media login flex gap-2 justify-center">
-              <Button onClick={() => { }}>
+              <Button onClick={() => googleLogin()} type='button'>
                 <FaGoogle />
               </Button>
-              <Button onClick={() => { }}>
+              <Button onClick={() => googleLogin()}>
                 <FaFacebook />
               </Button>
             </div>

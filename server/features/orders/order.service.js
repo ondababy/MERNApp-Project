@@ -1,12 +1,18 @@
 import { ProductModel, ProductService, UserService } from '#features';
 
 import { Service } from '#lib';
+import exp from 'constants';
 import OrderModel from './order.model.js';
 
 class OrderService extends Service {
   model = OrderModel;
   setUserId(userId) {
     this.forceFilter = { user: userId };
+  }
+  shippingMethods = {
+    std: { key: 'std', fee: 100, method: 'Standard', day: 7},
+    exp: { key: 'exp', fee: 200, method: 'Express', day: 3},
+    smd: { key: 'smd', fee: 300, method: 'Same Day', day: 1},
   }
 
   async manageStock(products) {
@@ -23,17 +29,35 @@ class OrderService extends Service {
   }
 
   async create(data) {
-    let { userId, products, ...orderData } = data;
+    let { userId, products, shipping, ...orderData } = data;
     const user = await UserService.getById(userId);
 
     return this.model.create({
       ...orderData,
       user,
       products,
+      shipping: {
+        ...shipping,
+        expected_ship_date: new Date(Date.now() + this.shippingMethods[shipping.method].day * 24 * 60 * 60 * 1000),
+      },
     });
   }
 
-  async update(data) {}
+  async update(data) {
+    let { id, products, shipping, ...orderData } = data;
+    const order = await this.getById(id);
+    const user = await UserService.getById(order.user);
+
+    return order.update({
+      ...orderData,
+      user,
+      products,
+      shipping: {
+        ...shipping,
+        expected_ship_date: new Date(Date.now() + this.shippingMethods[shipping.method].day * 24 * 60 * 60 * 1000),
+      },
+    }); 
+  }
 }
 
 export default new OrderService();

@@ -1,13 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 // hard coded shipping methods
-const shippingMethods = {
+export const shippingMethods = {
   std: { key: 'std', fee: 100, method: 'Standard' },
   exp: { key: 'exp', fee: 200, method: 'Express' },
   smd: { key: 'smd', fee: 300, method: 'Same Day' },
 };
 
-const paymentMethods = {
+export const paymentMethods = {
   cod: { key: 'cod', method: 'Cash on Delivery' },
   card: {
     key: 'card',

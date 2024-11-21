@@ -25,7 +25,8 @@
     "#utils/*": "./common/utils/*.js",
     "#config": "./common/config/index.js",
     "#config/*": "./common/config/*.js",
-    "#features": "./features/index.js"
+    "#features": "./features/index.js",
+    "#firebase/*": "./firebase/*.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -36,6 +37,7 @@
     "express": "^4.19.2",
     "express-async-handler": "^1.2.0",
     "express-validator": "^7.1.0",
+    "firebase-admin": "^12.7.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.5.2",
     "morgan": "^1.10.0",

@@ -21,8 +21,9 @@ export function useOrderActions({ cartData = {}, action = 'create', render = fal
   const order = useSelector((state) => state.order);
   const selectedItems = cart?.items ? cart?.items.filter(item => item?.selected) : [];
 
-  const [createOrder, { isLoading: isCreating }] = orderApi.useCreateOrderMutation();
-  const [updateOrder, { isLoading: isUpdating }] = orderApi.useUpdateOrderMutation();
+  const [orders, setOrders] = useState([]);
+  const [createOrder] = orderApi.useCreateOrderMutation();
+  const [updateOrder] = orderApi.useUpdateOrderMutation();
   const [deleteOrder] = orderApi.useDeleteOrderMutation();
   const [getOrder] = orderApi.useGetOrderMutation();
   const [getOrders] = orderApi.useGetOrdersMutation();
@@ -31,15 +32,19 @@ export function useOrderActions({ cartData = {}, action = 'create', render = fal
 
   const fetchOrders = useCallback(async () => {
     const res = await getOrders().unwrap();
+    setOrders(res?.resource || []);
     return res.resource || [];
   })
 
   const fetchOrder = useCallback(async () => {
-    getOrder(id).then((res) => {
-      if (res.error) {
-        toast.error(res.error.data.message);
+    return getOrder(id).then((res) => {
+      if (res?.error) {
+        toast.error(res?.error?.data?.message);
         navigate(role === 'admin' ? '/dashboard/orders/table' : '/');
-      } else if (res.data) setOrder(res.data.resource);
+      } else if (res.data) {
+        setOrder(res.data.resource)
+        return res.data.resource
+      };
     });
   })
   const handleCreate = useCallback(async (values) => {
@@ -58,10 +63,9 @@ export function useOrderActions({ cartData = {}, action = 'create', render = fal
   const handleDelete = useCallback(async (id) => {
     confirmDelete(async () => {
       try {
-        confirmDelete(async () => {
-          await deleteOrder(id).unwrap();
-          toast.success('Order deleted successfully');
-        });
+        await deleteOrder(id).unwrap();
+        toast.success('Order deleted successfully');
+        setOrders(orders.filter((order) => order.id !== id));
       } catch (error) {
         toast.error(error.message);
       }
@@ -115,6 +119,7 @@ export function useOrderActions({ cartData = {}, action = 'create', render = fal
 
   return {
     order,
+    orders,
     fetchOrders,
     fetchOrder,
     handleCreate,

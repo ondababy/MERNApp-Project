@@ -7,5 +7,9 @@ export * from './users/index.js';
 
 export * from './cart/index.js';
 export * from './orders/index.js';
+
 export * from './wishlist/index.js';
 export * from './categories/index.js';
+
+export * from './notifications/index.js';
+

@@ -13,7 +13,7 @@ function Header({ clickLogo }) {
 
   return (
     <>
-      <Navbar className='fixed bg-base-100/10 backdrop-blur-xl'>
+      <Navbar className='bg-base-100/10 backdrop-blur-xl z-[1000]'>
         <Navbar.Start>
           <Link>
             <Button
@@ -78,12 +78,16 @@ function Header({ clickLogo }) {
             </Dropdown>
           }
 
-          {!(userInfo?.id && accessToken) && <Button
-            color='primary'
-            variant='outline'
-          >
-            Log in
-          </Button>}
+          {!(userInfo?.id && accessToken) &&
+            <Link to="/login">
+              <Button
+                color='primary'
+                variant='outline'
+              >
+                Log in
+              </Button>
+            </Link>
+          }
 
 
         </Navbar.End>

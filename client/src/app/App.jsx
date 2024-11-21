@@ -1,14 +1,17 @@
-import router from '@app/routes';
-import { Spinner } from '@common';
 import 'animate.css';
-import React from 'react';
-import { useSelector } from 'react-redux';
-import { RouterProvider } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
 
+import { Spinner } from '@common';
+import { useNotification } from '@custom';
+import { useSelector } from 'react-redux';
+import { RouterProvider } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+
+import router from '@app/routes';
+import React from 'react';
 function App() {
+  useNotification();
   const isLoading = useSelector(state => state.loading.isLoading);
   return (
     <React.StrictMode>

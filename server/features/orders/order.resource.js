@@ -13,6 +13,9 @@ export default class OrderResource extends Resource {
       ...rest,
       user: await UserResource.make(userData),
       products: productData,
+      quantities: products.map((product) => ({[product.product]: product.quantity})),
+      subTotal: productData.reduce((acc, product, index) => acc + product.price * products[index].quantity, 0),
+      
     };
   }
 }

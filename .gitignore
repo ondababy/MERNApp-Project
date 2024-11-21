@@ -32,3 +32,4 @@ dist-ssr
 *.local
 
 .vercel
+firebase-service.json

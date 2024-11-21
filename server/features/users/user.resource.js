@@ -5,11 +5,12 @@ export default class UserResource extends Resource {
   async transform(user) {
     const userData = UserModel.filterHidden(user);
     const userInfo = userData ? await UserInfo.findById(userData?.info) : null;
+    console.log(userInfo, userData);
     return {
       ...userData,
-      id: user._id,
+      id: user?._id,
       info: userInfo,
-      createdAt: this.formatDate(user.createdAt),
+      createdAt: this.formatDate(user?.createdAt),
     };
   }
 }

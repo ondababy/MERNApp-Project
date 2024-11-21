@@ -22,9 +22,9 @@ const Order = new Schema({
       shipping: {
         method: { type: String, default: 'std', enum: ['std', 'exp', 'smd'] },
         address: { type: String, required: true },
-        start_ship_date: { type: Date, default: Date.now },
-        expected_ship_date: { type: Date, default: Date.now },
-        shipped_date: { type: Date, default: Date.now },
+        start_ship_date: { type: Date, default: null },
+        expected_ship_date: { type: Date, default: null },
+        shipped_date: { type: Date, default: null },
       },
     },
     { timestamps: true },
