@@ -23,7 +23,6 @@ class CartController extends Controller {
     if (validData.error) return this.error({ res, message: validData.error });
 
     let data = await this.service.updateOrCreate(validData, req.user);
-    console.log(data);
     if (!data?._id) return this.error({ res, message: 'Invalid data!' });
 
     const resource = await this.resource?.make(data);
@@ -31,7 +30,6 @@ class CartController extends Controller {
   };
 
   delete = async (req, res) => {
-    console.log('req.params.id', req.params.id);
     const data = await this.service?.delete(req.params.id);
     if (!data?._id) return this.error({ res, message: `Data with ID: ${req.params.id} not found.` });
 

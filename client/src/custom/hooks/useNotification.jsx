@@ -26,6 +26,7 @@ const useNotification = () => {
   }, [fcmToken]);
 
   useEffect(() => {
+    if (!messaging) return;
     const unsubscribe = onMessage(messaging, (payload) => {
       try {
         console.log('Message received. ', payload);
@@ -41,7 +42,6 @@ const useNotification = () => {
         console.error('Error displaying notification:', error)
       }
     });
-
     return () => unsubscribe();
   }, [dispatch]);
 

@@ -47,27 +47,43 @@ class UserService extends Service {
     const userExists = await this.checkIfExists({
       email: body.email,
       _id: { $ne: id },
+
     });
     if (userExists) throw new Errors.BadRequest('User with that email already exists!');
 
     const data = this.model?.filterFillables(body);
     if (data.password) data.password = await this.model?.hashPassword(data.password);
+
     const user = await this.model?.findByIdAndUpdate(id, data, { new: true });
     return user;
   }
 
+  async contactExists(contact) {
+    const user = await this.info?.findOne({ contact });
+    if (user) throw new Errors.BadRequest('Contact already exists!');
+  }
+
   async createUserInfo(user, info) {
-    console.log(info);
-    const data = this.info?.filterFillables(info);
-    const userInfo = await this.info?.create(data);
-    user.info = userInfo._id;
-    await user.save();
+    await this.contactExists(info.contact);
+    try {
+      const data = this.info?.filterFillables(info);
+      const userInfo = await this.info?.create(data);
+      user.info = userInfo._id;
+      await user.save();
     return userInfo;
+    } catch (err) {
+      throw new Errors.BadRequest('Error creating user info!');
+    }
   }
   async updateUserInfo(user, info) {
-    const data = this.info?.filterFillables(info);
-    const userInfo = await this.info?.findByIdAndUpdate(user.info, data, { new: true });
-    return userInfo;
+    await this.contactExists(info.contact);
+    try {
+      const data = this.info?.filterFillables(info);
+      const userInfo = await this.info?.findByIdAndUpdate(user.info, data, { new: true });
+      return userInfo;
+    } catch (err) {
+      throw new Errors.BadRequest('Error updating user info!');
+    }
   }
 
   async forgotPassword({ email, redirectUrl }) {

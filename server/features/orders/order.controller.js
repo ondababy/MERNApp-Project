@@ -6,6 +6,19 @@ class OrderController extends Controller {
   service = OrderService;
   resource = OrderResource;
 
+  getAll = async (req, res) => {
+    const { user } = req;
+    this.service.setUserId(user._id);
+
+    const meta = await this.service._getMeta(req.query);
+    const data = await this.service.paginate(meta).exec();
+    const message = data.length ? 'Data collection fetched!' : 'No data found!';
+
+    const resource = (await this.resource?.collection(data)) || data;
+    this.success({ res, message, resource, meta: { ...meta, count: data.length } });
+  };
+
+  
   store = async (req, res) => {
     const order = await this.service.create(req.body);
     if (!order?.id) return this.error({ res, message: 'Order not created' });

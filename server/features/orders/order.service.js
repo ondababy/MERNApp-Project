@@ -7,17 +7,17 @@ import OrderModel from './order.model.js';
 
 class OrderService extends Service {
   model = OrderModel;
-  setUserId(userId) {
-    this.forceFilter = { user: userId };
-  }
   shippingMethods = {
     std: { key: 'std', fee: 100, method: 'Standard', day: 7},
     exp: { key: 'exp', fee: 200, method: 'Express', day: 3},
     smd: { key: 'smd', fee: 300, method: 'Same Day', day: 1},
   }
 
+  setUserId(userId) {
+    this.forceFilter = { user: userId };
+  }
+
   async manageStock(products) {
-    // Manage Stock
     const productList = products.map((product) => product.product);
     const productData = await ProductModel.find({ _id: { $in: productList } });
     productData.forEach((product) => {
@@ -84,7 +84,6 @@ class OrderService extends Service {
     }
 
     return updatedOrder;
-
   }
 }
 
