@@ -10,7 +10,7 @@ const commonRules = () => {
       .withMessage('Name is required!')
       .isString()
       .matches(/^[a-zA-Z0-9 ]+$/)
-      .withMessage('Name must be alphanumeric!'),
+      .withMessage('Name must be alphanumeric!' + 'Characters like space and _-.,!#:() are allowed!'),
     check('price').notEmpty().withMessage('Price is required!').isNumeric().withMessage('Price must be a number!'),
     check('stock').notEmpty().withMessage('Stock is required!').isNumeric().withMessage('Stock must be a number!'),
     check('description').optional({ checkFalsy: true }).isString(),
