@@ -1,3 +1,4 @@
+
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getMessaging, getToken, onMessage } from 'firebase/messaging';
@@ -15,50 +16,19 @@ const firebaseConfig = {
 
 export const vapidKey = import.meta.env.VITE_APP_FIREBASE_VAPID_KEY || null;
 
-const isIncognito = async () => {
-  return new Promise((resolve) => {
-    const fs = window.RequestFileSystem || window.webkitRequestFileSystem;
-    if (!fs) {
-      resolve(false);
-    } else {
-      fs(window.TEMPORARY, 100, () => resolve(false), () => resolve(true));
-    }
-  });
-};
-
-let messaging;
-const initializeFirebase = async () => {
-  const incognito = await isIncognito();
-  if (incognito) {
-    console.warn('Firebase Messaging is disabled in incognito mode.');
-    return;
-  }
-
-  const app = initializeApp(firebaseConfig);
-  messaging = getMessaging(app);
-};
-
-export const requestFCMToken = async () => {
-  if (!messaging) {
-    console.warn('Firebase Messaging is not initialized.');
-    return null;
-  }
-
-  try {
-    const currentToken = await getToken(messaging, { vapidKey });
-    if (currentToken) {
-      console.log('FCM Token:', currentToken);
-      return currentToken;
-    } else {
-      console.log('No registration token available. Request permission to generate one.');
-    }
-  } catch (error) {
-    console.error('An error occurred while retrieving token. ', error);
-  }
-};
-
-initializeFirebase();
-
 export const firebase = initializeApp(firebaseConfig);
 export const firebaseAuth = getAuth();
-export { messaging, onMessage };
+export const messaging = getMessaging(firebase);
+export const requestFCMToken = async () => {
+  return Notification.requestPermission().then((notif)=> {
+    if (notif === 'granted') {
+      return getToken(messaging, {vapidKey: vapidKey}).then((token) => {
+        return token
+      });
+    } else {
+      throw new Error("Permission denied");
+    }
+  }).catch((err) => {
+    console.log("Error getting FCM token: ", err);
+  });
+};
