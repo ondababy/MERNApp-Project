@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 const badgeColor = {
   pending: 'bg-yellow-500',
@@ -8,11 +8,12 @@ const badgeColor = {
   cancelled: 'bg-red-500',
 }
 
-import { MessageCircle } from 'lucide-react'
+import { MessageCircle } from 'lucide-react';
 
 export default function OrderCard({ order, onClick, key }) {
   return (
     <div key={order._id} className="card border cursor-pointer hover:bg-base-content/10" onClick={onClick}>
+
       <div className="card-body">
         <div className="flex justify-between items-center">
           <div>
