@@ -7,9 +7,13 @@ class ProductService extends Service {
   fieldToSlugify = 'name';
 
 
-  async filterProducts(filter) {
+  async filterProducts(filter,meta) {
     this._checkModel();
-    return this.model.find(filter);
+    console.log('\n'.repeat(100))
+    console.log('Filtering products: ', filter)
+    this.query = this.model.find({});;
+    return this.paginate(meta).exec();
+    // return this.filter().exec();
   }
 
 

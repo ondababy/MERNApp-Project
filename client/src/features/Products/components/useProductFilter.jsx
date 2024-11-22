@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import * as productQuery from '../product.slice';
-import useProductActions from './useProductActions';
+import { productApi } from '../product.api';
+import { setQueries } from '../product.slice';
 
 const useProductFilter = () => {
   const dispatch = useDispatch();
@@ -9,40 +9,38 @@ const useProductFilter = () => {
     current: 1,
     last: 1,
   });
-  const {
-    queries,
-    filters,
-    minRangeInput,
-    maxRangeInput,
-    categorySearch
-  } = useSelector((state) => state.product);
-  const { products, fetchProducts } = useProductActions()
-  const [qString, setQString] = useState('')
+  const productQuery = useSelector((state) => state.product);
+  const [products, setProducts] = useState([]);
+  const [getFiltered] = productApi.useGetFilteredMutation();
 
-  const _fetchProducts = async (qStr) => {
-    fetchProducts(qStr).then((res) => {
+  const fetchProducts = async (queries) => {
+    if (!queries) queries = productQuery;
+    return getFiltered(queries).then(({ data }) => {
+      setProducts(data.resource || []);
       setPaginate({
-        current: res?.meta.page,
-        last: res?.meta.last_page,
+        current: data?.meta?.page || 1,
+        last: data?.meta?.last_page || 1,
       });
     });
   }
 
-  const handlePaginate = page => {
-    dispatch(productQuery.setQueries({ page }));
-    setPaginate({ ...paginate, current: page });
-    _fetchProducts();
+  useEffect(() => {
+    console.log('Query changed: ', productQuery);
+    fetchProducts();
+  }, [productQuery]);
 
+  const handlePaginate = page => {
+    dispatch(setQueries({ page }));
+    setPaginate({ ...paginate, current: page });
   };
 
   return {
-    qString,
+    productQuery,
     products,
     paginate,
     setPaginate,
-    setQString,
     handlePaginate,
-    fetchProducts: _fetchProducts,
+    fetchProducts,
   };
 };
 

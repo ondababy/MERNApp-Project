@@ -1,4 +1,4 @@
-import { PaginationComponent, useQueries } from '@custom';
+import { PaginationComponent } from '@custom';
 import React from 'react';
 import ProductCard from './ProductCard';
 import useProductFilter from './useProductFilter';
@@ -7,7 +7,6 @@ import useProductFilter from './useProductFilter';
 function ProductGrid() {
   /* DECLARATIONS #################################################### */
   const {
-    qString,
     products,
     paginate,
     fetchProducts,
@@ -15,7 +14,7 @@ function ProductGrid() {
   } = useProductFilter()
 
   React.useEffect(() => {
-    fetchProducts(qString);
+    fetchProducts();
   }, []);
 
 
