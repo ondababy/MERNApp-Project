@@ -20,7 +20,7 @@ export default function useUserActions({ id = null, action = "create", fields = 
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user: oAuthUser } = useFirebaseAuth();
-
+  ss
   const { userInfo, accessToken } = useSelector((state) => state.auth);
   const [createUser, { isLoading: isCreating }] = userApi.useCreateUserMutation();
   const [updateUser, { isLoading: isUpdating }] = userApi.useUpdateUserMutation();
@@ -29,8 +29,8 @@ export default function useUserActions({ id = null, action = "create", fields = 
   const [user, setUser] = useState(null);
   const [userSchema, setUserSchema] = useState(_fields);
   const [avatar, setAvatar] = useState({
-    src: oAuthUser?.photoURL || "https://placehold.co/600",
-    alt: oAuthUser?.displayName || "n/a",
+    src: userInfo?.info?.avatar?.url || oAuthUser?.photoURL || "https://placehold.co/600",
+    alt: userInfo?.username || oAuthUser?.displayName || "n/a",
     avatarChanged: false,
   })
   /* ############ #################################################### */
@@ -114,7 +114,6 @@ export default function useUserActions({ id = null, action = "create", fields = 
 
 
   useEffect(() => {
-    console.clear();
     const names = oAuthUser?.displayName?.split(' ') || [];
     const oAuthInfo = {
       email: oAuthUser?.email || '',
@@ -132,6 +131,7 @@ export default function useUserActions({ id = null, action = "create", fields = 
         }
         const userData = { ...values, ...info }
         setUser(userData);
+        console.clear();
         console.log({ userData });
         if (userInfo?.id === id) {
           dispatch(setCredentials({
