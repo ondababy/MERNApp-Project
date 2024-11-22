@@ -1,6 +1,7 @@
+import { clearNotifications } from "@app/slices";
 import { useFirebaseAuth } from '@custom';
 import { confirmLogout } from '@custom/utils';
-import { authApi, logout as logoutAction } from '@features';
+import { authApi, clearCart, clearOrder, logout as logoutAction } from '@features';
 import { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -21,6 +22,12 @@ export const useLogoutAction = () => {
   return action;
 };
 
+const clearData = (dispatch) => {
+  dispatch(clearNotifications());
+  dispatch(clearCart());
+  dispatch(clearOrder());
+}
+
 const useLogout = () => {
   const logout = useLogoutAction();
   const navigate = useNavigate();
@@ -32,6 +39,7 @@ const useLogout = () => {
         try {
           await logout();
           await signOut();
+          clearData(dispatch);
           navigate('/login');
           toast.success('Logged out successfully');
         } catch (error) {

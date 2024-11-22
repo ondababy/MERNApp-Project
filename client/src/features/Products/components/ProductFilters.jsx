@@ -7,7 +7,7 @@ import {
     AccordionTrigger
 } from '@common/components/ui/accordion'
 
-function Filter({ ...props }) {
+function Filter({ children, ...props }) {
     return (
         <Accordion type="single" defaultValue="item-1" collapsible {...props}>
             <AccordionItem value="item-1">
@@ -19,8 +19,8 @@ function Filter({ ...props }) {
                     </div>
                 </AccordionTrigger>
                 <AccordionContent>
-                    <div className='h-32'>
-
+                    <div className='px-4 min-h-32'>
+                        {children}
                     </div>
                 </AccordionContent>
             </AccordionItem>
@@ -35,11 +35,15 @@ export default function ProductFilters() {
             <div className="my-4 overflow-auto">
                 {/* FILTERS */}
 
-                {
-                    Array(3).fill().map((_, i) => (
-                        <Filter key={i} />
-                    ))
-                }
+                <Filter>
+                    Price Filter
+                </Filter>
+                <Filter>
+                    Category Filter
+                </Filter>
+                <Filter>
+                    Ratings Filter
+                </Filter>
 
 
             </div>

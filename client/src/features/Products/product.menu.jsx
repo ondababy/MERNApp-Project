@@ -10,7 +10,6 @@ export const productMenus = [
     subLinks: [
       { to: `${mainUrl}/table`, label: 'Products Table', icon: <FaTable /> },
       { to: `${mainUrl}/create`, label: 'Create Products', icon: <FaPlus /> },
-      { to: `${mainUrl}/list`, label: 'Products List', icon: <FaUsers /> },
     ],
   },
 ];
