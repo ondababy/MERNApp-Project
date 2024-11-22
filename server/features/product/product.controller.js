@@ -1,5 +1,5 @@
 import { Controller } from '#lib';
-import ProductModel from './product.model.js'; // Ensure you import ProductModel here
+import ProductModel from './product.model.js';
 import ProductResource from './product.resource.js';
 import ProductService from './product.service.js';
 import { productCreateRules, productUpdateRules } from './product.validation.js';

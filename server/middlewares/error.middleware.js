@@ -14,9 +14,13 @@ export const errorMiddleware = async (err, req, res, next) => {
   let message = err.message || 'Internal Server Error';
 
   // if there are files in cloudinary, delete them
-  if (err && (req.file || req.files)) {
-    const publicIds = req.files.map((image) => `${image.folder}/${image.public_id}`);
-    await utils.deleteFiles(publicIds);
+  try {
+    if (err && (req.file || req.files)) {
+      const publicIds = req.files.map((image) => `${image.folder}/${image.public_id}`);
+      await utils.deleteFiles(publicIds);
+    }
+  } catch (error) {
+    console.log(error);    
   }
 
   if (err.name === 'CastError' && err.kind === 'ObjectId') {
