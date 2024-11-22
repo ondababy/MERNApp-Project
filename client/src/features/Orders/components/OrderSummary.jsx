@@ -63,7 +63,7 @@ export default function OrderSummary({ order, onConfirm = () => { }, noConfirm =
         {
           order.items?.map((item, index) => (
             <div key={index} className="flex justify-between my-4">
-              <span className="text-gray-600">{item.product.name.substring(0, 15) + '...'} x {item.quantity}</span>
+              <span className="text-gray-600">{item?.product?.name?.substring(0, 15) + '...'} x {item?.quantity}</span>
               <span className="font-semibold">
                 {order?.currency || ''} {item.price}
               </span>

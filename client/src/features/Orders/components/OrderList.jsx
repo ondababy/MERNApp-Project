@@ -124,6 +124,11 @@ export default function OrderList() {
                   Cancel Order
                 </div>
               )}
+              {selectedOrder.status === 'delivered' && (
+                <div className="btn btn-info btn-outline w-full">
+                  Comment
+                </div>
+              )}
             </div>
           </>
         ) : (

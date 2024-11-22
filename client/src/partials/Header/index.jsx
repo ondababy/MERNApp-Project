@@ -68,6 +68,14 @@ function Header({ clickLogo }) {
                     Profile
                   </Link>
                 </li>
+                {
+                  userInfo?.role === 'admin' &&
+                  <li>
+                    <Link to="/dashboard" className="justify-between">
+                      Dashboard
+                    </Link>
+                  </li>
+                }
                 <li>
                   <Link to="/cart" className="justify-between">
                     Cart
