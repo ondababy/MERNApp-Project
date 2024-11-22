@@ -26,8 +26,13 @@ function ProductGrid() {
         className='max-h-[200vh] overflow-auto my-8 gap-4 flex grid grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 '
         dataLength={products?.length}
         next={fetchProducts}
-        hasMore={paginate.current < paginate.last}
+        hasMore={!(products.length > paginate.total)}
         loader={<h4>Loading...</h4>}
+        endMessage={
+          <h4 className='font-bold text-lg text-center py-24 col-span-2 lg:col-span-3 2xp:col-span-4'>
+            You have reach the end
+          </h4>
+        }
       >
         {
           products?.length ? products?.flat().map((product, i) => (

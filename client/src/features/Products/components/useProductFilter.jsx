@@ -24,6 +24,7 @@ const useProductFilter = () => {
     return getFiltered(queries).then(({ data }) => {
       setProducts(prev => [...prev, ...data?.resource]);
       setPaginate({
+        ...data?.meta,
         current: data?.meta?.page || 1,
         last: data?.meta?.last_page || 1,
       });
