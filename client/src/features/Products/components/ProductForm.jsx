@@ -25,13 +25,14 @@ const ProductForm = ({ title = 'Product Form', action = 'create' }) => {
     fetchProduct,
     handleImageInput,
     onSubmit,
+    fields,
   } = useProductActions({ action });
 
 
 
   useEffect(() => {
     if (slug) fetchProduct();
-    else setProductSchema(action === 'create' ? fields : altFields);
+    else setProductSchema(action === 'create' ? fields : fields);
   }, [action, slug]);
 
 

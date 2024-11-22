@@ -34,6 +34,9 @@ export const productSlice = createSlice({
   name: 'product',
   initialState,
   reducers: {
+    setQueries: (state, action) => {
+      state.queries = { ...state.queries, ...action.payload };
+    },
     setPriceFilter: (state, action) => {
       state.filters.price = action.payload;
     },
@@ -56,6 +59,7 @@ export const productSlice = createSlice({
 });
 
 export const {
+  setQueries,
   setPriceFilter,
   setCategoryFilter,
   setRatingFilter,
