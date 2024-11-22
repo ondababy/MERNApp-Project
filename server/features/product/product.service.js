@@ -6,12 +6,18 @@ class ProductService extends Service {
   model = ProductModel;
   fieldToSlugify = 'name';
 
+
+  async filterProducts(filter) {
+    this._checkModel();
+    return this.model.find(filter);
+  }
+
+
   async getCategoryId(name) {
     const category = await CategoryModel.findOne({ name });
     if (!category) throw new Error('Category not found');
     return category._id;
   }
-
 
   async getBrandId(name) {
     const brand = await BrandModel.findOne({ name });

@@ -20,10 +20,10 @@ const initialState = {
     // max: [20000, null], // >=20000
 
     // equivalent mongoose query using regex: gt|gte|lt|lte
-    min: { gt: 0, lte: 5000 }, // <=5000
-    mid: { gt: 5000, lte: 10000 }, // 5000 - 10000
-    high: { gt: 10000, lte: 20000 }, // 10000 - 20000
-    max: { gt: 20000 }, // >=20000
+    min: { $gt: 0, $lte: 5000 }, // <=5000
+    mid: { $gt: 5000, $lte: 10000 }, // 5000 - 10000
+    high: { $gt: 10000, $lte: 20000 }, // 10000 - 20000
+    max: { $gt: 20000 }, // >=20000
   },
   minRangeInput: '',
   maxRangeInput: '',

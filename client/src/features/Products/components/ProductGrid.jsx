@@ -11,6 +11,7 @@ function ProductGrid() {
     products,
     paginate,
     fetchProducts,
+    handlePaginate,
   } = useProductFilter()
 
   React.useEffect(() => {

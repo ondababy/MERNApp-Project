@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import * as productQuery from '../product.slice';
 import useProductActions from './useProductActions';
 
 const useProductFilter = () => {
@@ -27,15 +28,8 @@ const useProductFilter = () => {
     });
   }
 
-  useEffect(() => {
-    console.log(qString)
-  }, [qString]);
-
   const handlePaginate = page => {
-    const newQuery = {
-      ...query.queries,
-      page: page,
-    }
+    dispatch(productQuery.setQueries({ page }));
     setPaginate({ ...paginate, current: page });
     _fetchProducts();
 
