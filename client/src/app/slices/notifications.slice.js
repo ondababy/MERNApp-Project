@@ -34,6 +34,7 @@ const notificationsSlice = createSlice({
       state.token = action.payload;
       localStorage.setItem('fcmToken', action.payload);
     },
+    
   },
 });
 
