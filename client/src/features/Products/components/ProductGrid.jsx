@@ -1,53 +1,24 @@
 import { PaginationComponent, useQueries } from '@custom';
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { productApi } from '../product.api';
 import ProductCard from './ProductCard';
+import useProductFilter from './useProductFilter';
 
-const defaultQuery = {
-  q: '',
-  page: 1,
-  order: 'desc',
-  sortBy: 'created_at',
-  limit: 6,
-};
 
 function ProductGrid() {
   /* DECLARATIONS #################################################### */
-  const navigate = useNavigate();
-  const query = useQueries(defaultQuery);
-  const [getProducts, { isLoading }] = productApi.useGetProductsMutation();
-  const [products, setProducts] = React.useState([]);
-  const [paginate, setPaginate] = React.useState({
-    current: 1,
-    last: 1,
-  });
-
-  /* END DECLARATIONS ################################################ */
-  const fetchProducts = React.useCallback(async (qStr) => {
-    getProducts(qStr).unwrap().then((res) => {
-      setProducts(res?.resource);
-      setPaginate({
-        current: res?.meta.page,
-        last: res?.meta.last_page,
-      });
-    })
-  });
+  const {
+    qString,
+    products,
+    paginate,
+    fetchProducts,
+  } = useProductFilter()
 
   React.useEffect(() => {
-    fetchProducts(query.toStrQuery(query.queries));
+    fetchProducts(qString);
   }, []);
 
 
-  const handlePaginate = page => {
-    const newQuery = {
-      ...query.queries,
-      page: page,
-    }
-    setPaginate({ ...paginate, current: page });
-    fetchProducts(query.toStrQuery(newQuery));
 
-  };
 
 
   return (

@@ -197,8 +197,9 @@ const useProductActions = ({ id, action = 'create' } = {}) => {
 
 
   const fetchProducts = async (qStr) => {
-    const res = await getProducts(qStr).unwrap();
-    setProducts(res.resource || []);
+    return getProducts(qStr).unwrap().then(res => {
+      setProducts(res.resource || []);
+    });
   };
 
 

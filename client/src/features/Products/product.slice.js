@@ -4,9 +4,9 @@ const initialState = {
   queries: {
     q: '',
     page: 1,
-    limit: 10,
-    sort: 'id',
-    order: 'asc',
+    order: 'desc',
+    sortBy: 'created_at',
+    limit: 6,
   },
   filters: {
     price: [],
