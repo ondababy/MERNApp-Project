@@ -18,9 +18,9 @@ const commonRules = () => {
 
     check('websiteUrl')
       .notEmpty()
-      .withMessage('Website URL is required!')
-      .isURL()
-      .withMessage('Must be a valid URL!'),
+      .withMessage('Website URL is required!'),
+      // .isURL()
+      // .withMessage('Must be a valid URL!'),
 
     check('emailAddress')
       .notEmpty()

@@ -80,7 +80,6 @@ export function useOrderActions({ cartData = {}, action = 'create', render = fal
   })
   const handleSubmit = useCallback(async (values) => {
     try {
-      values = toFormData(values);
       if (action === 'create') await handleCreate(values);
       else await handleUpdate(values);
     } catch (error) {

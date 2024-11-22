@@ -28,7 +28,7 @@ const ProductForm = ({ title = 'Product Form', action = 'create' }) => {
   /* DECLARATIONS #################################################### */
   const navigate = useNavigate();
   const [product, setProduct] = useState(null);
-  const [previewImages, setPreviewImages] = useState([]);
+  const [previewImages, setPreviewImages] = useState(images);
   const [productSchema, setProductSchema] = useState(fields);
   const [createProduct, { isLoading: isCreating }] = productApi.useCreateProductMutation();
   const [updateProduct, { isLoading: isUpdating }] = productApi.useUpdateProductMutation();
@@ -47,7 +47,14 @@ const ProductForm = ({ title = 'Product Form', action = 'create' }) => {
 
   const handleImageInput = (e) => {
     const files = e.target.files;
-    const images = Array.from(files).map((file) => URL.createObjectURL(file));
+    const images = Array.from(files).map((file) => {
+      return {
+        src: URL.createObjectURL(file),
+        alt: file.name,
+        file,
+      };
+    });
+
     setPreviewImages(images);
   }
 
@@ -97,7 +104,6 @@ const ProductForm = ({ title = 'Product Form', action = 'create' }) => {
   return (
     <ProductWrapper
       title={title}
-      prevUrl="/dashboard/products/table"
     >
       <div className="flex flex-col gap-4 lg:flex-row items-center lg:items-start">
 
@@ -105,14 +111,14 @@ const ProductForm = ({ title = 'Product Form', action = 'create' }) => {
           <CarouselComponent imageList={
             product?.images?.length ?
               product?.images.map((image) => ({ src: image.url, alt: image.alt }))
-              : images} />
+              : previewImages} />
         </div>
 
 
         <div className="container w-2/3">
 
           <FormikForm
-            formSchema={productSchema}
+            formSchema={productSchema.map(f => f.name === 'image' ? { ...f, onChange: handleImageInput } : f)}
             formikProps={{
               initialValues,
               validationSchema: productValidation,

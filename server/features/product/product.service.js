@@ -1,9 +1,29 @@
+import { BrandModel, CategoryModel, SupplierModel } from '#features';
 import { Service } from '#lib';
 import ProductModel from './product.model.js';
 
 class ProductService extends Service {
   model = ProductModel;
   fieldToSlugify = 'name';
+
+  async getCategoryId(name) {
+    const category = await CategoryModel.findOne({ name });
+    if (!category) throw new Error('Category not found');
+    return category._id;
+  }
+
+
+  async getBrandId(name) {
+    const brand = await BrandModel.findOne({ name });
+    if (!brand) throw new Error('Brand not found');
+    return brand._id;
+  }
+
+  async getSupplierId(name) {
+    const supplier = await SupplierModel.findOne({ name });
+    if (!supplier) throw new Error('Supplier not found');
+    return supplier._id;
+  }
 
   async getBySlug(slug) {
     this._checkModel();
@@ -12,45 +32,3 @@ class ProductService extends Service {
 }
 
 export default new ProductService();
-
-
-
-// // export default new ProductService();
-// import { BrandModel, SupplierModel } from '#features';
-// import { Service } from '#lib';
-// import ProductModel from './product.model.js';
-
-// class ProductService extends Service {
-//   model = ProductModel;
-
-//   async create(data) {
-//     const { name, price, quantity, brandId, supplierId } = data;
-
-//     const brand = await this.validateBrand(brandId);
-//     const supplier = await this.validateSupplier(supplierId);
-
-//     const newProduct = await this.model.create({ // Use this.model instead
-//       name,
-//       price,
-//       quantity,
-//       brand: brand._id,
-//       supplier: supplier._id
-//     });
-
-//     return newProduct;
-//   }
-
-//   async validateBrand(brandId) {
-//     const brand = await BrandModel.findById(brandId);
-//     if (!brand) throw new Error('Brand not found');
-//     return brand;
-//   }
-
-//   async validateSupplier(supplierId) {
-//     const supplier = await SupplierModel.findById(supplierId);
-//     if (!supplier) throw new Error('Supplier not found');
-//     return supplier;
-//   }
-// }
-
-// export default new ProductService();

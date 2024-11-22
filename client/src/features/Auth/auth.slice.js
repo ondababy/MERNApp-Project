@@ -4,6 +4,7 @@ const userInfo = window.localStorage.getItem('userInfo');
 const accessToken = window.localStorage.getItem('accessToken');
 const initialState = {
   userInfo: userInfo ? JSON.parse(userInfo) : null,
+  oAuthUser: null,
   accessToken: accessToken || null,
   role: null,
   isChanging: false,
@@ -34,7 +35,9 @@ export const authSlice = createSlice({
     },
     setShowProfile: (state) => {
       state.showProfile = !state.showProfile;
-    }
+    },
+    
+    
   },
 });
 

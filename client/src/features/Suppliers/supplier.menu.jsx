@@ -10,7 +10,6 @@ export const supplierMenus = [
     subLinks: [
       { to: `${mainUrl}/table`, label: 'Suppliers Table', icon: <FaTable /> },
       { to: `${mainUrl}/create`, label: 'Create Suppliers', icon: <FaPlus /> },
-      { to: `${mainUrl}/list`, label: 'Suppliers List', icon: <FaUsers /> },
     ],
   },
 ];

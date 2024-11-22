@@ -1,9 +1,9 @@
 
 import isEqual from 'lodash/isEqual';
 
-import { confirmSave } from '@custom';
+import { confirmSave, toFormData, useFirebaseAuth } from '@custom';
 import { setCredentials, setIsChanging } from '@features';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -15,24 +15,26 @@ export default function useUserActions({ id = null, action = "create", fields = 
   /* DECLARATIONS #################################################### */
   const _fields = fields || (typeof getFields === 'function' ? getFields() : getFields);
   const _altFields = altFields || (typeof getAltFields === 'function' ? getAltFields() : getAltFields);
-  // CAROUSEL
-  const images = [
-    {
-      src: "https://placehold.co/600",
-      alt: "n/a",
-    },
-  ]
 
   /* DECLARATIONS #################################################### */
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { user: oAuthUser } = useFirebaseAuth();
+
   const { userInfo, accessToken } = useSelector((state) => state.auth);
-  const [user, setUser] = useState(null);
-  const [userSchema, setUserSchema] = useState(_fields);
   const [createUser, { isLoading: isCreating }] = userApi.useCreateUserMutation();
   const [updateUser, { isLoading: isUpdating }] = userApi.useUpdateUserMutation();
   const [getUser, { isLoading: isFetching }] = userApi.useGetUserMutation();
+
+  const [user, setUser] = useState(null);
+  const [userSchema, setUserSchema] = useState(_fields);
+  const [avatar, setAvatar] = useState({
+    src: userInfo?.info?.avatar?.url || oAuthUser?.photoURL || "https://placehold.co/600",
+    alt: userInfo?.username || oAuthUser?.displayName || "n/a",
+    avatarChanged: false,
+  })
   /* ############ #################################################### */
+  // CAROUSEL
   const initialValues = useMemo(
     () =>
       userSchema.reduce((acc, field) => {
@@ -45,46 +47,37 @@ export default function useUserActions({ id = null, action = "create", fields = 
   const compareValues = (values) => {
     const isChanged = isEqual(initialValues, values);
     dispatch(setIsChanging({
-      isChanging: !isChanged,
+      isChanging: !isChanged && !avatar.avatarChanged,
     }));
-    return isChanged
+    return isChanged && !avatar.avatarChanged;
   }
-
-
-
-  useEffect(() => {
-
-    if (action === 'edit' && id) {
-      getUser(id).then((res) => {
-        const { info, ...values } = res?.data?.resource
-        const userData = { ...values, ...info }
-        setUser(userData);
-        if (userInfo?.id === id) {
-          dispatch(setCredentials({
-            userInfo: res?.data?.resource,
-            token: accessToken,
-          }));
-        }
-      });
-    }
-    setUserSchema(action === 'create' ? _fields : _altFields);
-
-  }, [action, id, getUser]);
 
   const onSubmit = async (values, actions) => {
     confirmSave(async () => handleSubmit(values, actions));
   };
 
   const handleSubmit = async (values, actions) => {
-    const { username, email, password, confirm_password, ...info } = values
-    const payload = { username, email, password, confirm_password, ...userInfo, info }
+    const { username, email, password, confirm_password, avatar, ...info } = values
+
+    let payload = {
+      username,
+      email,
+      password,
+      confirm_password,
+      avatar,
+      info
+    }
+
+
     try {
       let res;
       if (action === 'create') {
+        payload = toFormData(payload);
         res = await createUser(payload).unwrap();
         toast.success('User created successfully');
       } else {
-        res = await updateUser({ id, user: payload }).unwrap();
+        payload = toFormData(payload);
+        res = await updateUser({ id: userInfo.id, user: payload }).unwrap();
         toast.success('User updated successfully');
       }
       const userData = res?.user;
@@ -105,6 +98,53 @@ export default function useUserActions({ id = null, action = "create", fields = 
     }
   };
 
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setAvatar({
+        src: reader.result,
+        alt: file.name,
+        avatarChanged: true,
+      });
+    }
+    reader.readAsDataURL(file);
+
+  };
+
+
+  useEffect(() => {
+    const names = oAuthUser?.displayName?.split(' ') || [];
+    const oAuthInfo = {
+      email: oAuthUser?.email || '',
+      first_name: names.slice(0, -1).join(' ') || '',
+      last_name: names[names.length - 1] || '',
+      contact: oAuthUser?.phoneNumber || '',
+      photoURL: oAuthUser?.photoURL || '',
+    }
+
+    if (action === 'edit' && id) {
+      getUser(id).then((res) => {
+        let { info, ...values } = res?.data?.resource
+        if (oAuthUser) {
+          info = { ...oAuthInfo, ...info }
+        }
+        const userData = { ...values, ...info }
+        setUser(userData);
+        console.clear();
+        if (userInfo?.id === id) {
+          dispatch(setCredentials({
+            userInfo: res?.data?.resource,
+            token: accessToken,
+          }));
+        }
+      });
+    }
+    setUserSchema(action === 'create' ? _fields : _altFields);
+
+  }, [action, id, getUser, oAuthUser]);
+
+
   return {
     formikProps: {
       initialValues,
@@ -112,12 +152,14 @@ export default function useUserActions({ id = null, action = "create", fields = 
       enableReinitialize: true,
       onSubmit,
     },
-    userSchema,
+    userSchema: userSchema.map(f => f.name === 'avatar' ? { ...f, onChange: handleImageUpload } : f),
     initialValues,
     isCreating,
     isUpdating,
     isFetching,
     handleSubmit,
-    compareValues
+    compareValues,
+    handleImageUpload,
+    avatar,
   }
 }

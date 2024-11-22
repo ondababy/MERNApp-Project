@@ -19,7 +19,7 @@ function Header({ clickLogo }) {
               color="ghost"
             >
               <TextRainbow
-                text="Shoeshabold"
+                text="Shoeshable"
                 className="text-xl font-extrabold font-display"
               />
             </Button>
@@ -59,7 +59,7 @@ function Header({ clickLogo }) {
             <Dropdown end>
               <Button tag="label" tabIndex={0} color="ghost" className="avatar" shape="circle">
                 <div className="w-10 rounded-full">
-                  <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+                  <img src={userInfo?.info?.avatar?.url || "https://placehold.co/400?text=no image"} />
                 </div>
               </Button>
               <Dropdown.Menu className="mt-3 z-[1] w-52 menu-sm">

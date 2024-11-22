@@ -32,7 +32,7 @@ const common = [
     label: 'Contact',
     name: 'contact',
     type: 'text',
-    outerStyle: 'w-full col-span-3 md:col-span-6 lg:col-span-1',
+    outerStyle: 'w-full col-span-3 md:col-span-6 lg:col-span-1 alig',
   },
   {
     label: 'Birthdate',
@@ -55,19 +55,19 @@ const common = [
     label: 'City',
     name: 'city',
     type: 'text',
-    outerStyle: 'w-full col-span-1 md:col-span-2  ',
+    outerStyle: 'w-full col-span-3 md:col-span-2  ',
   },
   {
     label: 'Region',
     name: 'region',
     type: 'text',
-    outerStyle: 'w-full col-span-1 md:col-span-2 ',
+    outerStyle: 'w-full col-span-3 md:col-span-2 ',
   },
   {
     label: 'Zip Code',
     name: 'zip_code',
     type: 'text',
-    outerStyle: 'w-full col-span-1 md:col-span-2 ',
+    outerStyle: 'w-full col-span-3 md:col-span-2 ',
   },
   {
     label: '',
@@ -79,14 +79,15 @@ const common = [
     name: 'avatar',
     type: 'image',
     accept: 'image/*',
-    multiple: true,
-    outerStyle: 'w-full col-span-3 md:col-span-3 lg:col-span-6 ',
+    // multiple: true,
+    outerStyle: 'hidden w-full col-span-3 md:col-span-3 lg:col-span-6 ',
+    id: 'avatar-upload',
   },
-  {
-    label: '',
-    variant: 'divider',
-    outerStyle: 'w-full col-span-3 lg:col-span-6',
-  },
+  // {
+  //   label: '',
+  //   variant: 'divider',
+  //   outerStyle: 'w-full col-span-3 lg:col-span-6',
+  // },
 ];
 
 const getFields = () => [

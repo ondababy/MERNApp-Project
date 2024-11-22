@@ -44,5 +44,6 @@ const server = () => {
 };
 
 export const run = () => {
-  connectDB(MONGO_URI, server);
+    console.log('\n'.repeat(100));
+    connectDB(MONGO_URI, server);
 };

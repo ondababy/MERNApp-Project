@@ -3,6 +3,7 @@ import { NotificationService, ProductModel, ProductService, UserService } from '
 import { sendEmail } from '#utils';
 
 import { Service } from '#lib';
+import { parse } from 'path';
 import OrderModel from './order.model.js';
 
 class OrderService extends Service {
@@ -42,6 +43,34 @@ class OrderService extends Service {
     });
   }
 
+  makeAltMessage(order) {
+    
+    return `
+    <div class="order-summary">
+      <h3>Order Summary</h3>
+      <ul>
+        ${order?.products?.length && order.products.map((product, idx) => {
+          const qty = Object.values(order.quantities[idx])[0]
+          const itemTotal = product.price * parseInt(qty);
+          return `
+          <li>
+            ${qty} x ${product.name} - $${itemTotal.toFixed(2)}
+          </li>
+        `}).join('')}
+      </ul>
+      <p>
+        Subtotal: $${order?.subTotal}
+      </p>
+      <p>
+        Shipping: $${this.shippingMethods[order?.shipping?.method]?.fee}  
+      </p>
+      <p>
+        Total: $${order?.subTotal + this.shippingMethods[order?.shipping?.method]?.fee}  
+      </p>
+    </div>
+    `;
+  }
+
   async update(data) {
     let { 
       user:userId, 
@@ -76,10 +105,11 @@ class OrderService extends Service {
         title,
         body: message,
       });
+      const altMessage = this.makeAltMessage(data.order);
       sendEmail({
         email: user.email,
         subject: title,
-        message:  new EmailTemplate({ userName: user.username, message }).generate(),
+        message:  new EmailTemplate({ userName: user.username, message, altMessage }).generate(),
       })
     }
 
