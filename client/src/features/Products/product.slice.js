@@ -27,7 +27,7 @@ const initialState = {
   },
   range: {
     $gt: 0,
-    $lte: 500
+    // $lte: null
   },
   categorySearch: '',
 };
@@ -62,7 +62,9 @@ export const productSlice = createSlice({
       if (range < state.range['$gt'])
         range = state.range['$gt'];
 
-      state.range = { $gt: state.range['$gt'], $lte: range || 500 };
+      state.range = { $gt: state.range['$gt'], $lte: range  };
+      if (!range)
+        delete state.range['$lte'];
     },
     setCategorySearch: (state, action) => {
       state.categorySearch = action.payload;
