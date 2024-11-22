@@ -18,11 +18,11 @@ const useProductFilter = () => {
     last: 1,
   });
 
-  const fetchProducts = async (queries) => {
+  const fetchProducts = async (queries, reset = false) => {
     if (!queries) queries = productQuery;
     // dispatch(setSilentLoading(true));
     return getFiltered(queries).then(({ data }) => {
-      setProducts(prev => [...prev, ...data?.resource]);
+      setProducts(prev => reset ? data?.resource : [...prev, ...data?.resource]);
       setPaginate({
         ...data?.meta,
         current: data?.meta?.page || 1,
@@ -34,7 +34,7 @@ const useProductFilter = () => {
   const dbs = useCallback(debounce(fetchProducts, 500), [fetchProducts]);
 
   useEffect(() => {
-    dbs(productQuery);
+    dbs(productQuery, true);
   }, [productQuery]);
 
   const handlePaginate = page => {
