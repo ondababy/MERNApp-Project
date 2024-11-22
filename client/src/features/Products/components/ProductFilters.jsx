@@ -1,19 +1,29 @@
-import React from 'react'
-
-import { Rating } from '@common'
+import { Rating } from '@common';
 import {
     Accordion,
     AccordionContent,
     AccordionItem,
     AccordionTrigger
-} from '@common/components/ui/accordion'
+} from '@common/components/ui/accordion';
+import {
+    setCategoryFilter,
+    setCategorySearch,
+    setMaxRangeInput,
+    setMinRangeInput,
+    setPriceFilter,
+    setRatingFilter,
+} from '../product.slice';
+
+
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 const priceRanges = [
-    'Up to P5000',
-    'P5000 - P10000',
-    'P10000 - P20000',
-    'Over P20000'
-]
+    { label: 'Up to P5000', key: 'min' },
+    { label: 'P5000 - P10000', key: 'mid' },
+    { label: 'P10000 - P20000', key: 'high' },
+    { label: 'Over P20000', key: 'max' },
+];
 const shoeCategories = [
     'Sneakers',
     'Boots',
@@ -23,7 +33,7 @@ const shoeCategories = [
     'Men\'s Shoes',
     'Women\'s Shoes',
     'Kids\' Shoes'
-]
+];
 
 function Filter({ title, children, ...props }) {
     return (
@@ -43,23 +53,62 @@ function Filter({ title, children, ...props }) {
                 </AccordionContent>
             </AccordionItem>
         </Accordion>
-    )
+    );
 }
 
 export default function ProductFilters() {
+    const dispatch = useDispatch();
+    const { queries, filters, minRangeInput, maxRangeInput, categorySearch } = useSelector((state) => state.product);
+
+    const handlePriceChange = (range) => {
+        const updatedPrice = filters.price.includes(range)
+            ? filters.price.filter((item) => item !== range)
+            : [...filters.price, range];
+        dispatch(setPriceFilter(updatedPrice));
+    };
+
+    const handleCategoryChange = (category) => {
+        const updatedCategories = filters.categories.includes(category)
+            ? filters.categories.filter((item) => item !== category)
+            : [...filters.categories, category];
+        dispatch(setCategoryFilter(updatedCategories));
+    };
+
+    const handleRatingChange = (rating) => {
+        dispatch(setRatingFilter(rating));
+    };
+
+    const handleMinRangeInputChange = (e) => {
+        dispatch(setMinRangeInput(e.target.value));
+    };
+
+    const handleMaxRangeInputChange = (e) => {
+        dispatch(setMaxRangeInput(e.target.value));
+    };
+
+    const handleCategorySearchChange = (e) => {
+        dispatch(setCategorySearch(e.target.value));
+    };
+
     return (
         <div className="hidden container max-w-sm lg:block">
             <div className="divider"></div>
             <div className="my-4 overflow-auto">
                 {/* FILTERS */}
 
+                {/* PRICE */}
                 <Filter title={"Price Range"}>
                     <div>
                         {priceRanges.map((range, index) => (
                             <div key={index} className="flex items-center justify-between py-2">
                                 <label className="flex items-center">
-                                    <input type="checkbox" className="checkbox checkbox-sm checkbox-primary" />
-                                    <span className="ml-2">{range}</span>
+                                    <input
+                                        type="checkbox"
+                                        className="checkbox checkbox-sm checkbox-primary"
+                                        checked={filters.price.includes(range.key)}
+                                        onChange={() => handlePriceChange(range.key)}
+                                    />
+                                    <span className="ml-2">{range.label}</span>
                                 </label>
                             </div>
                         ))}
@@ -70,16 +119,34 @@ export default function ProductFilters() {
                                 <span className="ml-2">Set Range</span>
                             </label>
                             <div className="flex items-center">
-                                <input type="text" className="input input-bordered input-sm w-16" />
+                                <input
+                                    type="text"
+                                    className="input input-bordered input-sm w-16"
+                                    value={minRangeInput}
+                                    onChange={handleMinRangeInputChange}
+                                />
                                 <span className="mx-2">-</span>
-                                <input type="text" className="input input-bordered input-sm w-16" />
+                                <input
+                                    type="text"
+                                    className="input input-bordered input-sm w-16"
+                                    value={maxRangeInput}
+                                    onChange={handleMaxRangeInputChange}
+                                />
                             </div>
                         </div>
                     </div>
                 </Filter>
+
+                {/* CATEGORIES */}
                 <Filter title={"Categories"}>
                     <label className="my-2 input input-bordered flex items-center gap-2">
-                        <input type="text" className="grow" placeholder="Search" />
+                        <input
+                            type="text"
+                            className="grow"
+                            placeholder="Search"
+                            value={categorySearch}
+                            onChange={handleCategorySearchChange}
+                        />
                     </label>
                     <div className="divider"></div>
 
@@ -87,25 +154,27 @@ export default function ProductFilters() {
                         {shoeCategories.map((category, index) => (
                             <div key={index} className="flex items-center justify-between py-2">
                                 <label className="flex items-center">
-                                    <input type="checkbox" className="checkbox checkbox-sm checkbox-primary" />
+                                    <input
+                                        type="checkbox"
+                                        className="checkbox checkbox-sm checkbox-primary"
+                                        checked={filters.categories.includes(category)}
+                                        onChange={() => handleCategoryChange(category)}
+                                    />
                                     <span className="ml-2">{category}</span>
                                 </label>
                             </div>
                         ))}
                     </div>
-
-
                 </Filter>
+
+                {/* RATINGS */}
                 <Filter title={"Ratings"}>
                     <div className="flex items-center text-lg gap-8">
                         <span>Filter By: </span>
-                        <Rating onChange={() => { }} />
-
+                        <Rating value={filters.rating} onChange={handleRatingChange} />
                     </div>
                 </Filter>
-
-
             </div>
         </div>
-    )
+    );
 }
