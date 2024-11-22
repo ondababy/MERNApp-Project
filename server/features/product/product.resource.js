@@ -14,6 +14,7 @@ import { Resource } from '#lib';
 
 export default class ProductResource extends Resource {
   async transform(product) {
+    if (!product?._id) return null;
     const { _id, category, brand, supplier, ...rest } = product;
 
     const categoryDetails = await CategoryModel.findById(category).select('name _id');
