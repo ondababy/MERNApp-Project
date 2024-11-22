@@ -1,15 +1,18 @@
 
-import { useSlug } from '@common';
-import { confirmSave, requestError, toFormData } from '@custom';
+import { ActionButtons, useSlug } from '@common';
+import { Checkbox } from "@common/components/ui/checkbox";
+import { confirmDelete, confirmSave, requestError, toFormData } from '@custom';
+import { ArrowUpDown } from "lucide-react";
 import { useMemo, useState } from 'react';
+import { Button } from "react-daisyui";
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { productApi } from '../product.api';
 import { getAltFields, getFields } from '../product.fields';
 
+
 const fields = typeof getFields === 'function' ? getFields() : getFields || [];
 const altFields = typeof getAltFields === 'function' ? getAltFields() : getAltFields || [];
-
 const images = [
   {
     src: "https://placehold.co/600",
@@ -17,16 +20,121 @@ const images = [
   },
 ]
 
-const useProductActions = ({ id, action = 'create' }) => {
+const makeData = (products, handleDelete, toggleExpand) => {
+  return products.map((product) => ({
+    id: product.id,
+    name: product.name,
+    stock: `${product.stock}`,
+    price: `${product.price}`,
+    details: product.details, // for expandable rows
+    image: product.image,
+    actions: { id: product.id, handleDelete },
+    isExpanded: false, // for controlling row expansion
+    ...product,
+    toggleExpand,
+  }));
+};
+
+const makeColumns = (navigate, toggleExpand) => [
+  {
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={table.getIsAllPageRowsSelected()}
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Select row"
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
+  {
+    accessorKey: "image",
+    header: "Image",
+    cell: ({ row }) => <img src={row.getValue("image")} alt="Product" className="w-16 h-16" />,
+    enableSorting: false,
+    enableHiding: false,
+    enableCustomFilter: false,
+  },
+  ...["name", "stock", "price"].map((key) => ({
+    accessorKey: key,
+    header: ({ column }) => (
+      <Button
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        className="bg-transparent border-none btn-sm capitalize"
+      >
+        {key}
+        <ArrowUpDown />
+      </Button>
+    ),
+    cell: ({ row }) => <p className="px-3">{row.getValue(key)}</p>,
+  })),
+  {
+    id: "expand",
+    header: "Details",
+    cell: ({ row }) => (
+      <>
+        <Button
+          className="btn-xs"
+          onClick={() => row.original.toggleExpand(row.original.id)}
+        >
+          {row.original.isExpanded ? "Collapse" : "Expand"}
+        </Button>
+        {row.original.isExpanded && <p className="px-3 text-sm break-all">{row.original.description}</p>}
+      </>
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
+  {
+    accessorKey: "actions",
+    header: "Actions",
+    cell: ({ row }) => (
+      <ActionButtons
+        onDelete={() => row.getValue("actions").handleDelete(row.getValue("actions").id)}
+        onEdit={() => navigate(`/dashboard/products/${row.original.slug}/edit`)}
+        onView={() => navigate(`/dashboard/products/${row.original.slug}/view`)}
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
+];
+
+
+const useProductActions = ({ id, action = 'create' } = {}) => {
 
   /* DECLARATIONS #################################################### */
   const navigate = useNavigate();
+
+  const {
+    useGetProductsMutation,
+    useDeleteProductMutation,
+    useCreateProductMutation,
+    useUpdateProductMutation,
+    useGetProductMutation,
+  } = productApi;
+
+  const [createProduct, { isLoading: isCreating }] = useCreateProductMutation();
+  const [updateProduct, { isLoading: isUpdating }] = useUpdateProductMutation();
+  const [getProduct, { isLoading: isFetching }] = useGetProductMutation();
+  const [getProducts] = useGetProductsMutation();
+  const [deleteProduct] = useDeleteProductMutation();
+
   const [product, setProduct] = useState(null);
+  const [products, setProducts] = useState([]);
   const [previewImages, setPreviewImages] = useState(images);
   const [productSchema, setProductSchema] = useState(fields);
-  const [createProduct, { isLoading: isCreating }] = productApi.useCreateProductMutation();
-  const [updateProduct, { isLoading: isUpdating }] = productApi.useUpdateProductMutation();
-  const [getProduct, { isLoading: isFetching }] = productApi.useGetProductMutation();
+
+  const [selectedRows, setSelectedRows] = useState([]);
+
   const { slug, setSlug } = useSlug();
 
   const initialValues = useMemo(
@@ -88,9 +196,56 @@ const useProductActions = ({ id, action = 'create' }) => {
   };
 
 
+  const fetchProducts = async () => {
+    const res = await getProducts().unwrap();
+    setProducts(res.resource || []);
+  };
+
+
+  const toggleExpand = (id) => {
+    setProducts((prev) =>
+      prev.map((p) => (p.id === id ? { ...p, isExpanded: !p.isExpanded } : p))
+    );
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      confirmDelete(async () => {
+        await deleteProduct(id).unwrap();
+        setProducts(products.filter((product) => product.id !== id));
+        toast.success("Product deleted successfully");
+      });
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  const handleBulkDelete = async () => {
+    if (!selectedRows.length) return;
+    confirmDelete(async () => {
+      Promise.all(selectedRows.map((row) => deleteProduct(row.id).unwrap())).then(() => {
+        setProducts(products.filter((product) => !selectedRows.some((row) => row.id === product.id)));
+        setSelectedRows([]);
+        toast.success("Selected products deleted successfully");
+      });
+    });
+  };
+
+  const table = {
+    data: makeData(products, handleDelete, toggleExpand),
+    columns: makeColumns(navigate, toggleExpand),
+    rowCount: products.length,
+    selectionFunc: (rows) => setSelectedRows(rows),
+  }
+
+
+
   return {
     slug,
     product,
+    products,
+    table,
+    selectedRows,
     initialValues,
     productSchema,
     previewImages,
@@ -100,9 +255,12 @@ const useProductActions = ({ id, action = 'create' }) => {
     setSlug,
     setProductSchema,
     fetchProduct,
+    fetchProducts,
     handleImageInput,
     onSubmit,
-    handleSubmit
+    handleSubmit,
+    handleDelete,
+    handleBulkDelete,
   };
 };
 
