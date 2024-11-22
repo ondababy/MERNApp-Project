@@ -17,6 +17,10 @@ export default function ModalComponent({
     ref.current?.showModal();
   }, [ref]);
 
+  const handleHide = useCallback(() => {
+    ref.current?.close();
+  }, [ref])
+
   return <div className="font-sans">
     <Button className={buttonClass} onClick={handleShow}>
       {buttonLabel}
@@ -25,7 +29,7 @@ export default function ModalComponent({
       <Modal.Header className="font-bold ">
         <div className="flex items-center justify-between">
           {title}
-          <Button onClick={onClose}>Close</Button>
+          <Button onClick={handleHide}>Close</Button>
         </div>
         <div className="divider"></div>
       </Modal.Header>
