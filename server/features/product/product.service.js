@@ -7,7 +7,7 @@ class ProductService extends Service {
   fieldToSlugify = 'name';
 
 
-  async filterProducts(filter,meta) {
+  async filterProducts(filter, meta) {
     this._checkModel();
     console.log('\n'.repeat(100))
     console.log('Filtering products: ', filter)
