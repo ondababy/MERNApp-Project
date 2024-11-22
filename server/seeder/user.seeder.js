@@ -12,6 +12,8 @@ export const createAdmin = async () => {
       email: process.env.ADMIN_EMAIL,
       password: process.env.ADMIN_PASSWORD,
       role: 'admin',
+      emailVerifiedAt: new Date(),
+      
     });
     if (!user) return console.log('Admin user not created');
     console.log('Admin user created: ', user);
@@ -33,6 +35,8 @@ class UserSeeder extends Seeder {
         username: process.env.ADMIN_USERNAME,
         email: process.env.ADMIN_EMAIL,
         password: this.hash(process.env.ADMIN_PASSWORD),
+        role: 'admin',
+        emailVerifiedAt: new Date(),
       },
     ];
   }

@@ -19,7 +19,7 @@ function Header({ clickLogo }) {
               color="ghost"
             >
               <TextRainbow
-                text="Shoeshabold"
+                text="Shoeshable"
                 className="text-xl font-extrabold font-display"
               />
             </Button>
