@@ -1,5 +1,6 @@
 import { setSilentLoading } from '@app/slices';
-import { useEffect, useState } from 'react';
+import { debounce } from '@custom';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { productApi } from '../product.api';
 import { setQueries } from '../product.slice';
@@ -29,10 +30,11 @@ const useProductFilter = () => {
       dispatch(setSilentLoading(false));
     });
   }
+  const dbs = useCallback(debounce(fetchProducts, 500), [fetchProducts]);
 
   useEffect(() => {
     console.log('Query changed: ', productQuery);
-    fetchProducts();
+    dbs(productQuery);
   }, [productQuery]);
 
   const handlePaginate = page => {

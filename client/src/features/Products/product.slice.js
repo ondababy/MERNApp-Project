@@ -25,8 +25,10 @@ const initialState = {
     high: { $gt: 10000, $lte: 20000 }, // 10000 - 20000
     max: { $gt: 20000 }, // >=20000
   },
-  minRangeInput: '',
-  maxRangeInput: '',
+  range: {
+    $gt: 0,
+    $lte: 500
+  },
   categorySearch: '',
 };
 
@@ -47,10 +49,20 @@ export const productSlice = createSlice({
       state.filters.rating = action.payload;
     },
     setMinRangeInput: (state, action) => {
-      state.minRangeInput = action.payload;
+      let range = parseInt(action.payload);
+      if (range < 0)  
+        range = 0;
+      if (range > state.range['$lte'])
+        range = state.range['$lte'];
+
+      state.range = { $lte: state.range['$lte'], $gt: range || 0};
     },
     setMaxRangeInput: (state, action) => {
-      state.maxRangeInput = action.payload;
+      let range = parseInt(action.payload);
+      if (range < state.range['$gt'])
+        range = state.range['$gt'];
+
+      state.range = { $gt: state.range['$gt'], $lte: range || 500 };
     },
     setCategorySearch: (state, action) => {
       state.categorySearch = action.payload;

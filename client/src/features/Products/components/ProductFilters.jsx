@@ -87,6 +87,7 @@ export default function ProductFilters() {
     };
 
     const handleCategorySearchChange = (e) => {
+
         dispatch(setCategorySearch(e.target.value));
     };
 
