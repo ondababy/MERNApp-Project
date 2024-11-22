@@ -23,9 +23,9 @@ export default class ProductResource extends Resource {
 
     return {
       id: _id,
-      category: categoryDetails ? { id: categoryDetails._id, name: categoryDetails.name } : null,
-      brand: brandDetails ? { id: brandDetails._id, name: brandDetails.name } : null,
-      supplier: supplierDetails ? { id: supplierDetails._id, name: supplierDetails.name } : null,
+      category: categoryDetails ? categoryDetails.name : null,
+      brand: brandDetails ? brandDetails.name : null,
+      supplier: supplierDetails ? supplierDetails.name : null,
       ...rest,
     };
   }
