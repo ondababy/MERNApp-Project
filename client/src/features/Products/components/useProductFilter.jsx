@@ -20,20 +20,19 @@ const useProductFilter = () => {
 
   const fetchProducts = async (queries) => {
     if (!queries) queries = productQuery;
-    dispatch(setSilentLoading(true));
+    // dispatch(setSilentLoading(true));
     return getFiltered(queries).then(({ data }) => {
-      setProducts(data.resource || []);
+      setProducts(prev => [...prev, ...data?.resource]);
       setPaginate({
         current: data?.meta?.page || 1,
         last: data?.meta?.last_page || 1,
       });
-      dispatch(setSilentLoading(false));
+      // dispatch(setSilentLoading(false));
     });
   }
   const dbs = useCallback(debounce(fetchProducts, 500), [fetchProducts]);
 
   useEffect(() => {
-    console.log('Query changed: ', productQuery);
     dbs(productQuery);
   }, [productQuery]);
 
