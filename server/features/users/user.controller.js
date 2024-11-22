@@ -38,11 +38,6 @@ class UserController extends Controller {
       user.fcmToken = req.body.fcmToken;
       await user.save();
     }
-    // if (req.body?.info) {
-    //   const validInfo = await this.validator(req, res, this.rules.createInfo);
-    //   await this.service.createUserInfo(user, validInfo.info);
-    // }
-
 
     res.cookie(...token);
     this.success({
@@ -63,11 +58,6 @@ class UserController extends Controller {
       user.fcmToken = req.body.fcmToken;
       await user.save();
     }
-
-    // if (req.body?.info) {
-    //   const validInfo = await this.validator(req, res, this.rules.createInfo);
-    //   await this.service.updateUserInfo(user, validInfo.info);
-    // }
 
     res.cookie(...token);
     this.success({
@@ -104,6 +94,7 @@ class UserController extends Controller {
     if (!user) throw new Errors.BadRequest('Invalid user data!');
 
     let info = JSON.parse(req?.body?.info) || null;
+    req.body.info = info;
     let userInfo;
     if (req.body?.info && !user?.info?._id) {
       validData = await this.validator(req, res, this.rules.createInfo);
@@ -112,8 +103,6 @@ class UserController extends Controller {
       validData = await this.validator(req, res, this.rules.updateInfo);
       userInfo = await this.service.updateUserInfo(user, info);
     }
-
-    console.log(req.file || req.files)
 
     if (req.file || req.files && (userInfo && UserInfoModel.schema.paths['avatar'])) {
       const avatar = this.addImage(req);

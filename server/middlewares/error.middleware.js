@@ -16,7 +16,7 @@ export const errorMiddleware = async (err, req, res, next) => {
   // if there are files in cloudinary, delete them
   try {
     if (err && (req.file || req.files)) {
-      const publicIds = req.files.map((image) => `${image.folder}/${image.public_id}`);
+      const publicIds = req?.files?.map((image) => `${image.folder}/${image.public_id}`);
       await utils.deleteFiles(publicIds);
     }
   } catch (error) {

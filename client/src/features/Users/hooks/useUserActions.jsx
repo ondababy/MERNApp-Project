@@ -132,7 +132,6 @@ export default function useUserActions({ id = null, action = "create", fields = 
         const userData = { ...values, ...info }
         setUser(userData);
         console.clear();
-        console.log({ userData });
         if (userInfo?.id === id) {
           dispatch(setCredentials({
             userInfo: res?.data?.resource,

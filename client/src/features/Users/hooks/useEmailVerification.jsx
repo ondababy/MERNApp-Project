@@ -67,7 +67,10 @@ export function useEmailVerification() {
 
   useEffect(() => {
     const otpFromUrl = new URLSearchParams(window.location.search).get('otp');
-    if (otpFromUrl) setOTP(otpFromUrl);
+    if (otpFromUrl) {
+      setOTP(otpFromUrl)
+      setIsCodeSent(true);
+    };
   }, []);
 
   useEffect(() => {

@@ -56,8 +56,8 @@ class UserService extends Service {
   }
 
   async updateUser(id, body) {
-    const role = body.role;
-    delete body.role;
+    let {role, password, confirm_password, ...rest} = body;
+    body = rest;
     
     const userExists = await this.checkIfExists({
       email: body.email,
@@ -66,13 +66,7 @@ class UserService extends Service {
     if (userExists) throw new Errors.BadRequest('User with that email already exists!');
 
     const data = this.model?.filterFillables(body);
-    // if (data.password) data.password = await user?.hashPassword(data.password);
-
     const user = await this.model?.findByIdAndUpdate(id, data, { new: true });
-
-
-
-
     if (role && req.user.role === ROLES.ADMIN) await this.setRole(user, role);
 
     return user;

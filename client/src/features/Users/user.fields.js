@@ -55,19 +55,19 @@ const common = [
     label: 'City',
     name: 'city',
     type: 'text',
-    outerStyle: 'w-full col-span-1 md:col-span-2  ',
+    outerStyle: 'w-full col-span-3 md:col-span-2  ',
   },
   {
     label: 'Region',
     name: 'region',
     type: 'text',
-    outerStyle: 'w-full col-span-1 md:col-span-2 ',
+    outerStyle: 'w-full col-span-3 md:col-span-2 ',
   },
   {
     label: 'Zip Code',
     name: 'zip_code',
     type: 'text',
-    outerStyle: 'w-full col-span-1 md:col-span-2 ',
+    outerStyle: 'w-full col-span-3 md:col-span-2 ',
   },
   {
     label: '',
