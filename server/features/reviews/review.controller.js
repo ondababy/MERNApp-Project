@@ -1,16 +1,16 @@
 import { Controller } from '#lib';
 import ReviewResource from './review.resource.js';
 import ReviewService from './review.service.js';
-// import { reviewCreateRules, reviewUpdateRules } from './review.validation.js';
+import { reviewCreateRules, reviewUpdateRules } from './review.validation.js';
 
 class ReviewController extends Controller {
   service = ReviewService;
   resource = ReviewResource;
 
-  //   rules = {
-  //   create: reviewCreateRules,
-  //   update: reviewUpdateRules,
-  // };
+    rules = {
+    create: reviewCreateRules,
+    update: reviewUpdateRules,
+  };
 
   getBySlug = async (req, res) => {
     const { slug } = req.params;
@@ -73,9 +73,6 @@ class ReviewController extends Controller {
     }
   };
 
-  /**
-   * Delete a review by ID
-   */
   delete = async (req, res) => {
     const { id } = req.params;
 

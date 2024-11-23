@@ -112,6 +112,7 @@ const customBadWords = [
   'basura',
   'bulok',
   'bubu',
+  'potangina',
   'potang ina mo',
   'bopols',
   'unggoy',
