@@ -11,7 +11,6 @@ import ReviewWrapper from './ReviewWrapper';
 const allowedColumns = () => [
   { key: 'name', label: 'Name' },
   { key: 'actions', label: '' },
-  // More columns can be added here
 ];
 
 const ReviewTable = () => {

@@ -1,7 +1,7 @@
 import { Schema } from '#lib';
 import { ImageSchema } from '#utils';
-import customBadWords from './customBadWords.js';
 import { Filter } from 'bad-words';
+import customBadWords from './customBadWords.js';
 
 const filter = new Filter();
 filter.addWords(...customBadWords);
@@ -10,19 +10,26 @@ const reviewSchema = new Schema({
   name: 'Review',
   schema: [
     {
-      // order: {
-      //   type: Schema.Types.ObjectId,
-      //   ref: 'Order',
-      //   required: true
-      // },
-      ratings: {
+      order: {
+        type: Schema.Types.ObjectId,
+        ref: 'Order',
+        required: true
+      },
+      title: {
+        type: String,
+        validate: {
+          validator: (value) => !filter.isProfane(value),
+          message: 'Title contains bad words'
+        }
+      },
+      rating: {
         type: Number,
         required: [true, 'Please provide a rating'],
         min: 1,
-        max: 5,
+        max: 10,
         validate: {
           validator: Number.isInteger,
-          message: 'Rating must be an interger between 1 and 5'
+          message: 'Rating must be an interger between 1 and 10'
         }
       },
       description: {
@@ -31,14 +38,6 @@ const reviewSchema = new Schema({
         validate: {
           validator: (value) => !filter.isProfane(value),
           message: 'Review contains bad words'
-        }
-      },
-      suggestion: {
-        type: String,
-        required: false,
-        validate: {
-          validator: (value) => !filter.isProfane(value),
-          message: 'Suggestion contains bad words'
         }
       },
       isAnonymous: {

@@ -1,12 +1,11 @@
 const getFields = () => [
-  { label: 'Name', name: 'name', type: 'text' },
-  { label: 'Image', name: 'image', type: 'image', accept: 'image/*', multiple: true },
-  // More getFields can be added here
+  { label: 'Title', name: 'title', type: 'text' },
+  { label: 'Rating', name: 'rating', type: 'number' },
+  { label: 'Comment', name: 'comment', type: 'text' },
 ];
 
 const getAltFields = () => [
-  { label: 'Name', name: 'name', type: 'text' },
-  // alternate getFields can be added here
+  ...getFields(),
 ];
 
 export { getAltFields, getFields };
