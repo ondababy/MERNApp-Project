@@ -11,12 +11,15 @@ import { DatePickerWithRange } from "../datepicker"
 import { Overview } from "./overview"
 import { RecentSales } from "./recent-sales"
 
+import { useSelector } from "react-redux"
+
 export const metadata = {
   title: "Dashboard",
   description: "Example dashboard app built using the components.",
 }
 
 export function DashboardPage() {
+  const { userInfo } = useSelector((state) => state.auth)
   return (
     <>
       <div className="md:hidden">
@@ -38,7 +41,9 @@ export function DashboardPage() {
       <div className="hidden flex-col md:flex">
         <div className="flex-1 space-y-4 p-8 pt-6">
           <div className="flex items-center justify-between space-y-2 my-4">
-            <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
+            <h2 className="text-3xl font-bold tracking-tight">
+              Welcome back, {userInfo?.username}
+            </h2>
             <div className="flex items-center space-x-2">
               <DatePickerWithRange />
               <Button>Download</Button>

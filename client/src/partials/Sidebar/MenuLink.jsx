@@ -6,7 +6,7 @@ const MenuLink = ({ icon, label, addClass, ...props }) => {
     <Link
       {...props}
       className={
-        'flex items-center gap-2 font-bold transition-transform ease-in-out hover:text-primary hover:text-lg hover:z-10 ' +
+        'flex items-center gap-2 font-bold ease-in-out hover:text-primary hover:text-lg hover:z-10 transition-all' +
         addClass
       }
     >

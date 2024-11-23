@@ -3,6 +3,7 @@ import { dashUrl as mainUrl } from './courier.api';
 
 export const courierMenus = [
   {
+    index: 7,
     label: 'Manage Couriers',
     type: 'dropdown',
     to: mainUrl,

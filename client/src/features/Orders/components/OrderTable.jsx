@@ -12,6 +12,7 @@ import OrderWrapper from './OrderWrapper';
 
 const makeData = (orders, handleDelete) => {
   return orders.map((order) => ({
+    ...order,
     id: order.id,
     customer: `${order?.user?.info?.first_name || ''} ${order?.user?.info?.last_name || ''}`.trim(),
     items: `${order?.products?.length || 0}`,
@@ -22,7 +23,7 @@ const makeData = (orders, handleDelete) => {
 };
 
 const makeColumns = (navigate) => {
-  const interactiveColumns = ["customer", "items", "total", "status"].map((key) => {
+  const interactiveColumns = ["items", "total", "status"].map((key) => {
     return {
       accessorKey: key,
       header: ({ column }) => {
@@ -67,7 +68,7 @@ const makeColumns = (navigate) => {
     // USER AVATAR
     {
       accessorKey: 'avatar',
-      header: 'Customer',
+      header: '',
       cell: ({ row }) => {
         const order = row.original;
         const user = order?.user;
@@ -99,6 +100,35 @@ const makeColumns = (navigate) => {
       enableSorting: false,
       enableHiding: false,
     },
+    // CUSTOMER INFO
+    {
+      accessorKey: 'customer',
+      header: ({ column }) => {
+        return (
+          <Button
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className='bg-transparent border-none btn-sm capitalize'
+          >
+            Customer Info
+            <ArrowUpDown />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <details class="collapse bg-transparent transition-all ease-in-out">
+          <summary class="collapse-title font-medium">
+            {row.original?.user?.username}
+          </summary>
+          <div class="collapse-content">
+            <p>{row.original?.user?.email}</p>
+            <p>{row.original?.shipping?.address}</p>
+
+          </div>
+        </details>
+      ),
+    },
+
+
     ...interactiveColumns,
     {
       accessorKey: 'actions',

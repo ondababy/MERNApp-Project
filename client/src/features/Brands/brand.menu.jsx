@@ -3,6 +3,7 @@ import { dashUrl as mainUrl } from './brand.api';
 
 export const brandMenus = [
   {
+    index: 5,
     label: 'Manage Brands',
     type: 'dropdown',
     to: mainUrl,
