@@ -8,6 +8,7 @@ export default function ModalComponent({
   onClose,
   onShow,
   actions,
+  parentClass,
   buttonClass,
   buttonLabel,
   ...args
@@ -21,11 +22,11 @@ export default function ModalComponent({
     ref.current?.close();
   }, [ref])
 
-  return <div className="font-sans">
+  return <div className={`${parentClass} z-[1100!important]`}>
     <Button className={buttonClass} onClick={handleShow}>
       {buttonLabel}
     </Button>
-    <Modal {...args} ref={ref}>
+    <Modal {...args} ref={ref} className='z-[1100!important]'>
       <Modal.Header className="font-bold ">
         <div className="flex items-center justify-between">
           {title}

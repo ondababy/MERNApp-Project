@@ -1,6 +1,11 @@
 import { OrderModel, ProductModel } from '#features';
 import { Service } from '#lib';
 import ReviewModel from './review.model.js';
+import { Filter } from 'bad-words';
+import customBadWords from './customBadWords.js';
+
+const filter = new Filter();
+filter.addWords(...customBadWords);
 
 class ReviewService extends Service {
   model = ReviewModel;
@@ -11,6 +16,9 @@ class ReviewService extends Service {
   async addReviewToProducts(orderId, reviewId) {
     const order = await OrderModel.findById(orderId);
     if (!order) return;
+    order.review = reviewId;
+    order.save();
+    
     const products = await ProductModel.find({ _id: { $in: order.products.map(p=>p.product) } });
     products.forEach((product) => {
       if (!product.reviews.includes(reviewId)) {
@@ -18,6 +26,7 @@ class ReviewService extends Service {
         product.save();
       }
     });
+
   }
 
 
@@ -35,8 +44,12 @@ class ReviewService extends Service {
 
     const exists = await this.reviewExistInOrder(data.order, data.user);
     if (exists) {
-      id = exists._id;27017
+      id = exists._id;
     }
+    
+    data.title = filter.clean(data.title);
+    data.description = filter.clean(data.description);
+    
     let review;
     if (id) {
       review = await this.model.findByIdAndUpdate(id, data, { new: true });

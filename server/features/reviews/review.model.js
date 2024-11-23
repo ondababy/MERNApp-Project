@@ -1,10 +1,5 @@
 import { Schema } from '#lib';
 import { ImageSchema } from '#utils';
-import { Filter } from 'bad-words';
-import customBadWords from './customBadWords.js';
-
-const filter = new Filter();
-filter.addWords(...customBadWords);
 
 const reviewSchema = new Schema({
   name: 'Review',
@@ -22,11 +17,7 @@ const reviewSchema = new Schema({
       },
       title: {
         type: String,
-        default: '',
-        validate: {
-          validator: (value) => !filter.isProfane(value),
-          message: 'Title contains bad words'
-        }
+        default: ''
       },
       rating: {
         type: Number,
@@ -41,10 +32,6 @@ const reviewSchema = new Schema({
       description: {
         type: String,
         default: '',
-        validate: {
-          validator: (value) => !filter.isProfane(value),
-          message: 'Review contains bad words'
-        }
       },
       isAnonymous: {
         type: Boolean,

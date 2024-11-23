@@ -58,6 +58,7 @@ export default function OrderList() {
     });
   };
 
+
   return (
     <div className="w-full flex flex-col gap-2 lg:flex-row lg:justify-center min-h-screen ">
       <div className="w-full p-8 lg:w-3/2 flex flex-col gap-2 ">
@@ -161,10 +162,8 @@ export default function OrderList() {
 
 
               {/* MODAL FEEDBACK */}
-
-
-              {selectedOrder.status === 'delivered' && (
-                <ReviewModal />
+              {selectedOrder?.status === 'delivered' && (
+                <ReviewModal refresh={()=>setSelectedOrder(setSelectedOrder)} order={selectedOrder} id={selectedOrder?.review?.id} action={selectedOrder?.review?.id ? 'edit' : 'create'} />
               )}
             </div>
           </>

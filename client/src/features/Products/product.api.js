@@ -35,6 +35,13 @@ const productApi = apiSlice.injectEndpoints({
         headers,
       }),
     }),
+    getRatings: build.mutation({
+      query: (id) => ({
+        url: `${apiUrl}/${id}/reviews`,
+        method: 'GET',
+        headers,
+      }),
+    }),
     deleteProduct: build.mutation({
       query: (id) => ({
         url: `${apiUrl}/delete/${id}`,

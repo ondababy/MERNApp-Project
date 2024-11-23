@@ -26,6 +26,10 @@ const Order = new Schema({
         expected_ship_date: { type: Date, default: null },
         shipped_date: { type: Date, default: null },
       },
+      review: {
+        type: Schema.Types.ObjectId,
+        ref: 'Review',
+      }
     },
     { timestamps: true },
   ],

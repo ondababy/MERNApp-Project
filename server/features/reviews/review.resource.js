@@ -2,6 +2,7 @@ import { UserModel, UserResource } from '#features';
 import { Resource } from '#lib';
 export default class ReviewResource extends Resource {
   async transform(review) {
+    if (!review) return {}
     let { _id, user, ...rest } = review;
     let userData = await UserModel.findById(user);
     let userResource = await UserResource.make(userData);;

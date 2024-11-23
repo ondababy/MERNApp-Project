@@ -21,7 +21,8 @@ export default function Rating({ value = 0, onChange, className, withRating = tr
       index={index}
       rating={rating}
       onClick={() => handleRatingChange(index)}
-      className={cn(`mask mask-star-2 ${index % 2 === 0 ? 'mask-half-1' : 'mask-half-2'} bg-primary`, className)}
+      className={cn(`mask mask-star-2 ${index % 2 === 0 ? 'mask-half-1' : 'mask-half-2'} ${index < rating ? 'bg-primary' : 'bg-primary/30'
+        }`, className)}
     />
   ));
 
