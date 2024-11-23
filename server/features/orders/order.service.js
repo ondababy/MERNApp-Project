@@ -39,6 +39,7 @@ class OrderService extends Service {
       shipping: {
         ...shipping,
         expected_ship_date: new Date(Date.now() + this.shippingMethods[shipping.method].day * 24 * 60 * 60 * 1000),
+        fee: this.shippingMethods[shipping.method].fee,
       },
     });
   }

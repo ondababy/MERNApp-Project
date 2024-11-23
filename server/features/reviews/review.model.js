@@ -1,6 +1,7 @@
-import { ProductModel } from '#features';
+import { OrderModel, ProductModel } from '#features';
 import { Schema } from '#lib';
 import { ImageSchema } from '#utils';
+import mongoose from 'mongoose';
 
 const reviewSchema = new Schema({
   name: 'Review',
@@ -45,7 +46,7 @@ const reviewSchema = new Schema({
 });
 
 // pre delete
-Review.pre('delete', async function (next) {
+reviewSchema.pre('delete', async function (next) {
   const review = this;
   const order = await OrderModel.findById(review.order);
   if (!order) {
@@ -61,6 +62,40 @@ Review.pre('delete', async function (next) {
       product.save();
     }
   });
+});
+
+
+// post insertMany
+reviewSchema.post('insertMany', async function (docs, next) {
+  try {
+    if (!Array.isArray(docs)) {
+      return next(new Error('Expected an array of inserted reviews.'));
+    }
+
+    await Promise.all(
+      docs.map(async (review) => {
+        // Find the associated order
+        const order = await OrderModel.findById(review.order);
+        if (!order) {
+          throw new Error(`Order not found for review with ID: ${review._id}`);
+        }
+
+        order.review = review._id;
+        await order.save();
+
+        const productIds = order.products.map((p) => p.product); // Extract product IDs
+        await ProductModel.updateMany(
+          { _id: { $in: productIds } },
+          { $addToSet: { reviews: review._id } } // Prevent duplicate entries
+        );
+      })
+    );
+
+    next();
+  } catch (error) {
+    console.error('Error in review post-insertMany middleware:', error);
+    next(error);
+  }
 });
 
 

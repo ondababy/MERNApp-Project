@@ -11,6 +11,19 @@ export class Seeder {
   schema() {
     return {};
   }
+  randomId(model) {
+    let rand = Math.floor(Math.random() * model.length);
+    let item = model[rand];
+    return item?._id;
+  }
+
+  randomIds(model, count) {
+    let ids = [];
+    for (let i = 0; i < count; i++) {
+      ids.push(this.randomId(model));
+    }
+    return ids;
+  }
 
   async run() {
     try {

@@ -22,7 +22,7 @@ class ReviewService extends Service {
     
     const products = await ProductModel.find({ _id: { $in: order.products.map(p=>p.product) } });
     products.forEach((product) => {
-      if (!product.reviews.includes(mongoose.Types.ObjectId(reviewId))) {
+      if (!product.reviews.includes(new mongoose.Types.ObjectId(reviewId))) {
         product.reviews.push(reviewId);
         product.save();
       }
@@ -37,7 +37,18 @@ class ReviewService extends Service {
     return review;
   }
 
-  async update(id, body) {
+  async insertMany(data) {
+    this._checkModel();
+    await Promise.all(data.map(async (item) => {
+      return this.update(item);
+    }));
+  }
+
+  async create(body) {
+    return this.update(body);
+  }
+
+  async update(body, id = null ) {
     this._checkModel();
     const data = Array.isArray(body)
       ? body.map((item) => this.model.filterFillables(item))
@@ -58,7 +69,7 @@ class ReviewService extends Service {
       review = await this.model.create(data);
     }
     if (data.order) {
-      this.addReviewToProducts(data.order, review._id);
+      await this.addReviewToProducts(data.order, review._id);
     }
     return review;
     
