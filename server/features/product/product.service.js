@@ -1,4 +1,4 @@
-import { BrandModel, CategoryModel, SupplierModel } from '#features';
+import { BrandModel, CategoryModel, ReviewModel, SupplierModel } from '#features';
 import { Service } from '#lib';
 import ProductModel from './product.model.js';
 
@@ -6,6 +6,11 @@ class ProductService extends Service {
   model = ProductModel;
   fieldToSlugify = 'name';
 
+  async getReviewDetails(productId) {
+    const product = await this.model.findById(productId).select('reviews');
+    const reviews = await ReviewModel.find({ _id: { $in: product.reviews } });
+    return reviews;
+  }
 
   async filterProducts(filter, meta) {
     this._checkModel();
@@ -28,7 +33,6 @@ class ProductService extends Service {
     return this.paginate(meta).exec();
     
   }
-
 
   async getCategoryId(name) {
     const category = await CategoryModel.findOne({ name });

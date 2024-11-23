@@ -64,6 +64,7 @@ User.statics.hidden = [
   'resetPassword',
   'verifyEmail',
   'otp',
+  'fcmToken',
 ];
 
 User.methods.hashPassword = async function (password) {

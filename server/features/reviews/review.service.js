@@ -1,3 +1,4 @@
+import { OrderModel, ProductModel } from '#features';
 import { Service } from '#lib';
 import ReviewModel from './review.model.js';
 
@@ -6,6 +7,19 @@ class ReviewService extends Service {
   setUserId(userId) {
     this.forceFilter = { user: userId };
   }
+
+  async addReviewToProducts(orderId, reviewId) {
+    const order = await OrderModel.findById(orderId);
+    if (!order) return;
+    const products = await ProductModel.find({ _id: { $in: order.products.map(p=>p.product) } });
+    products.forEach((product) => {
+      if (!product.reviews.includes(reviewId)) {
+        product.reviews.push(reviewId);
+        product.save();
+      }
+    });
+  }
+
 
   async reviewExistInOrder(orderId, userId) {
     this._checkModel();
@@ -21,12 +35,20 @@ class ReviewService extends Service {
 
     const exists = await this.reviewExistInOrder(data.order, data.user);
     if (exists) {
-      id = exists._id;
+      id = exists._id;27017
     }
+    let review;
     if (id) {
-      return this.model.findByIdAndUpdate(id, data, { new: true });
+      review = await this.model.findByIdAndUpdate(id, data, { new: true });
+    } else{
+      review = await this.model.create(data);
     }
-    return this.model.create(data);
+    if (data.order) {
+      this.addReviewToProducts(data.order, review._id);
+    }
+    return review;
+    
+
   }
 
 
