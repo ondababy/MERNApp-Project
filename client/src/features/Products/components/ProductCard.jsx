@@ -7,6 +7,7 @@ import {
   CardTitle,
 } from "@common/components/ui/card";
 
+import { Rating } from "@common";
 import { cn } from "@common/lib/utils";
 import { CarouselComponent } from "@custom";
 import { useCartActions } from '@features';
@@ -101,21 +102,26 @@ function ProductCard({ product = defaultProduct, className, ...props }) {
           }
         </CardDescription>
       </CardHeader>
-      <CardFooter className="p-4 flex justify-between items-center">
-        <div className="flex items-end gap-1">
-          <p className='text-md'>
-            {product.currency}
-            {product.price}
-          </p>
-          <p className='text-xs mb-1'>
-            each
-          </p>
+      <CardFooter className="p-4 flex flex-col">
+        <div className="w-full flex justify-between items-center">
+          <div className="flex items-end gap-1">
+            <p className='text-md'>
+              {product.currency}
+              {product.price}
+            </p>
+            <p className='text-xs mb-1'>
+              each
+            </p>
+          </div>
+          <button
+            onClick={handleAddToCart}
+            className="btn btn-outline btn-primary">
+            <FiShoppingCart />
+          </button>
         </div>
-        <button
-          onClick={handleAddToCart}
-          className="btn btn-outline btn-primary">
-          <FiShoppingCart />
-        </button>
+        <div className="w-full flex gap-2 justify-start items-end">
+          {(product?.averageRating || 0).toFixed(2)} <Rating size="md" withRating={false} value={product?.averageRating || 0} />
+        </div>
       </CardFooter>
     </Card>
 
