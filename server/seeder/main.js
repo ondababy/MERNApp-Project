@@ -46,13 +46,13 @@ const main = async () => {
 };
 
 export const RunSeeders = async () => {
+  console.log('Running seeders...');
+  await createAdmin(); 
   if (process.env.ENABLE_SEED != 'true' || process.env.NODE_ENV === 'production') {
     console.log('Seeding disabled in production or without ENABLE_SEED flag');
     return;
   }
 
-  console.log('Running seeders...');
-  await createAdmin(); 
   console.log('Admin created');
   await main();
   console.log('Seeders completed');

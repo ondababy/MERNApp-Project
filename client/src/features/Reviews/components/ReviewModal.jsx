@@ -150,6 +150,10 @@ export default function ReviewModal({ action = "create", id = "", order, refresh
       setReview(order.review);
     };
   }, [_action]);
+  useEffect(() => {
+    setAction(action);
+  }, [action]);
+  console.log((review?.id || _action == 'create'))
   return (review?.id || _action == 'create') && (
     <Modal
       parentClass="z-[1100]"
@@ -160,7 +164,7 @@ export default function ReviewModal({ action = "create", id = "", order, refresh
       <div className="flex flex-col gap-2">
         <div className="w-full flex flex-col items-center justify-center mb-4 gap-4">
           <h1 className="text-lg font-bold">Rate your experience</h1>
-          <Rating withRating={false} value={review.rating} onChange={handleRateChange} />
+          <Rating disabled={false} withRating={false} value={review.rating} onChange={handleRateChange} />
         </div>
         <input
           type="text"

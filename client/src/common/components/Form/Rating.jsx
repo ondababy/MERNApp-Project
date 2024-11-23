@@ -39,7 +39,7 @@ function RatingItem({ index, rating, onClick, className, disabled }) {
   return (
     <input type="radio" name="rating-10"
       className={cn(className, { 'bg-primary': index < rating })}
-      onClick={disabled ? onClick : () => { }}
+      onClick={!disabled ? onClick : () => { }}
       disabled={disabled}
     />
   );

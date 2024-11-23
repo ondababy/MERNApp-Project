@@ -8,7 +8,7 @@ let shippingMethods = {
   smd: { key: 'smd', fee: 300, method: 'Same Day', day: 1},
 }
 
-let notes = {
+let notesPhrases = {
   pending: 'Your order is pending',
   processing: 'Your order is processing',
   shipped: 'Your order has been shipped',
@@ -26,7 +26,7 @@ export default class OrderResource extends Resource {
     const subTotal = productData.reduce((acc, product, index) => acc + product.price * products[index].quantity, 0);
     const shippingFee = shippingMethods[rest.shipping.method].fee;
     const total = subTotal + shippingFee;
-    const notes = notes[rest.status];
+    const notes = notesPhrases[rest.status];
 
     return {
       id: _id,
