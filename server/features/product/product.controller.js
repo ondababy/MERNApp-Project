@@ -93,70 +93,95 @@ class ProductController extends Controller {
     this.success({ res, message: 'Data updated!', resource });
   };
 
-  createProductReview = async (req, res) => {
-    const { rating, comment, productId } = req.body;
-    const review = {
-      user: req.user._id,
-      name: req.user.name,
-      rating: Number(rating),
-      comment
-    };
+  // Charts
+  productSales = async (req, res) => {
+    try {
+      const totalSales = await Order.aggregate([
+        {
+          $unwind: '$products',
+        },
+        {
+          $lookup: {
+            from: 'products', // Matches the collection name of the Product model
+            localField: 'products.product',
+            foreignField: '_id',
+            as: 'productDetails',
+          },
+        },
+        {
+          $unwind: '$productDetails',
+        },
+        {
+          $group: {
+            _id: null,
+            total: {
+              $sum: {
+                $multiply: ['$products.quantity', '$productDetails.price'],
+              },
+            },
+          },
+        },
+      ]);
+  
+      if (!totalSales.length || totalSales[0].total === 0) {
+        return res.status(404).json({ message: 'No total sales data found!' });
+      }
 
-    const product = await ProductModel.findById(productId);
-    if (!product) return this.error({ res, message: 'Product not found!' });
+      const sales = await Order.aggregate([
+        {
+          $unwind: '$products',
+        },
+        {
+          $lookup: {
+            from: 'products',
+            localField: 'products.product',
+            foreignField: '_id',
+            as: 'productDetails',
+          },
+        },
+        {
+          $unwind: '$productDetails',
+        },
+        {
+          $group: {
+            _id: '$productDetails.name', // Group by product name
+            total: {
+              $sum: {
+                $multiply: ['$products.quantity', '$productDetails.price'],
+              },
+            },
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            name: '$_id',
+            total: 1,
+          },
+        },
+      ]);
+  
+      if (!sales.length) {
+        return res.status(404).json({ message: 'No sales data found!' });
+      }
 
-    const isReviewed = product.reviews.find(
-      r => r.user.toString() === req.user._id.toString()
-    );
-
-    if (isReviewed) {
-      product.reviews.forEach(review => {
-        if (review.user.toString() === req.user._id.toString()) {
-          review.comment = comment;
-          review.rating = rating;
-        }
+      const totalAmount = totalSales[0].total;
+      const totalPercentage = sales.map((item) => ({
+        name: item.name,
+        percent: Number(((item.total / totalAmount) * 100).toFixed(2)),
+      }));
+  
+      // Step 4: Send response
+      return res.status(200).json({
+        success: true,
+        totalPercentage,
+        sales,
+        totalSales: totalAmount,
       });
-    } else {
-      product.reviews.push(review);
-      product.numOfReviews = product.reviews.length;
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
     }
-
-    product.ratings = product.reviews.reduce((acc, item) => item.rating + acc, 0) / product.reviews.length;
-    await product.save({ validateBeforeSave: false });
-
-    this.success({ res, message: 'Review posted successfully!' });
-  };
-
-  // Method to get product reviews
-  getProductReviews = async (req, res) => {
-    const product = await ProductModel.findById(req.query.id);
-    if (!product) return this.error({ res, message: 'Product not found!' });
-
-    this.success({ res, message: 'Reviews fetched successfully!', data: product.reviews });
-  };
-
-  // Method to delete a review
-  deleteReview = async (req, res) => {
-    const product = await ProductModel.findById(req.query.productId);
-    if (!product) return this.error({ res, message: 'Product not found!' });
-
-    const reviews = product.reviews.filter(review => review._id.toString() !== req.query.id.toString());
-    const numOfReviews = reviews.length;
-
-    const ratings = reviews.reduce((acc, item) => item.rating + acc, 0) / (reviews.length || 1);
-
-    await ProductModel.findByIdAndUpdate(req.query.productId, {
-      reviews,
-      ratings,
-      numOfReviews
-    }, {
-      new: true,
-      runValidators: true,
-      useFindAndModify: false
-    });
-
-    this.success({ res, message: 'Review deleted successfully!' });
-  };
+  };  
 }
 
 export default new ProductController();
