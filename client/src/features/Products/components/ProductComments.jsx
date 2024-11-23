@@ -7,9 +7,16 @@ import { productApi } from '../product.api';
 const Comment = ({ comment }) => {
   return (
     <div className="p-4 border rounded-lg bg-base-200">
-      <p className="font-semibold">
-        {comment.username}
-      </p>
+      <div className="flex gap-2 items-center">
+        <div className="avatar">
+          <div className="rounded-full w-8 h-8 bg-primary-500 flex items-center justify-center">
+            <img src={comment?.user?.avatar} alt="avatar" className="rounded-full w-8 h-8" />
+          </div>
+        </div>
+        <p className="font-semibold">
+          {comment?.user?.username}
+        </p>
+      </div>
       {/* RATING TODO */}
       {/* sm */}
       <p className='text-md my-2 flex gap-4 items-center'>
@@ -35,6 +42,7 @@ export default function ProductComments({ product }) {
 
   const fetchReviews = useCallback(async (id) => {
     return getRatings(id).unwrap().then((data) => {
+      console.log(data);
       setReviews(data.resource);
     });
 

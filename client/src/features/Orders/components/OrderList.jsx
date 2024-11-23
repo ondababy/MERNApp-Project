@@ -32,6 +32,7 @@ export default function OrderList() {
       if (selectedTab.toLowerCase() !== 'all') {
         res = res.filter((order) => order.status.toLowerCase() === selectedTab.toLowerCase());
       }
+      res.reverse();
       setOrders(res);
     });
     setSelectedOrder(null);

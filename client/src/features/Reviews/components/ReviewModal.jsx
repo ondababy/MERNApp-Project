@@ -6,8 +6,7 @@ import { reviewApi } from '../review.api';
 const ToastSuccess = () => (
   <div className="flex items-center gap-2">
     <svg
-      xmlns="http://www.w3
-      .org/2000/svg"
+      xmlns="http://www.w3.org/2000/svg"
       className="icon icon-check"
       width="24"
       height="24"
@@ -16,13 +15,11 @@ const ToastSuccess = () => (
       stroke="currentColor"
       fill="none"
     >
-      <path stroke-linecap="round" strokelinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
     </svg>
     <span>Feedback sent successfully</span>
   </div>
 );
-
-
 
 export default function ReviewModal({ action = "create", id = "", order, refresh = () => { } }) {
   const {
@@ -38,15 +35,14 @@ export default function ReviewModal({ action = "create", id = "", order, refresh
     rating: 0,
     isAnonymous: false,
   });
-  const [review, setReview] = useState({});
-  const [error, setError] = useState(null)
-  const [_action, setAction] = useState(action)
+  const [review, setReview] = useState(reviewValues.current);
+  const [error, setError] = useState(null);
+  const [_action, setAction] = useState(action);
 
   const [createReview] = useCreateReviewMutation();
   const [updateReview] = useUpdateReviewMutation();
   const [deleteReview] = useDeleteReviewMutation();
   const [getReview] = useGetReviewMutation();
-
 
   const fetchReview = useCallback(async () => {
     return await getReview(id).unwrap().then((data) => {
@@ -61,24 +57,23 @@ export default function ReviewModal({ action = "create", id = "", order, refresh
         ...review,
         order: order.id,
       }
-    }
-    console.log(payload.review)
+    };
     return await createReview(payload.review).unwrap().then((data) => {
       if (data?.error) {
-        setError(data.error.data.message)
-        return toast.error(data.error.data.message)
+        setError(data.error.data.message);
+        return toast.error(data.error.data.message);
       }
-      setError(null)
-      setReview(data.resource)
+      setError(null);
+      setReview(data.resource);
       refresh({
         ...order,
         review: data.resource
-      })
+      });
       toast.success(<ToastSuccess />);
     }).catch(e => {
-      console.error(e)
+      console.error(e);
     });
-  }, [createReview, review]);
+  }, [createReview, review, order, refresh]);
 
   const handleUpdateReview = useCallback(async () => {
     let payload = {
@@ -87,37 +82,41 @@ export default function ReviewModal({ action = "create", id = "", order, refresh
         ...review,
         order: order.id,
       }
-    }
+    };
     return await updateReview(payload).unwrap().then((data) => {
       if (data?.error) {
-        setError(data.error.data.message)
-        return toast.error(data.error.data.message)
+        setError(data.error.data.message);
+        return toast.error(data.error.data.message);
       }
-      setError(null)
-      setReview(data.resource)
+      setError(null);
+      setReview(data.resource);
       refresh({
         ...order,
         review: data.resource
-      })
+      });
       toast.success(<ToastSuccess />);
     }).catch(e => {
-      console.error(e)
+      console.error(e);
     });
-  }, [updateReview, id, review]);
+  }, [updateReview, id, review, order, refresh]);
 
   const handleDeleteReview = useCallback(async () => {
-    return await deleteReview(id).unwrap().then(() => {
+    return await deleteReview(id).unwrap().then((data) => {
       if (data?.error) {
-        setError(data.error.data.message)
-        return toast.error(data.error.data.message)
+        setError(data.error.data.message);
+        return toast.error(data.error.data.message);
       }
-      setReview(null)
-      setError(null)
+      setReview(reviewValues.current);
+      setError(null);
+      refresh({
+        ...order,
+        review: null
+      });
       toast.success(<ToastSuccess />);
     }).catch((e) => {
-      toast.error("Error deleting feedback.")
+      toast.error("Error deleting feedback.");
     });
-  }, [deleteReview, id]);
+  }, [deleteReview, id, order, refresh]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -143,18 +142,16 @@ export default function ReviewModal({ action = "create", id = "", order, refresh
   };
 
   useEffect(() => {
-    if (review) setAction('edit');
-  }, [review]);
+    if (action) setAction(action);
+  }, [action]);
+
   useEffect(() => {
     if (_action === "edit" && order?.review?.id) {
       setReview(order.review);
-    };
-  }, [_action]);
-  useEffect(() => {
-    setAction(action);
-  }, [action]);
-  console.log((review?.id || _action == 'create'))
-  return (review?.id || _action == 'create') && (
+    }
+  }, [_action, order]);
+
+  return (
     <Modal
       parentClass="z-[1100]"
       buttonClass="btn btn-info btn-outline w-full"
@@ -205,13 +202,11 @@ export default function ReviewModal({ action = "create", id = "", order, refresh
         <p className="text-xs italic font-light">
           By sending feedback, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
         </p>
-        {
-          error && (
-            <p className="text-xs italic text-red-400 my-4">
-              *Error while performing an action: {error}
-            </p>
-          )
-        }
+        {error && (
+          <p className="text-xs italic text-red-400 my-4">
+            *Error while performing an action: {error}
+          </p>
+        )}
       </div>
     </Modal>
   );
