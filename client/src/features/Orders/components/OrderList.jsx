@@ -3,9 +3,9 @@ import { useSelector } from 'react-redux';
 import { useOrderActions } from '../hooks/useOrderActions';
 import { paymentMethods, setOrder, shippingMethods } from '../order.slice';
 
+import { ReviewModal } from '@features';
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import CommentModal from './CommentModal';
 import OrderCard from './OrderCard';
 
 const badgeColor = {
@@ -164,7 +164,7 @@ export default function OrderList() {
 
 
               {selectedOrder.status === 'delivered' && (
-                <CommentModal />
+                <ReviewModal />
               )}
             </div>
           </>
