@@ -59,11 +59,11 @@ export default function OrderList() {
   };
 
   return (
-    <div className="w-full flex flex-col gap-2 lg:flex-row justify-center min-h-screen ">
+    <div className="w-full flex flex-col gap-2 lg:flex-row lg:justify-center min-h-screen ">
       <div className="w-full p-8 lg:w-3/2 flex flex-col gap-2 ">
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center w-full overflow-auto">
           <h1 className="text-2xl font-bold">Orders</h1>
-          <div role="tablist" className="tabs tabs-boxed">
+          <div role="tablist" className="tabs tabs-boxed tabs-xs lg:tabs-md">
             {tabs.map((status, idx) => (
               <button
                 key={`${status}${idx}${Math.random()}`}
@@ -90,12 +90,35 @@ export default function OrderList() {
       {/* Selected Order will show the information here */}
       <div
         className={`${selectedOrder?.id ? 'w-full animate__animated animate__fadeInRight' : 'hidden'
-          } p-8 lg:w-2/5 flex flex-col gap-2 `}
+          } p-8 lg:w-2/5 flex flex-col gap-2 lg:relative fixed bg-base-100 h-screen top-0 shadow-lg z-[1002]`}
       >
         {selectedOrder ? (
           <>
             <div className="flex flex-col gap-2">
-              <h1 className="font-bold uppercase text-md">Order ID: {selectedOrder.id}</h1>
+              <div className='flex justify-between items-center'>
+                <span>
+                  <h1 className="font-bold uppercase text-md">Order ID: </h1>
+                  <span>{selectedOrder.id}</span>
+                </span>
+                <button className='btn btn-ghost aspect-square rounded-full' onClick={() => setSelectedOrder(null)}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="icon icon-tabler icon-tabler-x"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    strokeWidth="2"
+                    stroke="currentColor"
+                    fill="none"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                  </svg>
+                </button>
+              </div>
               <p>Placed on {new Date(selectedOrder.createdAt).toDateString()}</p>
               <div className="divider"></div>
 

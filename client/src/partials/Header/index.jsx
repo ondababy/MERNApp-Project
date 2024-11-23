@@ -62,7 +62,7 @@ function Header({ clickLogo }) {
                   <img src={userInfo?.info?.avatar?.url || "https://placehold.co/400?text=no image"} />
                 </div>
               </Button>
-              <Dropdown.Menu className="mt-3 z-[1] w-52 menu-sm">
+              <Dropdown.Menu className="mt-3  w-52 menu-sm bg-base-100">
                 <li>
                   <Link to="/profile" className="justify-between">
                     Profile
