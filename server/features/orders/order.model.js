@@ -38,4 +38,12 @@ const Order = new Schema({
 Order.statics.fillables = [];
 Order.statics.hidden = [];
 
+
+Order.pre('delete', async function (next) {
+  const order = this;
+  await order.model('Review').deleteOne({ _id: order.review });
+  next();
+});
+
+
 export default Order.makeModel();

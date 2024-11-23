@@ -163,7 +163,7 @@ export default function OrderList() {
 
               {/* MODAL FEEDBACK */}
               {selectedOrder?.status === 'delivered' && (
-                <ReviewModal refresh={()=>setSelectedOrder(setSelectedOrder)} order={selectedOrder} id={selectedOrder?.review?.id} action={selectedOrder?.review?.id ? 'edit' : 'create'} />
+                <ReviewModal refresh={setSelectedOrder} order={selectedOrder} id={selectedOrder?.review?.id} action={selectedOrder?.review?.id ? 'edit' : 'create'} />
               )}
             </div>
           </>

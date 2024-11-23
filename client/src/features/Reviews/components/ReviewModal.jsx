@@ -24,7 +24,7 @@ const ToastSuccess = () => (
 
 
 
-export default function ReviewModal({ action = "create", id = "", order, refresh=()=>{} }) {
+export default function ReviewModal({ action = "create", id = "", order, refresh = () => { } }) {
   const {
     useGetReviewMutation,
     useUpdateReviewMutation,
@@ -70,7 +70,10 @@ export default function ReviewModal({ action = "create", id = "", order, refresh
       }
       setError(null)
       setReview(data.resource)
-      refresh()
+      refresh({
+        ...order,
+        review: data.resource
+      })
       toast.success(<ToastSuccess />);
     }).catch(e => {
       console.error(e)
@@ -92,7 +95,10 @@ export default function ReviewModal({ action = "create", id = "", order, refresh
       }
       setError(null)
       setReview(data.resource)
-      refresh()
+      refresh({
+        ...order,
+        review: data.resource
+      })
       toast.success(<ToastSuccess />);
     }).catch(e => {
       console.error(e)

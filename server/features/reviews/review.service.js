@@ -1,8 +1,9 @@
 import { OrderModel, ProductModel } from '#features';
 import { Service } from '#lib';
-import ReviewModel from './review.model.js';
 import { Filter } from 'bad-words';
+import mongoose from 'mongoose';
 import customBadWords from './customBadWords.js';
+import ReviewModel from './review.model.js';
 
 const filter = new Filter();
 filter.addWords(...customBadWords);
@@ -21,7 +22,7 @@ class ReviewService extends Service {
     
     const products = await ProductModel.find({ _id: { $in: order.products.map(p=>p.product) } });
     products.forEach((product) => {
-      if (!product.reviews.includes(reviewId)) {
+      if (!product.reviews.includes(mongoose.Types.ObjectId(reviewId))) {
         product.reviews.push(reviewId);
         product.save();
       }
