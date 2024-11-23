@@ -10,6 +10,11 @@ const reviewSchema = new Schema({
   name: 'Review',
   schema: [
     {
+      user: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+      },
       order: {
         type: Schema.Types.ObjectId,
         ref: 'Order',
@@ -17,6 +22,7 @@ const reviewSchema = new Schema({
       },
       title: {
         type: String,
+        default: '',
         validate: {
           validator: (value) => !filter.isProfane(value),
           message: 'Title contains bad words'
@@ -34,7 +40,7 @@ const reviewSchema = new Schema({
       },
       description: {
         type: String,
-        required: [true, 'Please provide a review'],
+        default: '',
         validate: {
           validator: (value) => !filter.isProfane(value),
           message: 'Review contains bad words'
