@@ -22,7 +22,7 @@ export function useEmailVerification() {
   const verify = useCallback(async () => {
     const verifyToken = new URLSearchParams(window.location.search).get('verifyToken');
     const payload = { id: userInfo.id, otp, verifyToken };
-    verifyEmail(payload).then((res) => {
+    return verifyEmail(payload).then((res) => {
       if (res?.error) {
         setInvalid(true);
         toast.error('Invalid OTP');
@@ -36,14 +36,21 @@ export function useEmailVerification() {
         }));
       }
 
+    }).catch((err) => {
+      toast.error('Error verifying email');
     });
   }, [otp, userInfo.id, verifyEmail, dispatch]);
 
   const resend = useCallback(async () => {
     const redirectUrl = `${window.location.origin}/onboarding`;
-    sendVerifyEmail({
+    return sendVerifyEmail({
       id: userInfo.id, redirectUrl
     }).then((res) => {
+      if (res?.error) {
+        toast.error('Error sending email');
+        return
+      }
+
       setInvalid(false);
       setIsCodeSent(true);
       dispatch(setCredentials({
@@ -53,12 +60,17 @@ export function useEmailVerification() {
       }));
       toast.success('Email sent successfully');
       setResendDelay(RESEND_DELAY);
+    }).catch((err) => {
+      toast.error('Error sending email');
     });
   }, [userInfo, accessToken, sendVerifyEmail, dispatch]);
 
   useEffect(() => {
     const otpFromUrl = new URLSearchParams(window.location.search).get('otp');
-    if (otpFromUrl) setOTP(otpFromUrl);
+    if (otpFromUrl) {
+      setOTP(otpFromUrl)
+      setIsCodeSent(true);
+    };
   }, []);
 
   useEffect(() => {

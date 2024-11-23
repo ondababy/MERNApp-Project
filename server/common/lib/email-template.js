@@ -37,6 +37,25 @@ class EmailTemplate {
             background-color: #f4f4f4;
             color: #777777;
           }
+          .order-summary {
+            margin-top: 20px;
+          }
+          .order-summary h3 {
+            margin-bottom: 10px;
+            color: #007bff;
+          }
+          .order-summary ul {
+            list-style-type: none;
+            padding: 0;
+          }
+          .order-summary ul li {
+            padding: 5px 0;
+            border-bottom: 1px solid #f4f4f4;
+          }
+          .order-summary p {
+            margin: 10px 0;
+            font-weight: bold;
+          }
             `;
   }
 
@@ -75,4 +94,3 @@ class EmailTemplate {
 }
 
 export default EmailTemplate;
-

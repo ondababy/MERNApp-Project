@@ -74,5 +74,5 @@ export const orderSlice = createSlice({
   },
 });
 
-export const { setOrder, setShipping, getShippingMethods, setCompleted } = orderSlice.actions;
+export const { setOrder, setShipping, getShippingMethods, clearOrder, setCompleted } = orderSlice.actions;
 export const orderReducer = orderSlice.reducer;

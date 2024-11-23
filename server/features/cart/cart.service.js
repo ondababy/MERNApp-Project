@@ -10,7 +10,6 @@ class CartService extends Service {
 
   async validate(data) {
     let { product = null, quantity = 0, incrementBy = 0 } = data;
-    console.log(data);
     incrementBy = parseInt(incrementBy) || 0;
     quantity = (parseInt(quantity) || 0) + incrementBy;
     const productData = await ProductModel.findById(product);

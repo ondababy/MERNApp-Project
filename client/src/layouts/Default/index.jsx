@@ -10,6 +10,7 @@ export function DefaultLayout() {
       <div className="w-full grid min-h-screen  mx-auto place-items-center">
         <Outlet />
       </div>
+
       <FooterWrapper />
     </div>
   )

@@ -1,12 +1,14 @@
-import shoes_splash from '@assets/images/shoes-splash.jpg'
-import { SelectComponent } from '@common'
-import { ProductFilters, ProductGrid } from '@features'
-import React from 'react'
-import ShopWrapper from './Wrapper'
+import shoes_splash from '@assets/images/shoes-splash.jpg';
+import { SelectComponent } from '@common';
+import { ProductFilters, ProductGrid } from '@features';
+import React from 'react';
+import ShopWrapper from './Wrapper';
 
-export { default as Cart } from './Cart'
-export { default as Checkout } from './Checkout'
-export { default as ProductDisplay } from './Product'
+export { default as Cart } from './Cart';
+export { default as Checkout } from './Checkout';
+export { default as OrdersDisplay } from './Orders';
+export { default as ProductDisplay } from './Product';
+export { default as Profile } from './Profile';
 
 
 
@@ -19,11 +21,10 @@ export function Shop() {
           <h1 className="text-5xl font-display">
             Our Products
           </h1>
-          <SelectComponent />
+          {/* <SelectComponent /> */}
         </div>
         <ProductGrid />
       </div>
-
     </ShopWrapper >
   )
 }

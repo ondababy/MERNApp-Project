@@ -30,12 +30,24 @@ const CategoryForm = ({ title = 'Category Form', action = 'create' }) => {
   const navigate = useNavigate();
   const [category, setCategory] = useState(null);
   const [categorySchema, setCategorySchema] = useState(fields);
+  const [previewImages, setPreviewImages] = useState(images);
   const [createCategory, { isLoading: isCreating }] = categoryApi.useCreateCategoryMutation();
   const [updateCategory, { isLoading: isUpdating }] = categoryApi.useUpdateCategoryMutation();
   const [getCategory, { isLoading: isFetching }] = categoryApi.useGetCategoryMutation();
   const { slug, setSlug } = useSlug();
   /* END DECLARATIONS ################################################ */
+  const handleImageInput = (e) => {
+    const files = e.target.files;
+    const images = Array.from(files).map((file) => {
+      return {
+        src: URL.createObjectURL(file),
+        alt: file.name,
+        file,
+      };
+    });
 
+    setPreviewImages(images);
+  }
   const initialValues = useMemo(
     () =>
       categorySchema.reduce((acc, field) => {
@@ -89,7 +101,6 @@ const CategoryForm = ({ title = 'Category Form', action = 'create' }) => {
   return (
     <CategoryWrapper
       title={title}
-      prevUrl="/dashboard/categories/table"
     >
 
       <div className="flex flex-col gap-4 lg:flex-row items-center lg:items-start">
@@ -99,12 +110,12 @@ const CategoryForm = ({ title = 'Category Form', action = 'create' }) => {
           <CarouselComponent images={
             category?.images?.length ?
               category?.images.map((image) => ({ src: image.url, alt: image.alt }))
-              : images} />
+              : previewImages} />
         </div>
 
         <div className="container w-2/3">
           <FormikForm
-            formSchema={categorySchema}
+            formSchema={categorySchema.map(f => f.name === 'image' ? { ...f, onChange: handleImageInput } : f)}
             formikProps={{
               initialValues,
               validationSchema: categoryValidation,

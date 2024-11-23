@@ -10,7 +10,6 @@ function Header({ clickLogo }) {
   const { userInfo, accessToken } = useSelector(state => state.auth)
   const { items, subTotal, currency } = useSelector(state => state.cart)
 
-
   return (
     <>
       <Navbar className='bg-base-100/10 backdrop-blur-xl z-[1000]'>
@@ -20,7 +19,7 @@ function Header({ clickLogo }) {
               color="ghost"
             >
               <TextRainbow
-                text="Shoeshabold"
+                text="Shoeshable"
                 className="text-xl font-extrabold font-display"
               />
             </Button>
@@ -60,15 +59,24 @@ function Header({ clickLogo }) {
             <Dropdown end>
               <Button tag="label" tabIndex={0} color="ghost" className="avatar" shape="circle">
                 <div className="w-10 rounded-full">
-                  <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+                  <img src={userInfo?.info?.avatar?.url || "https://placehold.co/400?text=no image"} />
                 </div>
               </Button>
               <Dropdown.Menu className="mt-3 z-[1] w-52 menu-sm">
                 <li>
-                  <a className="justify-between">
+                  <Link to="/profile" className="justify-between">
                     Profile
-                    <Badge className="badge">New</Badge>
-                  </a>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/cart" className="justify-between">
+                    Cart
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/orders" className="justify-between">
+                    Orders
+                  </Link>
                 </li>
                 <Dropdown.Item>Settings</Dropdown.Item>
                 <Dropdown.Item onClick={handleLogout}>
