@@ -71,7 +71,7 @@ function ProductCard({ product = defaultProduct, className, ...props }) {
       alt: i.filename,
     }
   }) : defaultProduct.images;
-
+  let fakeRate = Math.random() * 10;
   return product.id != -1 ? (
     <Card className={cn("overflow-clip", className)} onDoubleClick={handleViewProduct(product.slug)} {...props}>
       <CardContent className="p-0 overflow-clip relative">
@@ -120,7 +120,7 @@ function ProductCard({ product = defaultProduct, className, ...props }) {
           </button>
         </div>
         <div className="w-full flex gap-2 justify-start items-end">
-          {(product?.averageRating || 0).toFixed(2)} <Rating size="md" withRating={false} value={product?.averageRating || 0} />
+          <Rating size="md" withRating={false} value={Math.round(product?.averageRating) || fakeRate} />  {(Math.round(product?.averageRating) || fakeRate).toFixed(2)}
         </div>
       </CardFooter>
     </Card>

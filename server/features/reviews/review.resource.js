@@ -14,7 +14,7 @@ export default class ReviewResource extends Resource {
     
     return {
       id: _id,
-      user,
+      user: rest.isAnonymous || !user ? 'Anon' : user,
       ...rest,
     };
   }

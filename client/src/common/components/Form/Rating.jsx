@@ -1,7 +1,7 @@
 import { cn } from "@common/lib/utils";
 import { useEffect, useState } from "react";
 
-export default function Rating({ value = 0, onChange, className, withRating = true, size = "lg", ...args }) {
+export default function Rating({ value = 0, disabled = true, onChange, className, withRating = true, size = "lg", ...args }) {
   const [rating, setRating] = useState(value);
 
   useEffect(() => {
@@ -23,6 +23,7 @@ export default function Rating({ value = 0, onChange, className, withRating = tr
       onClick={() => handleRatingChange(index)}
       className={cn(`mask mask-star-2 ${index % 2 === 0 ? 'mask-half-1' : 'mask-half-2'} ${index < rating ? 'bg-primary' : 'bg-primary/30'
         }`, className)}
+      disabled={disabled}
     />
   ));
 
@@ -34,11 +35,12 @@ export default function Rating({ value = 0, onChange, className, withRating = tr
   );
 }
 
-function RatingItem({ index, rating, onClick, className }) {
+function RatingItem({ index, rating, onClick, className, disabled }) {
   return (
     <input type="radio" name="rating-10"
       className={cn(className, { 'bg-primary': index < rating })}
-      onClick={onClick}
+      onClick={disabled ? onClick : () => { }}
+      disabled={disabled}
     />
   );
 }
