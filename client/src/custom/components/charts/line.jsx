@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { CartesianGrid, Line, LineChart, XAxis } from "recharts"
+import * as React from "react";
+import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
 
 import {
   Card,
@@ -9,13 +9,14 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@common/components/ui/card"
+} from "@common/components/ui/card";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@common/components/ui/chart"
-const chartData = [
+} from "@common/components/ui/chart";
+
+const defaultChartData = [
   { date: "2024-04-01", desktop: 222, mobile: 150 },
   { date: "2024-04-02", desktop: 97, mobile: 180 },
   { date: "2024-04-03", desktop: 167, mobile: 120 },
@@ -107,9 +108,9 @@ const chartData = [
   { date: "2024-06-28", desktop: 149, mobile: 200 },
   { date: "2024-06-29", desktop: 103, mobile: 160 },
   { date: "2024-06-30", desktop: 446, mobile: 400 },
-]
+];
 
-const chartConfig = {
+const defaultChartConfig = {
   views: {
     label: "Page Views",
     color: "hsl(var(--chart-1))",
@@ -122,32 +123,34 @@ const chartConfig = {
     label: "Mobile",
     color: "hsl(var(--chart-2))",
   },
-}
+};
 
-export function LineChartComponent() {
-  const [activeChart, setActiveChart] =
-    React.useState("desktop")
+export function LineChartComponent({
+  chartData = defaultChartData,
+  chartConfig = defaultChartConfig,
+  title = "Line Chart - Interactive",
+  description = "Showing total visitors for the last 3 months",
+}) {
+  const [activeChart, setActiveChart] = React.useState("desktop");
 
   const total = React.useMemo(
     () => ({
       desktop: chartData.reduce((acc, curr) => acc + curr.desktop, 0),
       mobile: chartData.reduce((acc, curr) => acc + curr.mobile, 0),
     }),
-    []
-  )
+    [chartData]
+  );
 
   return (
     <Card>
       <CardHeader className="flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row">
         <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
-          <CardTitle>Line Chart - Interactive</CardTitle>
-          <CardDescription>
-            Showing total visitors for the last 3 months
-          </CardDescription>
+          <CardTitle>{title}</CardTitle>
+          <CardDescription>{description}</CardDescription>
         </div>
         <div className="flex">
           {["desktop", "mobile"].map((key) => {
-            const chart = key
+            const chart = key;
             return (
               <button
                 key={chart}
@@ -162,7 +165,7 @@ export function LineChartComponent() {
                   {total[key].toLocaleString()}
                 </span>
               </button>
-            )
+            );
           })}
         </div>
       </CardHeader>
@@ -187,11 +190,11 @@ export function LineChartComponent() {
               tickMargin={8}
               minTickGap={32}
               tickFormatter={(value) => {
-                const date = new Date(value)
+                const date = new Date(value);
                 return date.toLocaleDateString("en-US", {
                   month: "short",
                   day: "numeric",
-                })
+                });
               }}
             />
             <ChartTooltip
@@ -204,7 +207,7 @@ export function LineChartComponent() {
                       month: "short",
                       day: "numeric",
                       year: "numeric",
-                    })
+                    });
                   }}
                 />
               }
@@ -220,5 +223,5 @@ export function LineChartComponent() {
         </ChartContainer>
       </CardContent>
     </Card>
-  )
+  );
 }
