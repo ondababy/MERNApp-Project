@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { useOrderActions } from '../hooks/useOrderActions';
 import { paymentMethods, setOrder, shippingMethods } from '../order.slice';
 
+import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import CommentModal from './CommentModal';
 import OrderCard from './OrderCard';
@@ -102,23 +103,30 @@ export default function OrderList() {
               <div>
                 <h2 className="text-lg font-bold">Products</h2>
                 <ul>
-                  {selectedOrder.products.map((product) => (
-                    <li key={product._id} className="flex justify-between">
-                      <span>
-                        {product.name} (x {selectedOrder.quantities[product._id]})
-                      </span>
-                      <span>${product.price}</span>
-                    </li>
-                  ))}
+                  {selectedOrder.products.map((product) => {
+                    const qty = selectedOrder.quantities.filter((qty) => Object.keys(qty)[0] === product._id)[0][product._id];
+                    return (
+                      <li key={product._id} className="flex justify-between">
+                        <span className="flex gap-2">
+                          <Link to={`/shop/${product?.slug}`} className='link link-hover link-secondary'>{product.name}</Link>
+                          <span>(x {qty})</span>
+                        </span>
+                        <span>{parseFloat(product.price * qty)?.toFixed(2)}</span>
+                      </li>
+                    )
+                  })}
                 </ul>
                 <div className="divider"></div>
                 <h2 className="text-lg font-bold">Shipping</h2>
-                <p>{shippingMethods[selectedOrder?.shipping?.method].method}</p>
+                <span className="flex items-center justify-between">
+                  <p>{shippingMethods[selectedOrder?.shipping?.method].method}</p>
+                  <p>{shippingMethods[selectedOrder?.shipping?.method].fee}</p>
+                </span>
                 <div className="divider"></div>
                 <h2 className="text-lg font-bold">Payment</h2>
                 <p>{paymentMethods[selectedOrder?.payment?.method].method}</p>
                 <div className="divider"></div>
-                <h1 className="font-bold text-xl mb-2">Total: ${selectedOrder.total}</h1>
+                <h1 className="font-bold text-xl mb-2">Total: {selectedOrder.total}</h1>
                 <div className="divider"></div>
               </div>
               {selectedOrder.status === 'pending' && (

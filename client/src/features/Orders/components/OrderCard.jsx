@@ -39,7 +39,7 @@ export default function OrderCard({ order, onClick, key }) {
           </div>
           <div>
             <h3 className="text-lg font-bold">Total</h3>
-            <p className="text-sm">${order.total}</p>
+            <p className="text-sm">{order.total}</p>
           </div>
         </div>
       </div>
