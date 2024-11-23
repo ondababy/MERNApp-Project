@@ -1,30 +1,30 @@
-import { ProductModel, ProductService, UserService } from '#features';
+import EmailTemplate from '#common/lib/email-template';
+import { NotificationService, ProductModel, ProductService, UserService } from '#features';
+import { sendEmail } from '#utils';
 
 import { Service } from '#lib';
-import exp from 'constants';
+import { parse } from 'path';
 import OrderModel from './order.model.js';
 
 class OrderService extends Service {
   model = OrderModel;
-  setUserId(userId) {
-    this.forceFilter = { user: userId };
-  }
   shippingMethods = {
     std: { key: 'std', fee: 100, method: 'Standard', day: 7},
     exp: { key: 'exp', fee: 200, method: 'Express', day: 3},
     smd: { key: 'smd', fee: 300, method: 'Same Day', day: 1},
   }
 
+  setUserId(userId) {
+    this.forceFilter = { user: userId };
+  }
+
   async manageStock(products) {
-    // Manage Stock
     const productList = products.map((product) => product.product);
-    const productData = await ProductService.find({ _id: { $in: productList } });
-    await productList.forEach(async (product, index) => {
-      if (productData[index].stock < products[index].quantity) {
-        throw new Error('Product out of stock');
-      }
-      productData[index].stock -= products[index].quantity;
-      await productData[index].save();
+    const productData = await ProductModel.find({ _id: { $in: productList } });
+    productData.forEach((product) => {
+      const orderProduct = products.find((orderProduct) => orderProduct.product == product.id);
+      product.stock -= orderProduct.quantity;
+      product.save();
     });
   }
 
@@ -43,20 +43,77 @@ class OrderService extends Service {
     });
   }
 
-  async update(data) {
-    let { id, products, shipping, ...orderData } = data;
-    const order = await this.getById(id);
-    const user = await UserService.getById(order.user);
+  makeAltMessage(order) {
+    
+    return `
+    <div class="order-summary">
+      <h3>Order Summary</h3>
+      <ul>
+        ${order?.products?.length && order.products.map((product, idx) => {
+          const qty = Object.values(order.quantities[idx])[0]
+          const itemTotal = product.price * parseInt(qty);
+          return `
+          <li>
+            ${qty} x ${product.name} - $${itemTotal.toFixed(2)}
+          </li>
+        `}).join('')}
+      </ul>
+      <p>
+        Subtotal: $${order?.subTotal}
+      </p>
+      <p>
+        Shipping: $${this.shippingMethods[order?.shipping?.method]?.fee}  
+      </p>
+      <p>
+        Total: $${order?.subTotal + this.shippingMethods[order?.shipping?.method]?.fee}  
+      </p>
+    </div>
+    `;
+  }
 
-    return order.update({
-      ...orderData,
-      user,
-      products,
-      shipping: {
-        ...shipping,
-        expected_ship_date: new Date(Date.now() + this.shippingMethods[shipping.method].day * 24 * 60 * 60 * 1000),
+  async update(data) {
+    let { 
+      user:userId, 
+      status,
+      order: { id, products, shipping, ...orderData },
+     } = data;
+    const user = await UserService.getById(userId);
+    const updatedOrder = this.model.findOneAndUpdate(
+      {_id: id},
+      {
+        $set: {
+          ...orderData,
+          status,
+          shipping: {
+            ...shipping,
+            expected_ship_date: new Date(Date.now() + this.shippingMethods[shipping.method].day * 24 * 60 * 60 * 1000),
+          },
+        },
       },
-    }); 
+      { new: true }
+    )
+
+    if (!updatedOrder) throw new Error('Order not found');
+    if (status === 'shipped') this.manageStock(products);
+
+
+    if (user.fcmToken){
+      const message = `Your order ${id} has been ${status}!`;
+      const title = 'Order Status';
+      NotificationService.sendNotification({
+        deviceToken: user.fcmToken,
+        title,
+        body: message,
+      });
+      const altMessage = this.makeAltMessage(data.order);
+      sendEmail({
+        email: user.email,
+        subject: title,
+        message:  new EmailTemplate({ userName: user.username, message, altMessage }).generate(),
+      })
+    }
+
+    return updatedOrder;
   }
 }
 

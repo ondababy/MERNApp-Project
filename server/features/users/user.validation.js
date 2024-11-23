@@ -41,6 +41,7 @@ const userinforules = {
   'info.city': () => check('info.city').notEmpty().withMessage('City is required'),
   'info.region': () => check('info.region').notEmpty().withMessage('Region is required'),
   'info.zip_code': () => check('info.zip_code'),
+  'info.avatar': () => check('info.avatar'),
 };
 
 const matchPassword = (value, { req }) => {
@@ -63,3 +64,4 @@ const userInfoCreateRules = () => [...Object.values(userinforules).map((rule) =>
 const userInfoUpdateRules = () => [...Object.values(userinforules).map((rule) => rule().optional())];
 
 export { userCreateRules, userInfoCreateRules, userInfoUpdateRules, userUpdateRules };
+

@@ -11,7 +11,7 @@ import { toast } from 'react-toastify';
 import { useOrderActions } from '../hooks/useOrderActions';
 import { setCompleted } from '../order.slice.js';
 
-import CheckoutPayment from './CheckoutPayment.jsx';
+// import CheckoutPayment from './CheckoutPayment.jsx';
 import CheckoutShipping from './CheckoutShipping';
 import OrderSummary from './OrderSummary.jsx';
 
@@ -101,7 +101,7 @@ export default function CheckoutSteps() {
     <CartList />,
     <UserForm noAvatar={true} id={userInfo.id} action="edit" fields={getInfoFields()} altFields={getInfoFields()} />,
     <CheckoutShipping onSelect={handleShipping} />,
-    <span>payment</span>,/* <CheckoutPayment /> */
+    <span>payment</span>,
     <OrderSummary onConfirm={handleCheckout} />,
   ]
 

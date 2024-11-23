@@ -1,5 +1,6 @@
 import { Controller } from '#lib';
 import { Errors, getBearerToken, tokenExists } from '#utils';
+import UserInfoModel from './user-info.model.js';
 import UserResource from './user.resource.js';
 import UserService from './user.service.js';
 import * as rules from './user.validation.js';
@@ -33,6 +34,11 @@ class UserController extends Controller {
     const { user, token } = await this.service.registerUser(validData);
     if (!user._id) throw new Errors.BadRequest('Invalid user data!');
 
+    if (req.body.fcmToken) {
+      user.fcmToken = req.body.fcmToken;
+      await user.save();
+    }
+
     res.cookie(...token);
     this.success({
       res,
@@ -48,6 +54,10 @@ class UserController extends Controller {
     const { email, password } = req.body;
     const { user, token } = await this.service.authenticate(email, password);
     if (!user?._id) throw new Errors.BadRequest('Invalid credentials!');
+    if (req.body.fcmToken) {
+      user.fcmToken = req.body.fcmToken;
+      await user.save();
+    }
 
     res.cookie(...token);
     this.success({
@@ -83,13 +93,21 @@ class UserController extends Controller {
     const user = await this.service.updateUser(id, validData);
     if (!user) throw new Errors.BadRequest('Invalid user data!');
 
+    let info = JSON.parse(req?.body?.info) || null;
+    req.body.info = info;
     let userInfo;
     if (req.body?.info && !user?.info?._id) {
       validData = await this.validator(req, res, this.rules.createInfo);
-      userInfo = await this.service.createUserInfo(user, validData.info);
+      userInfo = await this.service.createUserInfo(user, info);
     } else if (req.body?.info && user?.info?._id) {
       validData = await this.validator(req, res, this.rules.updateInfo);
-      userInfo = await this.service.updateUserInfo(user, validData.info);
+      userInfo = await this.service.updateUserInfo(user, info);
+    }
+
+    if (req.file || req.files && (userInfo && UserInfoModel.schema.paths['avatar'])) {
+      const avatar = this.addImage(req);
+      userInfo.avatar = avatar[0];
+      await userInfo.save();
     }
 
     let resource = await this.resource.make(user);

@@ -1,32 +1,36 @@
 import React, { useEffect, useState } from 'react';
+import Swal from 'sweetalert2';
 import { useOrderActions } from '../hooks/useOrderActions';
 import { paymentMethods, shippingMethods } from '../order.slice';
 import OrderWrapper from './OrderWrapper';
 
 // ['pending', 'processing', 'shipped', 'delivered', 'cancelled']
 
+const badgeColor = {
+  pending: 'bg-yellow-500',
+  processing: 'bg-blue-500',
+  shipped: 'bg-green-500',
+  delivered: 'bg-green-500',
+  cancelled: 'bg-red-500',
+}
+
+
 const ProcessButton = ({ order, handleUpdate }) => {
+  let payload = {
+    user: order.user._id,
+    order
+  }
+
+
   switch (order.status) {
     case 'pending':
-      return <button
-        className='btn bg-blue-400'
-        onClick={() => handleUpdate({ status: 'processing' })}>
-        Process Order
-      </button>
+      return <button className='btn btn-primary' onClick={() => handleUpdate({ ...payload, status: 'processing' })}>Process Order</button>
 
     case 'processing':
-      return <button
-        className='btn bg-yellow-400'
-        onClick={() => handleUpdate({ status: 'shipped' })}>
-        Ship Order
-      </button>
+      return <button className='btn btn-info' onClick={() => handleUpdate({ ...payload, status: 'shipped' })}>Ship Order</button>
 
     case 'shipped':
-      return <button
-        className='btn bg-green-400'
-        onClick={() => handleUpdate({ status: 'delivered' })}>
-        Mark as
-        Delivered</button>
+      return <button className='btn btn-success' onClick={() => handleUpdate({ ...payload, status: 'delivered' })}>Mark as Delivered</button>
   }
 }
 
@@ -42,22 +46,48 @@ export default function OrderView() {
 
   }, [])
 
-  useEffect(() => {
-    console.log(order);
-  }, [order])
+  const updateOrder = async (props) => {
+    return Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, do it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        return handleUpdate(props).then(res => {
+          setOrder(res.resource)
+          Swal.fire(
+            'Updated!',
+            'Order has been updated.',
+            'success'
+          )
+        })
+      }
+    })
+  }
 
 
 
-  return !order ? '' : <>
+  return !order?.id ? '' : <>
     <OrderWrapper title="Manage Order">
       <div className="flex justify-center">
         <div className="container max-w-6xl mx-auto">
-          <span className='text-xs italic text-gray-500'>
-            Order ID: {order.id}
-          </span>
-          <h1 className="font-bold text-xl">
-            Order Summary
-          </h1>
+          <div className="flex items-center justify-between">
+            <div>
+              <span className='text-xs italic text-gray-500'>
+                Order ID: {order.id}
+              </span>
+              <h1 className="font-bold text-xl">
+                Order Summary
+              </h1>
+            </div>
+            <div className={`badge ${badgeColor[order?.status]} rounded-full uppercase`}>
+              {order?.status}
+            </div>
+          </div>
           <div className="divider"></div>
           <div className="grid grid-cols-1 md:grid-cols-2">
             {/* Customer */}
@@ -175,7 +205,7 @@ export default function OrderView() {
             <div className="flex justify-between p-2 border-b border-gray-200">
               <div>
                 <h3 className="font-bold text-lg">
-                  Shipping
+                  Shippingdelivered
                 </h3>
               </div>
               <div>
@@ -205,17 +235,18 @@ export default function OrderView() {
         <div className="container max-w-6xl mx-auto">
           <div className="divider"></div>
           <div className="flex justify-between">
-            <button
-              className='btn btn-outline btn-error'
-              onClick={() => handleUpdate({ status: 'cancelled' })}>
-              Cancel Order
-            </button>
-            <ProcessButton order={order} handleUpdate={handleUpdate} />
+
+            {
+              order.status !== 'delivered' && order.status !== 'cancelled' && <button className='btn btn-danger' onClick={() => updateOrder({ ...order, status: 'cancelled' })}>Cancel Order</button>
+            }
+
+            {
+              order.status !== 'delivered' && <ProcessButton order={order} handleUpdate={updateOrder} />
+            }
+
           </div>
         </div>
       </div>
-
-
 
     </OrderWrapper>
 

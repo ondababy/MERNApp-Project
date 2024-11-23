@@ -10,7 +10,6 @@ export const courierMenus = [
     subLinks: [
       { to: `${mainUrl}/table`, label: 'Couriers Table', icon: <FaTable /> },
       { to: `${mainUrl}/create`, label: 'Create Couriers', icon: <FaPlus /> },
-      { to: `${mainUrl}/list`, label: 'Couriers List', icon: <FaUsers /> },
     ],
   },
 ];

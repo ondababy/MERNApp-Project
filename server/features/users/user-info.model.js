@@ -38,6 +38,9 @@ const UserInfo = new Schema({
       zip_code: {
         type: String,
       },
+      photoUrl: {
+        type: String,
+      }
     },
   ],
 });

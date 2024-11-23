@@ -1,10 +1,33 @@
 import React from 'react';
 
-export default function BirthdateInput({ label, refer, meta, outerStyle, ...inputProps }) {
-  const values = React.useRef({
-    age: 0,
-    date: null,
-  })
+export default function BirthdateInput({ label, refer, meta, outerStyle, value, ...inputProps }) {
+  const [age, setAge] = React.useState(0);
+  const [date, setDate] = React.useState(null);
+
+  const calculateAge = (birthDate) => {
+    const today = new Date();
+    const birthDateObj = new Date(birthDate);
+    let age = today.getFullYear() - birthDateObj.getFullYear();
+    const m = today.getMonth() - birthDateObj.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDateObj.getDate())) {
+      age--;
+    }
+    return age;
+  };
+
+  React.useEffect(() => {
+    if (value) {
+      const formattedDate = value.split('T')[0];
+      setDate(formattedDate);
+      setAge(calculateAge(formattedDate));
+    }
+  }, [value]);
+
+  const handleDateChange = (e) => {
+    const newDate = e.target.value;
+    setDate(newDate);
+    setAge(calculateAge(newDate));
+  };
 
   return (
     <div className={outerStyle}>
@@ -16,8 +39,8 @@ export default function BirthdateInput({ label, refer, meta, outerStyle, ...inpu
             ref={refer}
             {...inputProps}
             type='date'
-
-
+            value={date || ''}
+            onChange={handleDateChange}
           />
         </div>
         <div className='w-1/3'>
@@ -28,12 +51,11 @@ export default function BirthdateInput({ label, refer, meta, outerStyle, ...inpu
             {...inputProps}
             type='text'
             disabled
+            value={age}
           />
         </div>
-
-
       </div>
       {meta?.touched && meta?.error && <div className="text-xs italic text-error">{meta?.error}</div>}
     </div>
-  )
+  );
 }

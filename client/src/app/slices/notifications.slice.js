@@ -1,5 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+const fcmToken = localStorage.getItem('fcmToken');
+
 const notificationTypes = {
   ERROR: 'error',
   SUCCESS: 'success',
@@ -15,6 +17,7 @@ const notifSchema = {
 
 const initialState = {
   notifications: [],
+  token: fcmToken || '',
 };
 
 const notificationsSlice = createSlice({
@@ -27,8 +30,13 @@ const notificationsSlice = createSlice({
     clearNotifications: (state) => {
       state.notifications = [];
     },
+    setToken: (state, action) => {
+      state.token = action.payload;
+      localStorage.setItem('fcmToken', action.payload);
+    },
+    
   },
 });
 
-export const { addNotification, clearNotifications } = notificationsSlice.actions;
+export const { addNotification, clearNotifications, setToken } = notificationsSlice.actions;
 export const notifReducer = notificationsSlice.reducer;

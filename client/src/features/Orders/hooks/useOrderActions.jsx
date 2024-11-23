@@ -52,13 +52,14 @@ export function useOrderActions({ cartData = {}, action = 'create', render = fal
       // dispatch(clearCart());
       // dispatch(clearOrder());
       toast.success('Create successful!');
-      navigate(role === 'admin' ? '/dashboard/orders/table' : '/');
+      navigate(role === 'admin' ? '/dashboard/orders/table' : '/orders');
     });
   })
   const handleUpdate = useCallback(async (values) => {
-    const res = await updateOrder({ id: order.id, order: values }).unwrap();
-    const updatedOrder = res?.resource || { ...order, ...values };
-    toast.success('Update successful!');
+    return updateOrder(values).unwrap().then(res => {
+      toast.success('Update successful!');
+      return res;
+    });
   })
   const handleDelete = useCallback(async (id) => {
     confirmDelete(async () => {
@@ -71,9 +72,14 @@ export function useOrderActions({ cartData = {}, action = 'create', render = fal
       }
     });
   })
+  const handleCancel = useCallback(async (values) => {
+    return updateOrder({ ...values, status: 'cancelled' }).unwrap().then(res => {
+      toast.success('Order cancelled successfully');
+      return res;
+    });
+  })
   const handleSubmit = useCallback(async (values) => {
     try {
-      values = toFormData(values);
       if (action === 'create') await handleCreate(values);
       else await handleUpdate(values);
     } catch (error) {
@@ -127,6 +133,7 @@ export function useOrderActions({ cartData = {}, action = 'create', render = fal
     handleDelete,
     handleSubmit,
     onSubmit,
+    handleCancel,
     handleCheckout,
     handleShipping,
   }

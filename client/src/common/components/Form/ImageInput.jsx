@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-function ImageInput({ label, alt, refer, meta, formik, outerStyle, ...inputProps }) {
+function ImageInput({ label, alt, refer, meta, formik, outerStyle, onChange = () => { }, ...inputProps }) {
   return (
     <div className={outerStyle}>
       <label className="w-full max-w-xs form-control">
@@ -16,6 +16,7 @@ function ImageInput({ label, alt, refer, meta, formik, outerStyle, ...inputProps
               inputProps.name,
               inputProps?.multiple ? Array.from(e.currentTarget.files) : e.currentTarget.files[0]
             );
+            onChange(e);
           }}
         />
         {alt && (

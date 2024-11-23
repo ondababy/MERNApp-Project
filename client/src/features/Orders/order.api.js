@@ -49,10 +49,10 @@ const orderApi = apiSlice.injectEndpoints({
       }),
     }),
     updateOrder: build.mutation({
-      query: ({ id, order }) => ({
-        url: `${apiUrl}/edit/${id}`,
+      query: (body) => ({
+        url: `${apiUrl}/edit/${body.id}`,
         method: 'PATCH',
-        body: order,
+        body,
         headers,
       }),
     }),

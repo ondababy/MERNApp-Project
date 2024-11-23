@@ -15,6 +15,14 @@ const defaultRoutes = [
         path: '/checkout',
         element: <Screen.Checkout />,
       },
+      {
+        path: '/orders',
+        element: <Screen.OrdersDisplay />,
+      },
+      {
+        path: '/profile',
+        element: <Screen.Profile />,
+      },
     ],
   },
 ];

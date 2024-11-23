@@ -6,6 +6,7 @@ class ProductSeeder extends Seeder {
   schema() {
     return {
       name: () =>
+        // filter so that it is .matches(/^[a-zA-Z0-9 ]+$/) alphanumeric
         faker.commerce.product() +
         ' Product Code: ' +
         faker.string.alpha({ length: 6, casing: 'upper', exclude: ['A'] }),

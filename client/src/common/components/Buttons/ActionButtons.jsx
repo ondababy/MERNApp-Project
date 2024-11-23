@@ -1,3 +1,4 @@
+import { cn } from '@common/lib/utils';
 import PropTypes from 'prop-types';
 import DeleteButton from './DeleteButton';
 import EditButton from './EditButton';
@@ -15,7 +16,7 @@ const ActionButtons = ({
 }) => {
   if (isLoading) return <span className="loading loading-spinner loading-md"></span>;
   return (
-    <div className={'flex justify-end' + className}>
+    <div className={cn('flex', className)}>
       {showView && <ViewButton onClick={onView} />}
       {showEdit && <EditButton onClick={onEdit} />}
       {showDelete && <DeleteButton onClick={onDelete} />}

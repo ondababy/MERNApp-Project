@@ -29,6 +29,7 @@ const CourierForm = ({ title = 'Courier Form', action = 'create' }) => {
   const navigate = useNavigate();
   const [courier, setCourier] = useState(null);
   const [courierSchema, setCourierSchema] = useState(fields);
+  const [previewImages, setPreviewImages] = useState(images);
   const [createCourier, { isLoading: isCreating }] = courierApi.useCreateCourierMutation();
   const [updateCourier, { isLoading: isUpdating }] = courierApi.useUpdateCourierMutation();
   const [getCourier, { isLoading: isFetching }] = courierApi.useGetCourierMutation();
@@ -43,6 +44,18 @@ const CourierForm = ({ title = 'Courier Form', action = 'create' }) => {
     [courier, courierSchema, action]
   );
   /* END DECLARATIONS ################################################ */
+  const handleImageInput = (e) => {
+    const files = e.target.files;
+    const images = Array.from(files).map((file) => {
+      return {
+        src: URL.createObjectURL(file),
+        alt: file.name,
+        file,
+      };
+    });
+
+    setPreviewImages(images);
+  }
 
   const handleCreate = async (values) => {
     await createCourier(values).unwrap();
@@ -98,12 +111,12 @@ const CourierForm = ({ title = 'Courier Form', action = 'create' }) => {
           <CarouselComponent imageList={
             courier?.images?.length ?
               courier?.images.map((image) => ({ src: image.url, alt: image.alt }))
-              : images} />
+              : previewImages} />
         </div>
 
         <div className="container w-2/3">
           <FormikForm
-            formSchema={courierSchema}
+            formSchema={courierSchema.map(f => f.name === 'image' ? { ...f, onChange: handleImageInput } : f)}
             formikProps={{
               initialValues,
               validationSchema: courierValidation,

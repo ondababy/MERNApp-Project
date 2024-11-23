@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 
-export default function OrderSummary({ onConfirm = () => { } }) {
-  const order = useSelector((state) => state.order);
+export default function OrderSummary({ order, onConfirm = () => { }, noConfirm = false }) {
+  order = order || useSelector((state) => state.order);
   const [terms, setTerms] = useState(false);
   const { userInfo: user } = useSelector((state) => state.auth);
 
@@ -63,7 +63,7 @@ export default function OrderSummary({ onConfirm = () => { } }) {
         {
           order.items?.map((item, index) => (
             <div key={index} className="flex justify-between my-4">
-              <span className="text-gray-600">{item.product.name.substring(0, 15) + '...'} x {item.quantity}</span>
+              <span className="text-gray-600">{item?.product?.name?.substring(0, 15) + '...'} x {item?.quantity}</span>
               <span className="font-semibold">
                 {order?.currency || ''} {item.price}
               </span>

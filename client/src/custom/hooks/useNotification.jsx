@@ -1,25 +1,32 @@
 import { messaging, requestFCMToken } from '@app/config';
-import { addNotification } from '@app/slices';
+import { addNotification, setToken } from '@app/slices';
 import { onMessage } from 'firebase/messaging';
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
 const useNotification = () => {
   const dispatch = useDispatch();
+  const { fcmToken } = useSelector((state) => state.notifications);
 
   useEffect(() => {
     const fetchToken = async () => {
       try {
         const token = await requestFCMToken();
-        console.log('FCM Token:', token);
+        dispatch(setToken(token));
       } catch (error) {
         console.error('Error fetching FCM token:', error);
       }
     };
 
-    fetchToken();
+    if (!fcmToken) {
+      fetchToken();
+    }
 
+  }, [fcmToken]);
+
+  useEffect(() => {
+    if (!messaging) return;
     const unsubscribe = onMessage(messaging, (payload) => {
       try {
         console.log('Message received. ', payload);
@@ -35,7 +42,6 @@ const useNotification = () => {
         console.error('Error displaying notification:', error)
       }
     });
-
     return () => unsubscribe();
   }, [dispatch]);
 
