@@ -8,7 +8,7 @@ function WishlistWrapper({ children, title, prevUrl }) {
   return (
     <>
       <div className="w-full h-full">
-        <PageTitle title={title}>
+        <PageTitle title={title} prevUrl={prevUrl}>
           <Button
             color="primary"
             className="my-4"

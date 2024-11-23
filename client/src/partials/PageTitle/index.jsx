@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { Link } from "react-router-dom";
 
 
-function PageTitle({ title, children, ...props }) {
+function PageTitle({ title, children, prevUrl, ...props }) {
   return (
     <div className="border-b border-gray-500 border-opacity-50 p-7">
       <div className="flex items-center justify-between h-12">
@@ -13,8 +13,8 @@ function PageTitle({ title, children, ...props }) {
           {title}
         </h1>
         {children}
-        <Link to={-1}>
-          <div className="btn btn-ghost">
+        <Link to={prevUrl || -1}>
+          <div className="btn btn-primary btn-ghost">
             Back
           </div>
         </Link>

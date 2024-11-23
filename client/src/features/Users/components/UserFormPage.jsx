@@ -8,7 +8,7 @@ export default function UserFormPage({ title = 'User Form', action = "create" })
 
   return (
     <div className="w-full h-full">
-      <PageTitle title={title} />
+      <PageTitle title={title} prevUrl={'/dashboard/users/table'} />
       <UserForm id={id} action={action} />
     </div>
   );

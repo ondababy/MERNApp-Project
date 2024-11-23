@@ -8,7 +8,7 @@ function CategoryWrapper({ children, title, prevUrl }) {
   return (
     <>
       <div className="w-full h-full">
-        <PageTitle title={title}>
+        <PageTitle title={title} prevUrl={prevUrl}>
 
         </PageTitle>
         <div className="p-8">{children}</div>

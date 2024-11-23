@@ -22,7 +22,7 @@ const useProductFilter = () => {
     if (!queries) queries = productQuery;
     dispatch(setSilentLoading(true));
     return getFiltered(queries).then(({ data }) => {
-      setProducts(prev => reset ? data?.resource : [...prev, ...data?.resource]);
+      setProducts(prev => reset ? data?.resource || [] : [...prev, ...(data?.resource || [])]);
       setPaginate({
         ...data?.meta,
         current: data?.meta?.page || 1,
