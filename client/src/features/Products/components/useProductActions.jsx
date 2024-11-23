@@ -27,7 +27,7 @@ const makeData = (products, handleDelete, toggleExpand) => {
     stock: `${product.stock}`,
     price: `${product.price}`,
     details: product.details, // for expandable rows
-    image: product.image,
+    image: product?.images ? product?.images[0]?.url : images[0].src,
     actions: { id: product.id, handleDelete },
     isExpanded: false, // for controlling row expansion
     ...product,
@@ -58,7 +58,7 @@ const makeColumns = (navigate, toggleExpand) => [
   {
     accessorKey: "image",
     header: "Image",
-    cell: ({ row }) => <img src={row.getValue("image")} alt="Product" className="w-16 h-16" />,
+    cell: ({ row }) => <img src={row.getValue("image")} alt="n/a" className="w-16 aspect-square image rounded hover:w-56 hover:z-[100] transition-all" />,
     enableSorting: false,
     enableHiding: false,
     enableCustomFilter: false,

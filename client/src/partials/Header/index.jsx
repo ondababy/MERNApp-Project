@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 
 function Header({ clickLogo }) {
   const handleLogout = useLogout();
-  const { userInfo, accessToken } = useSelector(state => state.auth)
+  const { userInfo, accessToken, role } = useSelector(state => state.auth)
   const { items, subTotal, currency } = useSelector(state => state.cart)
 
   return (
@@ -69,7 +69,7 @@ function Header({ clickLogo }) {
                   </Link>
                 </li>
                 {
-                  userInfo?.role === 'admin' &&
+                  role === 'admin' &&
                   <li>
                     <Link to="/dashboard" className="justify-between">
                       Dashboard
