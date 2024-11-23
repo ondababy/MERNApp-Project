@@ -8,7 +8,7 @@ export default defineConfig({
   plugins: [
     react(), 
     tsconfigPaths(),
-    viteBasicSslPlugin()
+    // viteBasicSslPlugin()
   ],
   server: {
     port: 3000,
