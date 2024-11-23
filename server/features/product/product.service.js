@@ -10,8 +10,6 @@ class ProductService extends Service {
   async filterProducts(filter, meta) {
     this._checkModel();
     const { filters, ...rest } = filter;
-    console.log('\n'.repeat(100))
-    console.log('Filtering products: ', filter)
 
     const priceQuery = filters.price.map(p=>({price: rest.priceRanges[p]}));
 
@@ -24,8 +22,6 @@ class ProductService extends Service {
       ],
       name: { $regex: filter.categorySearch, $options: 'i' },
     };
-    console.log('\n'.repeat(5))
-    console.log('Constructed query: ', JSON.stringify(query, null, 2));
 
 
     this.query = this.model.find(query);;
