@@ -29,7 +29,7 @@ class OrderSeeder extends Seeder {
   schema() {
     return {
       user: () => this.randomUser(this.user),
-      status: () => 'delivered',
+      status: () => faker.helpers.arrayElement(['cancelled', 'delivered']),
       note: faker.lorem.sentence,
       products: () => {
         let count = faker.number.int({ min: 1, max: 10 });
@@ -44,8 +44,8 @@ class OrderSeeder extends Seeder {
         address: faker.location.streetAddress(),
       }),
       createdAt: () => faker.date.between({
-        from: new Date(2024, 0, 1),
-        to: new Date( 2024, 10, 31)
+        to: new Date(),
+        from: new Date(new Date().setMonth(new Date().getMonth() - 3)),
       }),
 
     };
