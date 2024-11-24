@@ -41,6 +41,10 @@ const Product = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Review',
       }],
+      averageRating: {
+        type: Number,
+        default: 0,
+      },
       images: [ImageSchema],
     },
     { timestamps: true },

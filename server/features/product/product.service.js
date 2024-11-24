@@ -40,7 +40,7 @@ class ProductService extends Service {
 
     const query = {
       $or: [
-        { ratings: { $gte: filters.rating } },
+        { averageRating: { $gte: filters.rating } },
         ...priceQuery,
         { price: filter.range },
         { name: { $in: filters.categories } },

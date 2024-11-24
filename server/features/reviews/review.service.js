@@ -24,6 +24,7 @@ class ReviewService extends Service {
     products.forEach((product) => {
       if (!product.reviews.includes(new mongoose.Types.ObjectId(reviewId))) {
         product.reviews.push(reviewId);
+        product.averageRating = product.reviews.reduce((acc, item) => acc + item.rating, 0) / product.reviews.length;
         product.save();
       }
     });
