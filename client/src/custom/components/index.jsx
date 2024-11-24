@@ -1,3 +1,4 @@
+export * from './analytics';
 export * from './carousel';
 export * from './charts';
 export { Counter } from './counter';

@@ -1,11 +1,29 @@
 "use client"
 
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@common/components/ui/chart";
 import { cn } from "@common/lib/utils";
-import { useState } from "react";
-import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
+import { useEffect, useState } from "react";
+import { Bar, BarChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis } from "recharts";
+
 let shortMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',];
 const placeholderData = shortMonths.map((month) => ({ name: month, total: Math.floor(Math.random() * 5000) + 1000 }));
-const placeholderConfig = {
+
+export const _chartConfig = {
+  name: {
+    label: "Month",
+    color: "text-primary",
+  },
+  total: {
+    label: "Total",
+    color: "text-base-content",
+  },
+}
+
+export const _barConfig = {
   dataKey: {
     name: 'name',
     value: 'total',
@@ -33,32 +51,55 @@ const placeholderConfig = {
       fill: 'currentColor',
       className: 'fill-primary',
     },
-
-  }
+  },
+  chartConfig: _chartConfig,
 }
-
-export function BarChartComponent({ data = placeholderData, chartConfig = placeholderConfig, barStyle }) {
+export function BarChartComponent({ data = placeholderData, chartConfig = _barConfig, barStyle }) {
   const [dateKey, setDateKey] = useState({
     key: 'name',
     value: 'total',
   });
 
+  useEffect(() => {
+    setDateKey({
+      key: chartConfig.dataKey.name,
+      value: chartConfig.dataKey.value,
+    });
+  }, [chartConfig]);
+
   return (
     <ResponsiveContainer width="100%" height={350}>
-      <BarChart data={data}>
-        <XAxis
-          dataKey={dateKey.key}
-          {...chartConfig.props.x}
-        />
-        <YAxis
-          {...chartConfig.props.y}
-        />
-        <Bar
-          dataKey={dateKey.value}
-          className={cn("fill-primary", barStyle)}
-          {...chartConfig.props.bar}
-        />
-      </BarChart>
+      <ChartContainer
+        config={chartConfig.chartConfig}
+        className="aspect-auto h-[250px] w-full"
+      >
+        <BarChart data={data}>
+          <XAxis
+            dataKey={dateKey.key}
+            {...chartConfig.props.x}
+          />
+          <YAxis
+            {...chartConfig.props.y}
+          />
+          <CartesianGrid vertical={false} />
+
+          <ChartTooltip
+            content={
+              <ChartTooltipContent
+                className="w-[150px] bg-base-100 opacity-100 text-base-content"
+                nameKey={dateKey.value}
+                labelFormatter={(value) => (value)}
+              />
+            }
+          />
+          <Bar
+            dataKey={dateKey.value}
+            className={cn("fill-primary", barStyle)}
+            {...chartConfig.props.bar}
+          />
+
+        </BarChart>
+      </ChartContainer>
     </ResponsiveContainer>
   )
 }
