@@ -12,6 +12,16 @@ export default [
         controller: controller.getAll,
       },
       {
+        path: '/sales', 
+        method: METHODS.GET,
+        controller: controller.productSales,
+      },
+      {
+        path: '/stocks',
+        method: METHODS.GET,
+        controller: controller.productStocks,
+      },
+      {
         path: '/filter',
         method: METHODS.POST,
         controller: controller.getFilteredProducts,
@@ -35,7 +45,7 @@ export default [
         path: PATHS.ID,
         method: METHODS.GET,
         controller: controller.getById,
-      },
+      },    
       {
         path: PATHS.SLUG,
         method: METHODS.GET,

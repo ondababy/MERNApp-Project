@@ -1,5 +1,4 @@
 import { Controller } from '#lib';
-import ProductModel from './product.model.js';
 import ProductResource from './product.resource.js';
 import ProductService from './product.service.js';
 import { productCreateRules, productUpdateRules } from './product.validation.js';
@@ -23,7 +22,6 @@ class ProductController extends Controller {
 
   }
 
-  // Method to get product by slug
   getBySlug = async (req, res) => {
     const { slug } = req.params;
     const data = await this.service.getBySlug(slug);
@@ -96,92 +94,67 @@ class ProductController extends Controller {
   // Charts
   productSales = async (req, res) => {
     try {
-      const totalSales = await Order.aggregate([
-        {
-          $unwind: '$products',
-        },
-        {
-          $lookup: {
-            from: 'products', // Matches the collection name of the Product model
-            localField: 'products.product',
-            foreignField: '_id',
-            as: 'productDetails',
-          },
-        },
-        {
-          $unwind: '$productDetails',
-        },
-        {
-          $group: {
-            _id: null,
-            total: {
-              $sum: {
-                $multiply: ['$products.quantity', '$productDetails.price'],
-              },
-            },
-          },
-        },
-      ]);
+      const { totalSales, sales } = await this.service.getProductSales();
   
-      if (!totalSales.length || totalSales[0].total === 0) {
-        return res.status(404).json({ message: 'No total sales data found!' });
+      // Check if totalSales or sales are empty or undefined
+      if (!totalSales || totalSales.length === 0) {
+        return this.error({ res, message: 'No total sales data found!' });
       }
-
-      const sales = await Order.aggregate([
-        {
-          $unwind: '$products',
-        },
-        {
-          $lookup: {
-            from: 'products',
-            localField: 'products.product',
-            foreignField: '_id',
-            as: 'productDetails',
-          },
-        },
-        {
-          $unwind: '$productDetails',
-        },
-        {
-          $group: {
-            _id: '$productDetails.name', // Group by product name
-            total: {
-              $sum: {
-                $multiply: ['$products.quantity', '$productDetails.price'],
-              },
-            },
-          },
-        },
-        {
-          $project: {
-            _id: 0,
-            name: '$_id',
-            total: 1,
-          },
-        },
-      ]);
   
-      if (!sales.length) {
-        return res.status(404).json({ message: 'No sales data found!' });
+      if (!sales || sales.length === 0) {
+        return this.error({ res, message: 'No sales data found!' });
       }
-
+  
       const totalAmount = totalSales[0].total;
       const totalPercentage = sales.map((item) => ({
         name: item.name,
         percent: Number(((item.total / totalAmount) * 100).toFixed(2)),
       }));
   
-      // Step 4: Send response
-      return res.status(200).json({
-        success: true,
-        totalPercentage,
-        sales,
-        totalSales: totalAmount,
+      return this.success({
+        res,
+        message: 'Product sales fetched successfully!',
+        resource: { totalPercentage, sales, totalSales: totalAmount },
       });
     } catch (error) {
-      return res.status(500).json({ message: error.message });
+      return this.error({ res, message: error.message });
     }
-  };  
+  }; 
+
+  productStocks = async (req, res) => {
+    try {
+      // Get all products with stock information
+      const stocks = await this.service.getProductStocks();
+  
+      if (!stocks || !stocks.length) {
+        return this.error({ res, message: 'No stocks data found!' });
+      }
+  
+      // Calculate total stock
+      const totalStocks = stocks.reduce((acc, item) => acc + item.stock, 0);
+  
+      // Include the stock count and percentage for each product
+      const totalPercentage = stocks.map((item) => ({
+        name: item.name,
+        stock: item.stock, // Add the number of stocks
+        percent: totalStocks ? ((item.stock / totalStocks) * 100).toFixed(2) : 0,
+      }));
+  
+      // Respond with the stock data
+      return this.success({
+        res,
+        message: 'Product stocks fetched successfully!',
+        resource: { totalPercentage, stocks, totalStocks },
+      });
+    } catch (error) {
+      console.error('Error fetching product stocks:', error);
+      return this.error({ res, message: 'An error occurred while fetching product stocks!' });
+    }
+  };
+  
+  
+
+  
 }
 
 export default new ProductController();
