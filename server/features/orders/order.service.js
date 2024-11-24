@@ -1,5 +1,5 @@
 import EmailTemplate from '#common/lib/email-template';
-import { NotificationService, ProductModel, ProductService, UserService } from '#features';
+import { CartModel, NotificationService, ProductModel, ProductService, UserService } from '#features';
 import { sendEmail } from '#utils';
 
 import { Service } from '#lib';
@@ -31,6 +31,13 @@ class OrderService extends Service {
   async create(data) {
     let { userId, products, shipping, ...orderData } = data;
     const user = await UserService.getById(userId);
+
+    await CartModel.deleteMany({ 
+      user: userId,
+      product: { $in: products.map(product => product.product) },
+     });
+  
+    
 
     return this.model.create({
       ...orderData,

@@ -21,12 +21,16 @@ export default class ProductResource extends Resource {
 
     return {
       id: _id,
+      ...rest,
       category: categoryDetails ? categoryDetails.name : null,
       brand: brandDetails ? brandDetails.name : null,
       supplier: supplierDetails ? supplierDetails.name : null,
-      averageRating,
       numOfReviews: reviews.length,
-      ...rest,
+      price: rest.price.toFixed(2),
+      averageRating: averageRating ? rest.averageRating.toFixed(2) : 0, 
+
+
+
     };
   }
 }
