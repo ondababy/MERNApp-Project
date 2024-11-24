@@ -64,6 +64,7 @@ User.statics.hidden = [
   'resetPassword',
   'verifyEmail',
   'otp',
+  'fcmToken',
 ];
 
 User.methods.hashPassword = async function (password) {
@@ -110,4 +111,13 @@ User.pre('save', async function (next) {
   if (this.isModified('email') && this.otp.code) this.otp = {};
   next();
 });
+
+User.pre('delete', async function (next) {
+  const user = this;
+  await user.model('UserInfo').deleteOne({ user: user._id });
+  next();
+});
+
+
+
 export default User.makeModel();

@@ -1,3 +1,4 @@
+import { ReviewResource } from '#features';
 import { Controller } from '#lib';
 import ProductResource from './product.resource.js';
 import ProductService from './product.service.js';
@@ -11,6 +12,15 @@ class ProductController extends Controller {
     update: productUpdateRules,
   };
 
+  getReviewDetails = async (req, res) => {
+    const data = await this.service.getReviewDetails(req.params.id);
+    if (!data) return this.error({ res, message: 'Data not found!' });
+
+
+    const resource = (await ReviewResource?.collection(data)) || data;
+    this.success({ res, message: 'Data fetched!',  resource});
+  }
+  
   getFilteredProducts = async (req, res) => {
     const data = req.body;
     const meta = await this.service._getMeta(data.queries, res);

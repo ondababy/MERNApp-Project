@@ -8,14 +8,8 @@ function ReviewWrapper({ children, title, prevUrl }) {
   return (
     <>
       <div className="w-full h-full">
-        <PageTitle title={title}>
-          <Button
-            color="primary"
-            className="my-4"
-            onClick={() => navigate(prevUrl || '/dashboard/reviews')}
-          >
-            Back
-          </Button>
+        <PageTitle title={title} prevUrl={prevUrl}>
+
         </PageTitle>
         <div className="p-8">{children}</div>
       </div>

@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 
 function Header({ clickLogo }) {
   const handleLogout = useLogout();
-  const { userInfo, accessToken } = useSelector(state => state.auth)
+  const { userInfo, accessToken, role } = useSelector(state => state.auth)
   const { items, subTotal, currency } = useSelector(state => state.cart)
 
   return (
@@ -62,14 +62,14 @@ function Header({ clickLogo }) {
                   <img src={userInfo?.info?.avatar?.url || "https://placehold.co/400?text=no image"} />
                 </div>
               </Button>
-              <Dropdown.Menu className="mt-3 z-[1] w-52 menu-sm">
+              <Dropdown.Menu className="mt-3  w-52 menu-sm bg-base-100">
                 <li>
                   <Link to="/profile" className="justify-between">
                     Profile
                   </Link>
                 </li>
                 {
-                  userInfo?.role === 'admin' &&
+                  role === 'admin' &&
                   <li>
                     <Link to="/dashboard" className="justify-between">
                       Dashboard

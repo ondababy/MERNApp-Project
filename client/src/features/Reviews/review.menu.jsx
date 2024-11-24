@@ -3,6 +3,7 @@ import { dashUrl as mainUrl } from './review.api';
 
 export const reviewMenus = [
   {
+    index: 2,
     label: 'Manage Reviews',
     type: 'dropdown',
     to: mainUrl,

@@ -3,6 +3,7 @@ import { dashUrl as mainUrl } from './order.api';
 
 export const orderMenus = [
   {
+    index: 0,
     label: 'Manage Orders',
     type: 'dropdown',
     to: mainUrl,

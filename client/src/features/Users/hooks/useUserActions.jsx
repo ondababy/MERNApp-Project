@@ -49,7 +49,7 @@ export default function useUserActions({ id = null, action = "create", fields = 
     dispatch(setIsChanging({
       isChanging: !isChanged && !avatar.avatarChanged,
     }));
-    return isChanged && !avatar.avatarChanged;
+    return isChanged && avatar.avatarChanged;
   }
 
   const onSubmit = async (values, actions) => {

@@ -3,6 +3,7 @@ import { dashUrl as mainUrl } from './product.api';
 
 export const productMenus = [
   {
+    index: 1,
     label: 'Manage Products',
     type: 'dropdown',
     to: mainUrl,

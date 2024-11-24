@@ -9,9 +9,10 @@ import { reviewApi } from '../review.api';
 import ReviewWrapper from './ReviewWrapper';
 
 const allowedColumns = () => [
-  { key: 'name', label: 'Name' },
+  { key: 'user', label: 'User' },
+  { key: 'title', label: 'title' },
+  { key: 'rating', label: 'Rating' },
   { key: 'actions', label: '' },
-  // More columns can be added here
 ];
 
 const ReviewTable = () => {
@@ -69,6 +70,7 @@ const ReviewTable = () => {
         <Table
           data={reviews.map((review) => ({
             ...review,
+            user: review.user?.username,
             actions: (
               <ActionButtons
                 key={'action_' + review.slug}

@@ -18,11 +18,15 @@ const useProductFilter = () => {
     last: 1,
   });
 
+  const removeDuplicates = (arr) => {
+    return arr.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i);
+  }
+
   const fetchProducts = async (queries, reset = false) => {
     if (!queries) queries = productQuery;
     dispatch(setSilentLoading(true));
     return getFiltered(queries).then(({ data }) => {
-      setProducts(prev => reset ? data?.resource : [...prev, ...data?.resource]);
+      setProducts(prev => reset ? data?.resource || [] : removeDuplicates([...prev, ...data?.resource || []]));
       setPaginate({
         ...data?.meta,
         current: data?.meta?.page || 1,
@@ -34,13 +38,17 @@ const useProductFilter = () => {
   const dbs = useCallback(debounce(fetchProducts, 500), [fetchProducts]);
 
   useEffect(() => {
-    dbs(productQuery, true);
+    dbs(productQuery);
   }, [productQuery]);
 
   const handlePaginate = page => {
     dispatch(setQueries({ page }));
     setPaginate({ ...paginate, current: page });
   };
+  const autoPaginate = () => {
+    dispatch(setQueries(({ ...productQuery.queries, page: productQuery.queries.page + 1 })));
+    setPaginate(prev => ({ ...prev, current: prev.current + 1 }));
+  }
 
   return {
     productQuery,
@@ -49,6 +57,7 @@ const useProductFilter = () => {
     setPaginate,
     handlePaginate,
     fetchProducts,
+    autoPaginate
   };
 };
 

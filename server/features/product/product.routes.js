@@ -22,6 +22,11 @@ export default [
         controller: controller.productStocks,
       },
       {
+        path: '/:id/reviews',
+        method: METHODS.GET,
+        controller: controller.getReviewDetails,
+      },
+      {
         path: '/filter',
         method: METHODS.POST,
         controller: controller.getFilteredProducts,

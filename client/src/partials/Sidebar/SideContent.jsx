@@ -30,7 +30,7 @@ const SideContent = (props) => {
             >
               <FaArrowAltCircleLeft />
               <TextRainbow
-                text={userInfo?.username || 'Dashboard'}
+                text={'Dashboard'}
                 className="text-xl font-extrabold font-display"
               />
             </Button>

@@ -25,12 +25,18 @@ export class Controller {
   };
 
   getAll = async (req, res) => {
-    const meta = await this.service._getMeta(req.query);
-    const data = await this.service.paginate(meta).exec();
+    let data, meta;
+    if (req.query.all){
+      data = await this.service?.getAll();
+    }
+    else {
+      meta = await this.service._getMeta(req.query);
+      data = await this.service.paginate(meta).exec();
+    }
     const message = data.length ? 'Data collection fetched!' : 'No data found!';
 
     const resource = (await this.resource?.collection(data)) || data;
-    this.success({ res, message, resource, meta: { ...meta, count: data.length } });
+    this.success({ res, message, resource, meta: { ...(meta||[]), count: data.length } });
   };
 
   getById = async (req, res) => {

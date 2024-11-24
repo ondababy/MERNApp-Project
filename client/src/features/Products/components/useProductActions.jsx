@@ -27,7 +27,7 @@ const makeData = (products, handleDelete, toggleExpand) => {
     stock: `${product.stock}`,
     price: `${product.price}`,
     details: product.details, // for expandable rows
-    image: product.image,
+    image: product?.images ? product?.images[0]?.url : images[0].src,
     actions: { id: product.id, handleDelete },
     isExpanded: false, // for controlling row expansion
     ...product,
@@ -58,12 +58,37 @@ const makeColumns = (navigate, toggleExpand) => [
   {
     accessorKey: "image",
     header: "Image",
-    cell: ({ row }) => <img src={row.getValue("image")} alt="Product" className="w-16 h-16" />,
+    cell: ({ row }) => <img src={row.getValue("image")} alt="n/a" className="w-16 aspect-square image rounded hover:w-56 hover:z-[100] transition-all" />,
     enableSorting: false,
     enableHiding: false,
     enableCustomFilter: false,
+  }, {
+    accessorKey: 'name',
+    header: ({ column }) => (
+      <Button
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        className="bg-transparent border-none btn-sm capitalize"
+      >
+        Name
+        <ArrowUpDown />
+      </Button>
+    ),
+    cell: ({ row }) => (
+      <details class="collapse bg-transparent transition-all ease-in-out container max-w-sm">
+        <summary class="collapse-title font-medium">
+          <span className='font-bold text-md'>
+            {row?.original?.name}
+
+          </span>
+        </summary>
+        <div class="collapse-content">
+          <p className='break-all'>{row?.original?.description}</p>
+          <p className='break-all'>Rating: {row?.original?.averageRating || 0}</p>
+        </div>
+      </details>
+    ),
   },
-  ...["name", "stock", "price"].map((key) => ({
+  ...["stock", "price"].map((key) => ({
     accessorKey: key,
     header: ({ column }) => (
       <Button
@@ -76,23 +101,6 @@ const makeColumns = (navigate, toggleExpand) => [
     ),
     cell: ({ row }) => <p className="px-3">{row.getValue(key)}</p>,
   })),
-  {
-    id: "expand",
-    header: "Details",
-    cell: ({ row }) => (
-      <>
-        <Button
-          className="btn-xs"
-          onClick={() => row.original.toggleExpand(row.original.id)}
-        >
-          {row.original.isExpanded ? "Collapse" : "Expand"}
-        </Button>
-        {row.original.isExpanded && <p className="px-3 text-sm break-all">{row.original.description}</p>}
-      </>
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
   {
     accessorKey: "actions",
     header: "Actions",
@@ -196,7 +204,7 @@ const useProductActions = ({ id, action = 'create' } = {}) => {
   };
 
 
-  const fetchProducts = async (qStr) => {
+  const fetchProducts = async (qStr = '') => {
     return getProducts(qStr).unwrap().then(res => {
       setProducts(res.resource || []);
     });

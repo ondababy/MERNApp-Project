@@ -3,6 +3,7 @@ import { dashUrl as mainUrl } from './category.api';
 
 export const categoryMenus = [
   {
+    index: 6,
     label: 'Manage Categories',
     type: 'dropdown',
     to: mainUrl,

@@ -12,11 +12,13 @@ function ProductGrid() {
     paginate,
     fetchProducts,
     handlePaginate,
+    autoPaginate,
   } = useProductFilter()
 
   React.useEffect(() => {
     fetchProducts();
   }, []);
+
 
   return (
     <div className="flex flex-col h-full">
@@ -25,7 +27,7 @@ function ProductGrid() {
       <InfiniteScroll
         className='max-h-[200vh] overflow-auto my-8 gap-4 flex grid grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 '
         dataLength={products?.length}
-        next={fetchProducts}
+        next={autoPaginate}
         hasMore={!(products.length > paginate.total)}
         loader={<h4>Loading...</h4>}
         endMessage={

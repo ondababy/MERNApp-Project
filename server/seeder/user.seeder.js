@@ -4,14 +4,15 @@ import bcrypt from 'bcryptjs';
 import { Seeder } from './seeder.js';
 
 export const createAdmin = async () => {
-  const admin = await UserModel.findOne({ username: process.env.ADMIN_USERNAME });
+  const admin = await UserModel.findOne({ email: process.env.ADMIN_EMAIL });
   if (!admin) {
     console.log('Creating admin for the first time.');
     const user = await UserService.create({
-      username: process.env.ADMIN_USERNAME,
+      username: process.env.ADMIN_USERNAME || 'admin',
       email: process.env.ADMIN_EMAIL,
       password: process.env.ADMIN_PASSWORD,
       role: 'admin',
+      // very bad
       emailVerifiedAt: new Date(),
       
     });
@@ -31,13 +32,13 @@ class UserSeeder extends Seeder {
   }
   custom() {
     return [
-      {
-        username: process.env.ADMIN_USERNAME,
-        email: process.env.ADMIN_EMAIL,
-        password: this.hash(process.env.ADMIN_PASSWORD),
-        role: 'admin',
-        emailVerifiedAt: new Date(),
-      },
+      // {
+      //   username: process.env.ADMIN_USERNAME,
+      //   email: process.env.ADMIN_EMAIL,
+      //   password: this.hash(process.env.ADMIN_PASSWORD),
+      //   role: 'admin',
+      //   // emailVerifiedAt: new Date(),
+      // },
     ];
   }
   schema() {

@@ -32,7 +32,15 @@ import {
 } from "@common/components/ui/table";
 import { useEffect } from "react";
 
-export function DataTable({ data, columns, rowCount, selectionFunc = () => { } }) {
+export function DataTable({
+  data,
+  columns,
+  rowCount,
+  selectionFunc = () => { },
+  onNext = () => { },
+  onPrev = () => { },
+  onChangeLimit = () => { },
+}) {
   // Validate input data
   if (!columns || !Array.isArray(columns) || columns.length === 0) {
     return null;
@@ -172,15 +180,17 @@ export function DataTable({ data, columns, rowCount, selectionFunc = () => { } }
                 })}
             </DropdownMenuContent>
           </DropdownMenu>
+
           <select
             value={pagination.pageSize}
             className="ml-auto text-base-content bg-base-100 select select-bordered select-sm"
             onChange={e => {
               const newPageSize = Number(e.target.value);
+              onChangeLimit(newPageSize);
               setPagination(prev => ({
                 ...prev,
                 pageSize: newPageSize,
-                pageIndex: 0 // Reset to first page when changing page size
+                pageIndex: 0
               }));
             }}
           >
@@ -198,6 +208,7 @@ export function DataTable({ data, columns, rowCount, selectionFunc = () => { } }
               size="icon"
               onClick={handlePrint}
               title="Print Table"
+              className="text-base-content bg-base-100"
             >
               <Printer className="h-4 w-4" />
             </Button>
@@ -206,6 +217,7 @@ export function DataTable({ data, columns, rowCount, selectionFunc = () => { } }
               size="icon"
               onClick={handleDownloadCSV}
               title="Download CSV"
+              className="text-base-content bg-base-100"
             >
               <Download className="h-4 w-4" />
             </Button>
@@ -308,7 +320,10 @@ export function DataTable({ data, columns, rowCount, selectionFunc = () => { } }
             variant="outline"
             size="sm"
             className="ml-auto text-base-content bg-base-100"
-            onClick={() => table.previousPage()}
+            onClick={() => {
+              table.previousPage()
+              onPrev();
+            }}
             disabled={!table.getCanPreviousPage()}
           >
             Previous
@@ -317,7 +332,10 @@ export function DataTable({ data, columns, rowCount, selectionFunc = () => { } }
             variant="outline"
             size="sm"
             className="ml-auto text-base-content bg-primary"
-            onClick={() => table.nextPage()}
+            onClick={() => {
+              table.nextPage();
+              onNext();
+            }}
             disabled={!table.getCanNextPage()}
           >
             Next

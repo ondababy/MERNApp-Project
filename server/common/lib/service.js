@@ -72,12 +72,13 @@ export class Service {
 
   paginate(params = {}) {
     this._checkModel();
+    this.applyForceFilter();
+    if (!params?.limit) return this;
     let { limit = 10, page = 1 } = params;
     if (limit < 1) limit = 10;
     if (page < 1) page = 1;
     const skip = (page - 1) * limit;
 
-    this.applyForceFilter();
     this.query = this.query.skip(skip).limit(limit);
     return this;
   }
@@ -91,6 +92,7 @@ export class Service {
 
   async _getMeta(query) {
     this._checkModel();
+    if (!query?.limit) return null;
     let page = parseInt(query.page) || 1;
     const limit = parseInt(query.limit) || 10;
     const documentCount = await this.model.find(this.forceFilter).countDocuments();

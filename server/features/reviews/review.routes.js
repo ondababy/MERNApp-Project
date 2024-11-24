@@ -19,7 +19,7 @@ export default [
       {
         path: PATHS.STORE,
         method: METHODS.POST,
-        controller: [...protectAndPermit(READ_WRITE), upload.array('image'), controller.store],
+        controller: [...protectAndPermit(READ_WRITE), upload.array('image'), controller.update],
       },
       {
         path: PATHS.DELETE,

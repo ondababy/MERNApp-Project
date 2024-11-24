@@ -8,6 +8,7 @@ export default class UserResource extends Resource {
     return {
       ...userData,
       id: user?._id,
+      full_name: userInfo?.first_name + ' ' + userInfo?.last_name,
       info: userInfo,
       createdAt: this.formatDate(user?.createdAt),
     };

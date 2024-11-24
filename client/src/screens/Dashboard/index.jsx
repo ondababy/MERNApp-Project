@@ -1,9 +1,11 @@
-import { UserSection } from '@partials';
-import { useOutletContext } from 'react-router-dom';
+import { DashboardPage } from '@custom';
 
 function Dashboard() {
-  const { userInfo } = useOutletContext();
-  return userInfo?.id && <UserSection user={userInfo} />;
+  return (<>
+    <div className="w-full">
+      <DashboardPage />
+    </div>
+  </>);
 }
 
 export default Dashboard;
