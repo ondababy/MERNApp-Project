@@ -19,8 +19,8 @@ const reviewApi = apiSlice.injectEndpoints({
       }),
     }),
     getReview: build.mutation({
-      query: (slug) => ({
-        url: `${apiUrl}/slug/${slug}`,
+      query: (id) => ({
+        url: `${apiUrl}/${id}`,
         method: 'GET',
         headers,
       }),

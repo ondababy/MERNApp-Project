@@ -32,6 +32,7 @@ export default function OrderList() {
       if (selectedTab.toLowerCase() !== 'all') {
         res = res.filter((order) => order.status.toLowerCase() === selectedTab.toLowerCase());
       }
+      res.reverse();
       setOrders(res);
     });
     setSelectedOrder(null);
@@ -161,10 +162,8 @@ export default function OrderList() {
 
 
               {/* MODAL FEEDBACK */}
-
-
-              {selectedOrder.status === 'delivered' && (
-                <ReviewModal />
+              {selectedOrder?.status === 'delivered' && (
+                <ReviewModal refresh={setSelectedOrder} order={selectedOrder} id={selectedOrder?.review?.id} action={selectedOrder?.review?.id ? 'edit' : 'create'} />
               )}
             </div>
           </>

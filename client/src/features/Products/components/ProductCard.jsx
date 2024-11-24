@@ -7,6 +7,7 @@ import {
   CardTitle,
 } from "@common/components/ui/card";
 
+import { Rating } from "@common";
 import { cn } from "@common/lib/utils";
 import { CarouselComponent } from "@custom";
 import { useCartActions } from '@features';
@@ -70,7 +71,7 @@ function ProductCard({ product = defaultProduct, className, ...props }) {
       alt: i.filename,
     }
   }) : defaultProduct.images;
-
+  let fakeRate = Math.random() * 10;
   return product.id != -1 ? (
     <Card className={cn("overflow-clip", className)} onDoubleClick={handleViewProduct(product.slug)} {...props}>
       <CardContent className="p-0 overflow-clip relative">
@@ -101,21 +102,26 @@ function ProductCard({ product = defaultProduct, className, ...props }) {
           }
         </CardDescription>
       </CardHeader>
-      <CardFooter className="p-4 flex justify-between items-center">
-        <div className="flex items-end gap-1">
-          <p className='text-md'>
-            {product.currency}
-            {product.price}
-          </p>
-          <p className='text-xs mb-1'>
-            each
-          </p>
+      <CardFooter className="p-4 flex flex-col">
+        <div className="w-full flex justify-between items-center">
+          <div className="flex items-end gap-1">
+            <p className='text-md'>
+              {product.currency}
+              {product.price}
+            </p>
+            <p className='text-xs mb-1'>
+              each
+            </p>
+          </div>
+          <button
+            onClick={handleAddToCart}
+            className="btn btn-outline btn-primary">
+            <FiShoppingCart />
+          </button>
         </div>
-        <button
-          onClick={handleAddToCart}
-          className="btn btn-outline btn-primary">
-          <FiShoppingCart />
-        </button>
+        <div className="w-full flex gap-2 justify-start items-end">
+          <Rating size="md" withRating={false} value={Math.round(product?.averageRating) || fakeRate} />  {(Math.round(product?.averageRating) || fakeRate).toFixed(2)}
+        </div>
       </CardFooter>
     </Card>
 

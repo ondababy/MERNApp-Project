@@ -62,8 +62,33 @@ const makeColumns = (navigate, toggleExpand) => [
     enableSorting: false,
     enableHiding: false,
     enableCustomFilter: false,
+  }, {
+    accessorKey: 'name',
+    header: ({ column }) => (
+      <Button
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        className="bg-transparent border-none btn-sm capitalize"
+      >
+        Name
+        <ArrowUpDown />
+      </Button>
+    ),
+    cell: ({ row }) => (
+      <details class="collapse bg-transparent transition-all ease-in-out container max-w-sm">
+        <summary class="collapse-title font-medium">
+          <span className='font-bold text-md'>
+            {row?.original?.name}
+
+          </span>
+        </summary>
+        <div class="collapse-content">
+          <p className='break-all'>{row?.original?.description}</p>
+          <p className='break-all'>Rating: {row?.original?.averageRating || 0}</p>
+        </div>
+      </details>
+    ),
   },
-  ...["name", "stock", "price"].map((key) => ({
+  ...["stock", "price"].map((key) => ({
     accessorKey: key,
     header: ({ column }) => (
       <Button
@@ -76,23 +101,6 @@ const makeColumns = (navigate, toggleExpand) => [
     ),
     cell: ({ row }) => <p className="px-3">{row.getValue(key)}</p>,
   })),
-  {
-    id: "expand",
-    header: "Details",
-    cell: ({ row }) => (
-      <>
-        <Button
-          className="btn-xs"
-          onClick={() => row.original.toggleExpand(row.original.id)}
-        >
-          {row.original.isExpanded ? "Collapse" : "Expand"}
-        </Button>
-        {row.original.isExpanded && <p className="px-3 text-sm break-all">{row.original.description}</p>}
-      </>
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
   {
     accessorKey: "actions",
     header: "Actions",

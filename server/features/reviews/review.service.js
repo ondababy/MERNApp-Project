@@ -1,6 +1,12 @@
 import { OrderModel, ProductModel } from '#features';
 import { Service } from '#lib';
+import { Filter } from 'bad-words';
+import mongoose from 'mongoose';
+import customBadWords from './customBadWords.js';
 import ReviewModel from './review.model.js';
+
+const filter = new Filter();
+filter.addWords(...customBadWords);
 
 class ReviewService extends Service {
   model = ReviewModel;
@@ -11,13 +17,17 @@ class ReviewService extends Service {
   async addReviewToProducts(orderId, reviewId) {
     const order = await OrderModel.findById(orderId);
     if (!order) return;
+    order.review = reviewId;
+    order.save();
+    
     const products = await ProductModel.find({ _id: { $in: order.products.map(p=>p.product) } });
     products.forEach((product) => {
-      if (!product.reviews.includes(reviewId)) {
+      if (!product.reviews.includes(new mongoose.Types.ObjectId(reviewId))) {
         product.reviews.push(reviewId);
         product.save();
       }
     });
+
   }
 
 
@@ -27,7 +37,18 @@ class ReviewService extends Service {
     return review;
   }
 
-  async update(id, body) {
+  async insertMany(data) {
+    this._checkModel();
+    await Promise.all(data.map(async (item) => {
+      return this.update(item);
+    }));
+  }
+
+  async create(body) {
+    return this.update(body);
+  }
+
+  async update(body, id = null ) {
     this._checkModel();
     const data = Array.isArray(body)
       ? body.map((item) => this.model.filterFillables(item))
@@ -35,8 +56,12 @@ class ReviewService extends Service {
 
     const exists = await this.reviewExistInOrder(data.order, data.user);
     if (exists) {
-      id = exists._id;27017
+      id = exists._id;
     }
+    
+    data.title = filter.clean(data.title);
+    data.description = filter.clean(data.description);
+    
     let review;
     if (id) {
       review = await this.model.findByIdAndUpdate(id, data, { new: true });
@@ -44,7 +69,7 @@ class ReviewService extends Service {
       review = await this.model.create(data);
     }
     if (data.order) {
-      this.addReviewToProducts(data.order, review._id);
+      await this.addReviewToProducts(data.order, review._id);
     }
     return review;
     

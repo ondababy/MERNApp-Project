@@ -1,3 +1,4 @@
+import { ProductModel } from '#features';
 import { Schema } from '#lib';
 import { ImageSchema } from '#utils';
 
@@ -38,6 +39,16 @@ const Supplier = new Schema({
 
 Supplier.statics.fillables = [];
 Supplier.statics.hidden = [];
+
+Supplier.pre('delete', async function (next) {
+  const supplier = this;
+  const products = await ProductModel.find({ supplier: supplier._id });
+  products.forEach((product) => {
+    product.supplier = null;
+    product.save();
+  });
+  next();
+});
 
 export default Supplier.makeModel();
 

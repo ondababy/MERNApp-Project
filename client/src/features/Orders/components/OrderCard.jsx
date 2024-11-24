@@ -12,7 +12,7 @@ import { MessageCircle } from 'lucide-react';
 
 export default function OrderCard({ order, onClick, key }) {
   return (
-    <div key={order._id} className="card border cursor-pointer hover:bg-base-content/10" onClick={onClick}>
+    <div key={key} className="card border cursor-pointer hover:bg-base-content/10" onClick={onClick}>
       <div className="card-body">
         <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center">
           <div>

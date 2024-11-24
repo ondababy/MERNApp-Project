@@ -2,6 +2,7 @@ import { FaPlus, FaTable } from 'react-icons/fa';
 
 export const userMenus = [
   {
+    index: 3,
     label: 'Manage Users',
     type: 'dropdown',
     to: '/dashboard/users',

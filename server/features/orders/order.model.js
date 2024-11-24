@@ -6,7 +6,6 @@ const Order = new Schema({
     {
       user: { type: Schema.Types.ObjectId, ref: 'User' },
       status: { type: String, default: 'pending', enum: ['pending', 'processing', 'shipped', 'delivered', 'cancelled'] },
-      total: { type: Number, default: 0 },
       note: { type: String, default: '' },
 
       products: [
@@ -25,7 +24,12 @@ const Order = new Schema({
         start_ship_date: { type: Date, default: null },
         expected_ship_date: { type: Date, default: null },
         shipped_date: { type: Date, default: null },
+        fee: { type: Number, default: 0 },
       },
+      review: {
+        type: Schema.Types.ObjectId,
+        ref: 'Review',
+      }
     },
     { timestamps: true },
   ],
@@ -33,5 +37,13 @@ const Order = new Schema({
 
 Order.statics.fillables = [];
 Order.statics.hidden = [];
+
+
+Order.pre('delete', async function (next) {
+  const order = this;
+  await order.model('Review').deleteOne({ _id: order.review });
+  next();
+});
+
 
 export default Order.makeModel();

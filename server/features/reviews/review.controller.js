@@ -20,7 +20,7 @@ class ReviewController extends Controller {
     else
       validData = await this.validator(req, res, this.rules.create);
 
-    const data = await this.service?.update(id, validData);
+    const data = await this.service?.update(validData, id);
     if (!data._id) return this.error({ res, message: 'Invalid data!' });
 
     if (req.file || req.files || this.service.hasField('images')) {

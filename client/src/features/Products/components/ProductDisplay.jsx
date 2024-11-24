@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { BackButton } from '@common';
+import { BackButton, Rating } from '@common';
 import { Counter, Gallery } from '@custom';
 import { useCartActions } from '@features';
 import { Breadcrumbs } from '@partials';
@@ -78,7 +78,7 @@ export default function ProductDisplay({ data = productExample, children }) {
   React.useEffect(() => {
     fetchProduct();
   }, [])
-
+  let fakeRate = Math.random() * 10;
   return (
     <>
 
@@ -92,7 +92,7 @@ export default function ProductDisplay({ data = productExample, children }) {
           </div>
 
           {children}
-          <ProductComments />
+          <ProductComments product={product} />
 
         </div>
 
@@ -105,6 +105,11 @@ export default function ProductDisplay({ data = productExample, children }) {
           </h1>
           <p className='text-sm my-2'>
             {product.description.split('.')[0]}
+          </p>
+          <p className='text-md my-2 flex gap-4 items-center'>
+            <div className="w-full flex gap-2 justify-start items-end">
+              <Rating size="md" withRating={false} value={Math.round(product?.averageRating) || fakeRate} />  {(Math.round(product?.averageRating) || fakeRate).toFixed(2)}
+            </div>
           </p>
           <p className='text-md my-2 flex gap-4 items-center'>
             Stock:

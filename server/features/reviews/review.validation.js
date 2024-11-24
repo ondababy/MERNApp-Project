@@ -1,9 +1,4 @@
-import { Filter } from 'bad-words';
 import { check } from 'express-validator';
-import customBadWords from './customBadWords.js';
-
-const filter = new Filter();
-filter.addWords(...customBadWords);
 
 // Common rules used across different validations
 const commonRules = {
@@ -15,15 +10,11 @@ const commonRules = {
     check('title')
       .isString()
       .withMessage('Title must be a string')
-      .custom((value) => !filter.isProfane(value))
-      .withMessage('Description contains prohibited words')
       .optional(),
   description: () =>
     check('description')
       .isLength({ min: 5 })
       .withMessage('Description must be at least 5 characters long')
-      .custom((value) => !filter.isProfane(value))
-      .withMessage('Description contains prohibited words')
       .optional(),
   isAnonymous: () => check('isAnonymous')
         .optional()

@@ -27,6 +27,8 @@ function App() {
         draggable
         pauseOnHover
         stacked
+        style={{ zIndex: 5000 }}
+
       />
       <RouterProvider router={router} className={isLoading ? 'cursor-wait pointer-events-none' : ''} />
       {isLoading && !silentLoading &&

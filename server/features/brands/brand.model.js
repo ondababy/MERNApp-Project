@@ -1,3 +1,4 @@
+import { ProductModel } from '#features';
 import { Schema } from '#lib';
 import { ImageSchema } from '#utils';
 
@@ -36,5 +37,15 @@ const Brand = new Schema({
 
 Brand.statics.fillables = [];
 Brand.statics.hidden = [];
+
+Brand.pre('delete', async function (next) {
+  const brand = this;
+  const products = await ProductModel.find({ brand: brand._id });
+  products.forEach((product) => {
+    product.brand = null;
+    product.save();
+  });
+  next();
+});
 
 export default Brand.makeModel();
