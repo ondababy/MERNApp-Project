@@ -27,15 +27,8 @@ class OrderSeeder extends Seeder {
 
 
   schema() {
-    let user = this.randomUser(this.user);
-    let createdAt = faker.date.between({
-      from: new Date(2021, 0, 1),
-      to: new Date( 2021, 10, 31)
-    });
-    let status = faker.helpers.arrayElement(this.statuses);
-
     return {
-      user: () => user,
+      user: () => this.randomUser(this.user),
       status: () => 'delivered',
       note: faker.lorem.sentence,
       products: () => {
@@ -49,14 +42,11 @@ class OrderSeeder extends Seeder {
       },
       shipping: () => ({
         address: faker.location.streetAddress(),
-        start_ship_date: new Date(createdAt.getTime() + 24 * 60 * 60 * 1000),
-        expected_ship_date: new Date(createdAt.getTime() + 7 * 24 * 60 * 60 * 1000),
-        shipped_date: faker.date.between({
-          from: new Date(createdAt.getTime() + 24 * 60 * 60 * 1000),
-          to: new Date(createdAt.getTime() + 7 * 24 * 60 * 60 * 1000)
-        }),
       }),
-      createdAt: () => createdAt,
+      createdAt: () => faker.date.between({
+        from: new Date(2024, 0, 1),
+        to: new Date( 2024, 10, 31)
+      }),
 
     };
   }

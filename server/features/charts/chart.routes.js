@@ -13,6 +13,14 @@ export default [
           controller.monthlyRevenue,
         ],
       },
+      {
+        path: '/daily-revenue',
+        method: METHODS.POST,
+        controller: [
+          ...protectAndPermit(READ_WRITE),
+          controller.dailyRevenue,
+        ],
+      }
     ],
   },
 ];

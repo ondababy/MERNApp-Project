@@ -115,11 +115,11 @@ const makeColumns = (navigate) => {
         );
       },
       cell: ({ row }) => (
-        <details class="collapse bg-transparent transition-all ease-in-out">
-          <summary class="collapse-title font-medium">
+        <details className="collapse bg-transparent transition-all ease-in-out">
+          <summary className="collapse-title font-medium">
             {row.original?.user?.username}
           </summary>
-          <div class="collapse-content">
+          <div className="collapse-content">
             <p>{row.original?.user?.email}</p>
             <p>{row.original?.shipping?.address}</p>
 

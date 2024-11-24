@@ -20,6 +20,55 @@ class ChartService extends Service {
     return data;
   } 
 
+  getDates(startDate, endDate) {
+    const dates = [];
+    const currentDate = new Date(startDate);
+    const end = new Date(endDate);
+    while (currentDate <= end) {
+      dates.push(currentDate.toDateString());
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+    return dates;
+  }
+
+  async dailyRevenue({startDate, endDate}) {
+    startDate = new Date(startDate);
+    endDate = new Date(endDate);
+
+    startDate.setHours(0, 0, 0, 0);
+    endDate.setHours(23, 59, 59, 999);
+
+    const orders = await OrderModel.find({
+      createdAt: {
+        $gte: startDate,
+        $lte: endDate,
+      },
+      status: 'delivered',
+    }).exec();
+    const orderResource = await OrderResource.collection(orders);
+  
+    const dailyRevenue = orderResource.reduce((acc, order) => {
+      const date = new Date(order.createdAt).toDateString();
+      acc[date] = acc[date] ? acc[date] + order.total : order.total;
+      return acc;
+    }, {});
+  
+    const dates = this.getDates(startDate, endDate);
+    const data = dates.map((date) => {
+      if (!dailyRevenue[date]) return;
+      return {
+        date,
+        revenue: dailyRevenue[date] || 0,
+      }
+    });
+  
+    return data.filter(Boolean);
+  }
+  
+
+
+  
+
 }
 
 export default new ChartService();
