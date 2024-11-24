@@ -3,8 +3,8 @@ import { faker } from '@faker-js/faker';
 import { Seeder } from './seeder.js';
 
 class ReviewSeeder extends Seeder {
-  constructor(service, count) {
-    super(service, count);
+  constructor(service, count, reset) {
+    super(service, count, reset);
     this.user = null;
     this.order = null;    
 
@@ -42,8 +42,8 @@ class ReviewSeeder extends Seeder {
   }
 }
 
-export const reviewSeeder = async (count = 10) => {
-  const seeder = new ReviewSeeder(ReviewService, count);
+export const reviewSeeder = async (count = 10,reset) => {
+  const seeder = new ReviewSeeder(ReviewService, count,reset);
   await seeder.run();
 };
 

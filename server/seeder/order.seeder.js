@@ -3,8 +3,8 @@ import { faker } from '@faker-js/faker';
 import { Seeder } from './seeder.js';
 
 class OrderSeeder extends Seeder {
-  constructor(service, count) {
-    super(service, count);
+  constructor(service, count, reset) {
+    super(service, count, reset);
     this.user = null;
     this.product = null;
     this.selectedUser = null;
@@ -45,7 +45,7 @@ class OrderSeeder extends Seeder {
       }),
       createdAt: () => faker.date.between({
         to: new Date(),
-        from: new Date(new Date().setMonth(new Date().getMonth() - 3)),
+        from: new Date(new Date().setFullYear(new Date().getFullYear() - 1)),
       }),
 
     };
@@ -56,8 +56,8 @@ class OrderSeeder extends Seeder {
   }
 }
 
-export const orderSeeder = async (count = 10) => {
-  const seeder = new OrderSeeder(OrderService, count);
+export const orderSeeder = async (count = 10, reset) => {
+  const seeder = new OrderSeeder(OrderService, count, reset);
   await seeder.run();
 };
 

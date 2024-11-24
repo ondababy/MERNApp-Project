@@ -19,7 +19,7 @@ const prodDeps = async () =>
 const transaction = async () =>
   Promise.all([
     cartSeeder(20),
-    orderSeeder(100),
+    ...Array.from({ length: 20 }, async () => orderSeeder(100, false)),
   ]);
 
 // Main seeding function
@@ -33,7 +33,9 @@ const main = async () => {
   console.log('Product dependencies seeded');
 
   console.log('Seeding products...');
-  await productSeeder(50);
+  await Promise.all([
+    ...Array.from({ length: 50 }, async () => reviewSeeder(3, false)),
+  ])
   console.log('Products seeded');
 
   console.log('Seeding transactions...');
@@ -41,19 +43,18 @@ const main = async () => {
   console.log('Transactions seeded');
 
   console.log('Seeding reviews...');
-  await reviewSeeder(50);
+  await Promise.all([
+    ...Array.from({ length: 50 }, async () => reviewSeeder(10, false)),
+  ])
   console.log('Reviews seeded');
 };
 
 export const RunSeeders = async () => {
-  console.log('Running seeders...');
-  await createAdmin(); 
-  if (process.env.ENABLE_SEED != 'true' || process.env.NODE_ENV === 'production') {
-    console.log('Seeding disabled in production or without ENABLE_SEED flag');
-    return;
+  if (!(process.env.ENABLE_SEED != 'true' || process.env.NODE_ENV === 'production')) {
+    console.log('Running seeders...');
+    await main();
+    console.log('Seeders completed'); 
   }
-
+  await createAdmin(); 
   console.log('Admin created');
-  await main();
-  console.log('Seeders completed');
 };
