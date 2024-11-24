@@ -17,6 +17,15 @@ const chartApi = apiSlice.injectEndpoints({
         headers,
       }),
     }),
+    dailyRevenue: build.mutation({
+      query: (dateRange) => ({
+        url: `${apiUrl}/daily-revenue`,
+        method: 'POST',
+        body: dateRange,
+        headers,
+        
+      }),
+    }),
   }),
 });
 

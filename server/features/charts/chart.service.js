@@ -37,30 +37,33 @@ class ChartService extends Service {
 
     startDate.setHours(0, 0, 0, 0);
     endDate.setHours(23, 59, 59, 999);
-
+    let statuses = ['delivered', 'cancelled'];
     const orders = await OrderModel.find({
       createdAt: {
         $gte: startDate,
         $lte: endDate,
       },
-      status: 'delivered',
+      status: { $in: statuses },
     }).exec();
     const orderResource = await OrderResource.collection(orders);
   
+    const dates = this.getDates(startDate, endDate);
     const dailyRevenue = orderResource.reduce((acc, order) => {
       const date = new Date(order.createdAt).toDateString();
-      acc[date] = acc[date] ? acc[date] + order.total : order.total;
+      const status = order.status;
+      const total = order.total;
+      const index = dates.indexOf(date);
+      acc[index] = acc[index] || { date, delivered: 0, cancelled: 0 };
+      acc[index][status] += total;
       return acc;
     }, {});
-  
-    const dates = this.getDates(startDate, endDate);
-    const data = dates.map((date) => {
-      if (!dailyRevenue[date]) return;
-      return {
-        date,
-        revenue: dailyRevenue[date] || 0,
-      }
+
+    const data = dates.map((date, index) => {
+      const revenue = dailyRevenue[index];
+      return revenue ? { date: revenue.date, successful: revenue.delivered, cancelled: revenue.cancelled } : null;
     });
+
+  
   
     return data.filter(Boolean);
   }
