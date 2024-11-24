@@ -33,3 +33,11 @@ dist-ssr
 
 .vercel
 firebase-service.json
+
+certification
+certificates
+cert
+certs
+.pem
+.key
+.crt

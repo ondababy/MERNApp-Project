@@ -19,8 +19,18 @@ const prodDeps = async () =>
 const transaction = async () =>
   Promise.all([
     cartSeeder(20),
-    ...Array.from({ length: 20 }, async () => orderSeeder(100, false)),
+    ...Array.from({ length: 50 }, async () => orderSeeder(10, false)),
   ]);
+
+const products = async () =>
+  Promise.all([
+    ...Array.from({ length: 10 }, async () => productSeeder(15, false)),
+  ])
+
+const reviews = async () =>
+  Promise.all([
+    ...Array.from({ length: 5 }, async () => reviewSeeder(10, false)),
+  ])
 
 // Main seeding function
 const main = async () => {
@@ -33,9 +43,7 @@ const main = async () => {
   console.log('Product dependencies seeded');
 
   console.log('Seeding products...');
-  await Promise.all([
-    ...Array.from({ length: 50 }, async () => reviewSeeder(3, false)),
-  ])
+  await products();
   console.log('Products seeded');
 
   console.log('Seeding transactions...');
@@ -43,9 +51,7 @@ const main = async () => {
   console.log('Transactions seeded');
 
   console.log('Seeding reviews...');
-  await Promise.all([
-    ...Array.from({ length: 50 }, async () => reviewSeeder(10, false)),
-  ])
+  await reviews();
   console.log('Reviews seeded');
 };
 

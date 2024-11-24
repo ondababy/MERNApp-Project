@@ -21,19 +21,19 @@ export const createAdmin = async () => {
       zip_code: '12345',
     });
     console.log('User info created: ', info._id);
-    const user = await UserService.create({
+    const user = await UserModel.create({
       username: process.env.ADMIN_USERNAME || 'admin',
       email: process.env.ADMIN_EMAIL,
       password: process.env.ADMIN_PASSWORD,
       role: 'admin',
-      emailVerifiedAt: new Date(),
+      emailVerifiedAt: new Date(2024, 11, 1),
       info: info._id,
     });
     if (!user) return console.log('Admin user not created');
     console.log('Admin user created: ', user);
     if (!user.info || !user.emailVerifiedAt) {
       user.info = info._id;
-      user.emailVerifiedAt = new Date();
+      user.emailVerifiedAt = new Date(2024, 11, 1);
       await user.save();
     }
   }
