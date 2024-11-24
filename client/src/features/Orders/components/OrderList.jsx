@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import Swal from 'sweetalert2';
 import { useOrderActions } from '../hooks/useOrderActions';
 import { paymentMethods, setOrder, shippingMethods } from '../order.slice';
+
+import Swal from 'sweetalert2';
+import CommentModal from './CommentModal';
 import OrderCard from './OrderCard';
 
 const badgeColor = {
@@ -123,6 +125,15 @@ export default function OrderList() {
                 <div className="btn btn-error btn-outline w-full" onClick={onCancel}>
                   Cancel Order
                 </div>
+              )}
+
+
+
+              {/* MODAL FEEDBACK */}
+
+
+              {selectedOrder.status === 'delivered' && (
+                <CommentModal />
               )}
             </div>
           </>

@@ -20,7 +20,7 @@ const useProductFilter = () => {
 
   const fetchProducts = async (queries, reset = false) => {
     if (!queries) queries = productQuery;
-    // dispatch(setSilentLoading(true));
+    dispatch(setSilentLoading(true));
     return getFiltered(queries).then(({ data }) => {
       setProducts(prev => reset ? data?.resource : [...prev, ...data?.resource]);
       setPaginate({
@@ -28,7 +28,7 @@ const useProductFilter = () => {
         current: data?.meta?.page || 1,
         last: data?.meta?.last_page || 1,
       });
-      // dispatch(setSilentLoading(false));
+      dispatch(setSilentLoading(false));
     });
   }
   const dbs = useCallback(debounce(fetchProducts, 500), [fetchProducts]);

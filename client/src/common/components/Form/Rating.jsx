@@ -1,7 +1,7 @@
 import { cn } from "@common/lib/utils";
 import { useEffect, useState } from "react";
 
-export default function Rating({ value = 0, onChange, className, ...args }) {
+export default function Rating({ value = 0, onChange, className, withRating = true, ...args }) {
   const [rating, setRating] = useState(value);
 
   useEffect(() => {
@@ -28,7 +28,7 @@ export default function Rating({ value = 0, onChange, className, ...args }) {
   return (
     <div className="flex items-center text-lg gap-4">
       <div className="rating rating-lg rating-half">{items}</div>
-      <span className="font-bold">{rating}</span>
+      {withRating && <span className="font-bold">{rating}</span>}
     </div>
   );
 }
