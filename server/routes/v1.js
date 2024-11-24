@@ -17,6 +17,7 @@ const v1 = [
   ...features.supplierRoutes,
   ...features.userRoutes,
   ...features.reviewRoutes,
+  ...features.chartRoutes,
 ];
 
 export default v1;

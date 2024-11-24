@@ -17,12 +17,12 @@ const badgeColor = {
 
 const ProcessButton = ({ order, handleUpdate }) => {
   let payload = {
-    user: order.user._id,
+    user: order?.user?._id,
     order
   }
 
 
-  switch (order.status) {
+  switch (order?.status) {
     case 'pending':
       return <button className='btn btn-primary' onClick={() => handleUpdate({ ...payload, status: 'processing' })}>Process Order</button>
 
@@ -98,19 +98,19 @@ export default function OrderView() {
               <div>
 
                 <h3 className="font-bold text-xl">
-                  {order.user.info.first_name} {order.user.info.last_name}
+                  {order?.user?.info?.first_name} {order?.user?.info?.last_name}
                 </h3>
                 <h3 className="font-bold text-md text-gray-400">
-                  {order.user.username}
+                  {order?.user?.username}
                 </h3>
                 <p className='text-gray-400 italic'>
-                  {order.user.email}
+                  {order?.user?.email}
                 </p>
                 <p>
-                  {order.user.info.contact}
+                  {order?.user?.info?.contact}
                 </p>
                 <p>
-                  {order.user.info.city}, {order.user.info.region}
+                  {order?.user?.info?.city}, {order?.user?.info?.region}
                 </p>
               </div>
             </div>
@@ -168,8 +168,8 @@ export default function OrderView() {
           </h2>
 
           <div>
-            {order.products.map((product, index) => {
-              const quantity = order.quantities[index][product._id];
+            {order?.products.map((product, index) => {
+              const quantity = order?.quantities[index][product._id];
               const total = parseFloat(product.price * quantity).toFixed(2);
               return (
                 <div key={index} className="flex justify-between p-2 border-b border-gray-200 ">
@@ -198,7 +198,7 @@ export default function OrderView() {
               </div>
               <div>
                 <p>
-                  {order.subTotal}
+                  {order?.subTotal}
                 </p>
               </div>
             </div>
@@ -210,7 +210,7 @@ export default function OrderView() {
               </div>
               <div>
                 <p>
-                  {shippingMethods[order.shipping.method]?.fee}
+                  {shippingMethods[order?.shipping.method]?.fee}
                 </p>
               </div>
             </div>
@@ -222,7 +222,7 @@ export default function OrderView() {
               </div>
               <div>
                 <p>
-                  {order.total}
+                  {order?.total}
                 </p>
               </div>
             </div>
@@ -237,11 +237,11 @@ export default function OrderView() {
           <div className="flex justify-between">
 
             {
-              order.status !== 'delivered' && order.status !== 'cancelled' && <button className='btn btn-danger' onClick={() => updateOrder({ ...order, status: 'cancelled' })}>Cancel Order</button>
+              order?.status !== 'delivered' && order?.status !== 'cancelled' && <button className='btn btn-danger' onClick={() => updateOrder({ ...order, status: 'cancelled' })}>Cancel Order</button>
             }
 
             {
-              order.status !== 'delivered' && <ProcessButton order={order} handleUpdate={updateOrder} />
+              order?.status !== 'delivered' && <ProcessButton order={order} handleUpdate={updateOrder} />
             }
 
           </div>

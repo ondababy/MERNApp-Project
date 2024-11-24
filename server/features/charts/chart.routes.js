@@ -9,8 +9,8 @@ export default [
         path: '/monthly-revenue',
         method: METHODS.GET,
         controller: [
-          protectAndPermit(READ_WRITE),
-          controller.getMonthlyRevenue,
+          ...protectAndPermit(READ_WRITE),
+          controller.monthlyRevenue,
         ],
       },
     ],

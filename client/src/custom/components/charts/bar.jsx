@@ -54,7 +54,7 @@ export const _barConfig = {
   },
   chartConfig: _chartConfig,
 }
-export function BarChartComponent({ data = placeholderData, chartConfig = _barConfig, barStyle }) {
+export function BarChartComponent({ data = placeholderData, barConfig = _barConfig, barStyle }) {
   const [dateKey, setDateKey] = useState({
     key: 'name',
     value: 'total',
@@ -62,24 +62,24 @@ export function BarChartComponent({ data = placeholderData, chartConfig = _barCo
 
   useEffect(() => {
     setDateKey({
-      key: chartConfig.dataKey.name,
-      value: chartConfig.dataKey.value,
+      key: barConfig.dataKey.name,
+      value: barConfig.dataKey.value,
     });
-  }, [chartConfig]);
+  }, [barConfig]);
 
   return (
     <ResponsiveContainer width="100%" height={350}>
       <ChartContainer
-        config={chartConfig.chartConfig}
+        config={barConfig.chartConfig}
         className="aspect-auto h-[250px] w-full"
       >
         <BarChart data={data}>
           <XAxis
             dataKey={dateKey.key}
-            {...chartConfig.props.x}
+            {...barConfig.props.x}
           />
           <YAxis
-            {...chartConfig.props.y}
+            {...barConfig.props.y}
           />
           <CartesianGrid vertical={false} />
 
@@ -95,7 +95,7 @@ export function BarChartComponent({ data = placeholderData, chartConfig = _barCo
           <Bar
             dataKey={dateKey.value}
             className={cn("fill-primary", barStyle)}
-            {...chartConfig.props.bar}
+            {...barConfig.props.bar}
           />
 
         </BarChart>
