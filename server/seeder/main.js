@@ -9,7 +9,7 @@ import { createAdmin, userSeeder } from './user.seeder.js';
 
 // Dependencies for product seeding
 const prodDeps = async () =>
-  Promise.all([
+  await Promise.all([
     brandSeeder(),
     categorySeeder(),
     supplierSeeder(),
@@ -17,19 +17,20 @@ const prodDeps = async () =>
 
 // Transactions: cart and order seeders
 const transaction = async () =>
-  Promise.all([
+  await Promise.all([
     cartSeeder(20),
-    ...Array.from({ length: 50 }, async () => orderSeeder(10, false)),
+    orderSeeder(500),
+    // ...Array.from({ length: 50 }, orderSeeder(10, false)),
   ]);
 
 const products = async () =>
-  Promise.all([
-    ...Array.from({ length: 10 }, async () => productSeeder(15, false)),
+  await Promise.all([
+    ...Array.from({ length: 10 }, productSeeder(15, false)),
   ])
 
 const reviews = async () =>
-  Promise.all([
-    ...Array.from({ length: 5 }, async () => reviewSeeder(10, false)),
+  await Promise.all([
+    ...Array.from({ length: 15 }, reviewSeeder(10, false)),
   ])
 
 // Main seeding function
@@ -43,7 +44,7 @@ const main = async () => {
   console.log('Product dependencies seeded');
 
   console.log('Seeding products...');
-  await products();
+  await productSeeder(69);
   console.log('Products seeded');
 
   console.log('Seeding transactions...');
@@ -51,7 +52,7 @@ const main = async () => {
   console.log('Transactions seeded');
 
   console.log('Seeding reviews...');
-  await reviews();
+  await reviewSeeder(111);
   console.log('Reviews seeded');
 };
 
@@ -62,5 +63,4 @@ export const RunSeeders = async () => {
     console.log('Seeders completed'); 
   }
   await createAdmin(); 
-  console.log('Admin created');
 };

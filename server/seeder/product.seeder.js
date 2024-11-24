@@ -22,8 +22,8 @@ class ProductSeeder extends Seeder {
         ' ' +
         faker.string.alpha({ length: 6, casing: 'upper', exclude: ['A'] }),
       description: faker.commerce.productDescription,
-      price: () => faker.commerce.price({ min: 1000, max: 50000 }),
-      stock: () => faker.number.int({ min: 64, max: 100 }),
+      price: () => (Math.random() * 1000) + (Math.random() * 690),
+      stock: () => (Math.random() * 100) + 20,
       brand: () => {
         let randB = Math.floor(Math.random() * this.brand.length);
         let brand = this.brand[randB];
@@ -39,7 +39,7 @@ class ProductSeeder extends Seeder {
         let category = this.category[randC];
         return category?._id;
       },
-      averageRating: () => faker.number.float({ min: 1, max: 10, fixed: 1 }),
+      averageRating: () => Math.random() * 10,
     };
   }
 
