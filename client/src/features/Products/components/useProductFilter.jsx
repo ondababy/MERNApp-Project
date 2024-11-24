@@ -22,7 +22,7 @@ const useProductFilter = () => {
     return arr.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i);
   }
 
-  const fetchProducts = async (queries, reset = false) => {
+  const fetchProducts = async (queries, reset = true) => {
     if (!queries) queries = productQuery;
     dispatch(setSilentLoading(true));
     return getFiltered(queries).then(({ data }) => {

@@ -41,7 +41,7 @@ const SideContent = (props) => {
           >
             <BsPinAngleFill />
           </button>
-          <Link to="/home">
+          <Link to="/">
             <button className="transition-all btn btn-primary btn-outline">
               <FaHome />
             </button>

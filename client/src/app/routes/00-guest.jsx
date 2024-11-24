@@ -11,10 +11,10 @@ const guestRoutes = [
         path: '/',
         element: <Screen.Shop />,
       },
-      {
-        path: '/home',
-        element: <Screen.Home />,
-      },
+      // {
+      //   path: '/home',
+      //   element: <Screen.Home />,
+      // },
       {
         path: '/shop',
         element: <Screen.Shop />,
