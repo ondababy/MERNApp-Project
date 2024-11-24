@@ -1,10 +1,15 @@
 import { BrandModel, CategoryModel, ReviewModel, SupplierModel } from '#features';
 import { Service } from '#lib';
 import ProductModel from './product.model.js';
+import OrderModel from '../orders/order.model.js';
 
 class ProductService extends Service {
   model = ProductModel;
   fieldToSlugify = 'name';
+
+  async getProductStocks() {
+    return await this.model.find({}).select('name stock'); // Fetch only 'name' and 'stock'
+  }
 
   async getReviewDetails(productId) {
     const product = await this.model.findById(productId).select('reviews');
