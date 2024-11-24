@@ -20,14 +20,13 @@ export default class ProductResource extends Resource {
     const averageRating = reviewsData.reduce((acc, review) => acc + review.rating, 0) / reviewsData.length;
 
     return {
-      id: _id,
       ...rest,
+      id: _id,
       category: categoryDetails ? categoryDetails.name : null,
       brand: brandDetails ? brandDetails.name : null,
       supplier: supplierDetails ? supplierDetails.name : null,
       numOfReviews: reviews.length,
       price: rest.price.toFixed(2),
-      averageRating: averageRating ? rest.averageRating.toFixed(2) : 0, 
 
 
 
