@@ -113,7 +113,6 @@ class ProductController extends Controller {
     this.success({ res, message: 'Data updated!', resource });
   };
 
-  // Charts
   productSales = async (req, res) => {
     try {
       const { totalSales, sales } = await this.service.getProductSales();
@@ -146,25 +145,8 @@ class ProductController extends Controller {
   productStocks = async (req, res) => {
     try {
       // Get all products with stock information
-      const stocks = await this.service.getProductStocks();
+      const { totalPercentage, stocks, totalStocks } = await this.service.getProductStocks();
 
-      if (!stocks || !stocks.length) {
-        return this.error({ res, message: 'No stocks data found!' });
-      }
-
-      // Calculate total stock
-      const totalStocks = stocks.reduce((acc, item) => acc + item.stock, 0);
-
-      // Include the stock count and percentage for each product
-      const totalPercentage = stocks.map((item) => ({
-        name: item.name,
-        stock: item.stock, // Add the number of stocks
-        percent: totalStocks
-          ? ((item.stock / totalStocks) * 100).toFixed(2)
-          : 0,
-      }));
-
-      // Respond with the stock data
       return this.success({
         res,
         message: 'Product stocks fetched successfully!',

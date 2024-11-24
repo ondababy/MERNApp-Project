@@ -1,4 +1,4 @@
-import { DatePickerWithRange, LineChartComponent } from '@custom';
+import { BarChartComponent, DatePickerWithRange } from '@custom';
 import OrderWrapper from './OrderWrapper';
 
 function OrderPage() {
@@ -6,7 +6,7 @@ function OrderPage() {
     <OrderWrapper title="Manage Orders">
       <div className="gap-4 flex flex-col">
         <DatePickerWithRange />
-        <LineChartComponent />
+        <BarChartComponent />
       </div>
     </OrderWrapper>
   );
