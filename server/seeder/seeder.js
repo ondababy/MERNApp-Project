@@ -1,9 +1,10 @@
 import { faker } from '@faker-js/faker';
 
 export class Seeder {
-  constructor(service, count) {
+  constructor(service, count, reset = true) {
     this.service = service;
     this.count = count;
+    this.reset = reset;
   }
   custom() {
     return [];
@@ -30,7 +31,7 @@ export class Seeder {
       const schema = this.schema();
       const custom = this.custom();
 
-      console.log('Generating fake data for', this.service.model.modelName);
+      console.log(`\n[${this.service.model.modelName}] Seeding data...`);
       let fakeData = Array.from({ length: this.count }, () => {
         const data = this.generate(schema);
         return data;
@@ -39,14 +40,15 @@ export class Seeder {
       if (custom.length) {
         fakeData = [...fakeData, ...custom];
       }
-      console.log('Data: ', fakeData);
+      if (this.reset) {
+        console.log(`[${this.service.model.modelName}] Resetting collection...`);
+        await this.service.model.deleteMany({});
+      }
 
-      await this.service.deleteMany({});
-      console.log(`Cleared existing data from ${this.service.model.modelName}`);
       await this.service.insertMany(fakeData, { ordered: false });
-      console.log(`Inserted ${this.count} fake records into ${this.service.model.modelName}`);
+      console.log(`[${this.service.model.modelName}] Data seeded successfully. Total: ${this.count}\n`);
     } catch (error) {
-      console.error(`Error seeding data for ${this.service.model.modelName}:`, error);
+      console.error(`[${this.service.model.modelName}] Error seeding data: ${error.message}`);
     }
   }
 
@@ -60,7 +62,7 @@ export class Seeder {
         if (faker[category] && faker[category][method]) {
           fakeData[field] = faker[category][method]();
         } else {
-          console.warn(`Invalid faker method: ${fakerMethod}`);
+          console.warn(`${this.service.model.modelName}] Invalid faker method: ${fakerMethod}`);
         }
       }
     }

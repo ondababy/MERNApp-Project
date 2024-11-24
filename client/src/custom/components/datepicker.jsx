@@ -15,16 +15,24 @@ import { cn } from "@common/lib/utils"
 
 export function DatePickerWithRange({
   className,
+  value = {
+    to: new Date(),
+    from: addDays(new Date(), -15),
+  },
   onChange = () => { },
+  maxDays = 30,
 }) {
-  const [date, setDate] = React.useState({
-    from: new Date(2022, 0, 20),
-    to: addDays(new Date(2022, 0, 20), 20),
-  })
-
-  React.useEffect(() => {
+  const [date, setDate] = React.useState(value)
+  const handleDateChange = (date) => {
+    if (date.from && date.to) {
+      const diff = date.to - date.from
+      if (diff > maxDays * 24 * 60 * 60 * 1000) {
+        date.to = addDays(date.from, maxDays)
+      }
+    }
+    setDate(date)
     onChange(date)
-  }, [date])
+  }
 
   return (
     <div className={cn("grid gap-2", className)}>
@@ -59,7 +67,7 @@ export function DatePickerWithRange({
             mode="range"
             defaultMonth={date?.from}
             selected={date}
-            onSelect={setDate}
+            onSelect={handleDateChange}
             numberOfMonths={2}
             className="w-auto bg-base-100 text-base-content"
             classNames={{

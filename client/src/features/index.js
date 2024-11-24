@@ -7,7 +7,9 @@ export * from './Suppliers/index.js';
 export * from './Users/index.js';
 
 export * from './Cart/index.js';
-export * from './Orders/index.js';
-export * from './Wishlist/index.js';
 export * from './Categories/index.js';
+export * from './Charts/index.js';
+export * from './Orders/index.js';
 export * from './Reviews/index.js';
+export * from './Wishlist/index.js';
+

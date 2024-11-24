@@ -57,7 +57,7 @@ const User = new Schema({
   ],
 });
 
-User.statics.fillables = ['username', 'email', 'password', 'fcmToken', 'role', 'emailVerifiedAt'];
+User.statics.fillables = ['username', 'email', 'password', 'fcmToken', 'role', 'emailVerifiedAt', 'info'];
 User.statics.hidden = [
   '__v',
   'password',
