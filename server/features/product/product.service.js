@@ -7,6 +7,10 @@ class ProductService extends Service {
   model = ProductModel;
   fieldToSlugify = 'name';
 
+  async getProductStocks() {
+    return await this.model.find({}).select('name stock'); // Fetch only 'name' and 'stock'
+  }
+
   async getReviewDetails(productId) {
     const product = await this.model.findById(productId).select('reviews');
     const reviews = await ReviewModel.find({ _id: { $in: product.reviews } });
