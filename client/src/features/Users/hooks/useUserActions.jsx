@@ -125,8 +125,8 @@ export default function useUserActions({ id = null, action = "create", fields = 
 
     if (action === 'edit' && id) {
       getUser(id).then((res) => {
-        let { info, ...values } = res?.data?.resource
-        if (oAuthUser) {
+        let { info = {}, ...values } = res?.data?.resource
+        if (oAuthUser && info) {
           info = { ...oAuthInfo, ...info }
         }
         const userData = { ...values, ...info }

@@ -73,12 +73,12 @@ const ReviewTable = () => {
             user: review.user?.username,
             actions: (
               <ActionButtons
-                key={'action_' + review.slug}
+                key={'action_' + review.id}
                 className="flex justify-end"
                 isLoading={isDeleting}
                 onDelete={() => handleDelete(review.id)}
-                onEdit={() => navigate(`/dashboard/reviews/${review.slug}/edit`)}
-                onView={() => navigate(`/dashboard/reviews/${review.slug}/view`)}
+                onEdit={() => navigate(`/dashboard/reviews/${review.id}/edit`)}
+                onView={() => navigate(`/dashboard/reviews/${review.id}/view`)}
               />
             ),
           }))}

@@ -172,7 +172,7 @@ export default function ProductFilters() {
                 <Filter title={"Ratings"}>
                     <div className="flex items-center text-lg gap-8">
                         <span>Filter By: </span>
-                        <Rating value={filters.rating} onChange={handleRatingChange} />
+                        <Rating disabled={false} value={filters.rating} onChange={handleRatingChange} />
                     </div>
                 </Filter>
             </div>

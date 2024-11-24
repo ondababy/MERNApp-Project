@@ -29,6 +29,7 @@ const clearData = (dispatch) => {
 }
 
 const useLogout = () => {
+  const dispatch = useDispatch();
   const logout = useLogoutAction();
   const navigate = useNavigate();
   const { signOut } = useFirebaseAuth();

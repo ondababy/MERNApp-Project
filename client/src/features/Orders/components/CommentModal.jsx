@@ -36,7 +36,7 @@ export default function CommentModal() {
       <div className="flex flex-col gap-2">
         <div className="w-full flex flex-col items-center justify-center mb-4 gap-4">
           <h1 className="text-lg font-bold">Rate your experience</h1>
-          <Rating withRating={false} onChange={handleRateChange} />
+          <Rating disabled={false} withRating={false} onChange={handleRateChange} />
         </div>
         {/* Title */}
         <input
