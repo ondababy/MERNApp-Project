@@ -56,7 +56,7 @@ class UserService extends Service {
   }
 
   async updateUser(id, body) {
-    let {role, password, confirm_password, ...rest} = body;
+    let {roles, ...rest} = body;
     body = rest;
     
     const userExists = await this.checkIfExists({
