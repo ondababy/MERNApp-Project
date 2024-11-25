@@ -22,11 +22,49 @@ const useProductFilter = () => {
     return arr.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i);
   }
 
-  const fetchProducts = async (queries, reset = true) => {
+  const filterProducts = (products) => {
+    return products.filter(product => {
+      // Handle category search
+      if (productQuery.categorySearch && !product.category.toLowerCase().includes(productQuery.categorySearch.toLowerCase())) {
+        return false;
+      }
+
+      // Handle categories filter
+      if (productQuery.filters.categories.length > 0 && !productQuery.filters.categories.includes(product.category)) {
+        return false;
+      }
+
+      // Handle price filter
+      if (productQuery.filters.price.length > 0) {
+        const priceRange = productQuery.filters.price.map(range => productQuery.priceRanges[range]);
+        const isInPriceRange = priceRange.some(range => {
+          const { $gt, $lte } = range;
+          return product.price > $gt && (typeof $lte === 'undefined' || product.price <= $lte);
+        });
+        if (!isInPriceRange) {
+          return false;
+        }
+      }
+
+      // Handle rating filter
+      if (productQuery.filters.rating && product.averageRating < productQuery.filters.rating) {
+        return false;
+      }
+
+      // Handle general search query
+      if (productQuery.queries.q && !product.name.toLowerCase().includes(productQuery.queries.q.toLowerCase())) {
+        return false;
+      }
+
+      return true;
+    });
+  };
+
+  const fetchProducts = async (queries, reset = false) => {
     if (!queries) queries = productQuery;
     dispatch(setSilentLoading(true));
     return getFiltered(queries).then(({ data }) => {
-      setProducts(prev => reset ? data?.resource || [] : removeDuplicates([...prev, ...data?.resource || []]));
+      setProducts(prev => filterProducts(reset ? data?.resource || [] : removeDuplicates([...prev, ...data?.resource || []])));
       setPaginate({
         ...data?.meta,
         current: data?.meta?.page || 1,
@@ -38,7 +76,7 @@ const useProductFilter = () => {
   const dbs = useCallback(debounce(fetchProducts, 500), [fetchProducts]);
 
   useEffect(() => {
-    dbs(productQuery);
+    fetchProducts(productQuery, true);
   }, [productQuery]);
 
   const handlePaginate = page => {

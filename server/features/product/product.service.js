@@ -43,9 +43,9 @@ class ProductService extends Service {
         ...priceQuery,
         { price: filter.range },
         { name: { $in: filters.categories } },
+        { averageRating: { $gte: filters.rating } },
       ],
       name: { $regex: filter.categorySearch, $options: 'i' },
-      averageRating: { $gte: filters.rating },
     };
 
 
