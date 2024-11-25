@@ -23,7 +23,7 @@ class ProductSeeder extends Seeder {
         faker.string.alpha({ length: 6, casing: 'upper', exclude: ['A'] }),
       description: faker.commerce.productDescription,
       price: () => (Math.random() * 5000) + (Math.random() * 6900) + 1000,
-      stock: () => (Math.random() * 100) + 20,
+      stock: () => parseInt((Math.random() * 100) + 20),
       brand: () => {
         let randB = Math.floor(Math.random() * this.brand.length);
         let brand = this.brand[randB];

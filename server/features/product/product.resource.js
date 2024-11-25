@@ -32,6 +32,7 @@ export default class ProductResource extends Resource {
       supplier: supplierDetails ? supplierDetails.name : null,
       numOfReviews: reviews.length,
       price: rest.price.toFixed(2),
+      stock: parseInt(rest.stock),
 
 
 
