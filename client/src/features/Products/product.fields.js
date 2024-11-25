@@ -43,7 +43,7 @@ const getFields = () => [
     name: 'supplier',
     variant: 'text',
     outerStyle: 'w-full col-span-3 row-span-2',
-    placeholder: 'Enter valid brand name.',
+    placeholder: 'Enter valid supplier name.',
   },
   {
     label: 'Image',

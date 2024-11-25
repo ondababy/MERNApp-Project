@@ -1,3 +1,4 @@
+import { validate } from '#common';
 import { ReviewResource } from '#features';
 import { Controller } from '#lib';
 import ProductResource from './product.resource.js';
@@ -49,14 +50,13 @@ class ProductController extends Controller {
     this.success({ res, message: 'Data fetched!', resource });
   };
 
-  // Method to store a new product
   store = async (req, res) => {
     let validData = req.body;
     if (!this.rules.create.length)
       validData = await this.validator(req, res, this.rules.create);
 
-    if (!validData.brand || !validData.supplier) {
-      return this.error({ res, message: 'Brand and Supplier are required!' });
+    if (!validData.brand || !validData.supplier || !validData.category) {
+      return this.error({ res, message: 'Brand, Supplier, and Category are required!' });
     }
     if (validData.category) {
       validData.category = await this.service.getCategoryId(validData.category);
@@ -85,8 +85,8 @@ class ProductController extends Controller {
     if (!this.rules.update.length)
       validData = await this.validator(req, res, this.rules.update);
 
-    if (!validData.brand || !validData.supplier) {
-      return this.error({ res, message: 'Brand and Supplier are required!' });
+    if (!validData.brand || !validData.supplier || !validData.category) {
+      return this.error({ res, message: 'Brand, Supplier, and Category are required!' });
     }
 
     const brandId = await this.service.getBrandId(validData.brand);
