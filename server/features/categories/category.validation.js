@@ -7,8 +7,6 @@ const commonRules = {
     check('name')
       .notEmpty()
       .withMessage('Name is required!')
-      .matches(/^[a-zA-Z0-9 ]+$/)
-      .withMessage('Name must be alphanumeric!'),
 };
 
 const categoryCreateRules = () => {

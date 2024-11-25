@@ -13,7 +13,12 @@ export default class ProductResource extends Resource {
       ...rest 
     } = product;
 
-    const categoryDetails = await CategoryModel.findById(category).select('name _id');
+    // const categoryDetails = await CategoryModel.findById(category).select('name _id');
+    const categoryDetails = category 
+    ? await CategoryModel.findById(category).select('name _id') 
+    : null;
+    // const categoryDetails = await CategoryModel.findById(product.category).select('name _id');
+    console.log('Category Details:', categoryDetails);
     const brandDetails = await BrandModel.findById(brand).select('name _id');
     const supplierDetails = await SupplierModel.findById(supplier).select('name _id');
     const reviewsData = await ReviewModel.find({ _id: { $in: reviews } }).select('rating');

@@ -33,7 +33,6 @@ const reviews = async () =>
     ...Array.from({ length: 15 }, reviewSeeder(10, false)),
   ])
 
-// Main seeding function
 const main = async () => {
   console.log('Seeding users...');
   await userSeeder();
