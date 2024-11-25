@@ -39,7 +39,7 @@ class OrderService extends Service {
   
     
 
-    return this.model.create({
+    const order = this.model.create({
       ...orderData,
       user,
       products,
@@ -49,6 +49,21 @@ class OrderService extends Service {
         fee: this.shippingMethods[shipping.method].fee,
       },
     });
+
+    if (!order) throw new Error('Order not created');
+    
+    const message = `Your order ${order.id} has been placed!`;
+    const title = 'Order Confirmation';
+    const altMessage = this.makeAltMessage(order);
+
+    sendEmail({
+      email: user.email,
+      subject: title,
+      message:  new EmailTemplate({ userName: user.username, message, altMessage }).generate(),
+    })
+
+
+    return order;
   }
 
   makeAltMessage(order) {
