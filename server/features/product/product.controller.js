@@ -63,6 +63,7 @@ class ProductController extends Controller {
     }
     validData.brand = await this.service.getBrandId(validData.brand);
     validData.supplier = await this.service.getSupplierId(validData.supplier);
+    validData.category = await this.service.getCategoryId(validData.category)
 
     let data = await this.service?.create(validData);
     if (!data._id) return this.error({ res, message: 'Invalid data!' });
@@ -90,10 +91,10 @@ class ProductController extends Controller {
 
     const brandId = await this.service.getBrandId(validData.brand);
     const supplierId = await this.service.getSupplierId(validData.supplier);
-    const categoryId = await this.service.getCategoryId(validData.category);
-    validData.category = categoryId,
+    const categoryId = await this.service.getCategoryId(validData.category)
     validData.brand = brandId;
     validData.supplier = supplierId;
+    validData.category = categoryId;
 
     let data = await this.service?.update(req.params.id, validData);
     if (!data._id) return this.error({ res, message: 'Invalid data!' });
