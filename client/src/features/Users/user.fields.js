@@ -107,7 +107,7 @@ const getFields = () => [
   },
 ];
 
-const getAltFields = () => [...common];
+const getAltFields = () => [...getFields()];
 const getInfoFields = () => [
   {
     label: 'Customer Info',
