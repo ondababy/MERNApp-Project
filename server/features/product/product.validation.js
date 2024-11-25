@@ -14,6 +14,9 @@ const commonRules = () => {
     check('price').notEmpty().withMessage('Price is required!').isNumeric().withMessage('Price must be a number!'),
     check('stock').notEmpty().withMessage('Stock is required!').isNumeric().withMessage('Stock must be a number!'),
     check('description').optional({ checkFalsy: true }).isString(),
+    check('category')
+      .notEmpty()
+      .withMessage('Category is required!'),
     check('brand')
       .notEmpty()
       .withMessage('Brand is required!'),
