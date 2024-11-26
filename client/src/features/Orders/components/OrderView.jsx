@@ -178,7 +178,7 @@ export default function OrderView() {
                       {product.name}
                     </h3>
                     <p className='w-full  md:col-span-2 md:text-end'>
-                      {product?.price?.toFixed(2)} x {quantity}
+                      {parseFloat(product?.price).toFixed(2)} x {quantity}
                     </p>
                     <p className='w-full md:col-span-2 md:text-end'>
                       {total}

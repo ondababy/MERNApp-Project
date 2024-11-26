@@ -60,7 +60,7 @@ export function CartCard({ item = itemDefault, onRemove = () => { }, onSelect = 
             <div className="flex text-sm gap-2">
               <span className="text-gray-600">Price: </span>
               <span className=" font-semibold">
-                {product.currency || 'PHP'} {product?.price?.toFixed(2) || 0}
+                {product.currency || 'PHP'} {parseFloat(product?.price).toFixed(2) || 0}
               </span>
             </div>
             <div className="flex text-sm gap-2">
