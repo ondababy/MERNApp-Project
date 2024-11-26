@@ -55,7 +55,7 @@ function ProductCard({ product = defaultProduct, className, ...props }) {
     addItem({
       quantity: 0,
       incrementBy: 1,
-      total: product.price.toFixed(2),
+      total: product?.price?.toFixed(2),
       product: product.id,
     }).then(() => {
       toast.success(<ToastContent />);
