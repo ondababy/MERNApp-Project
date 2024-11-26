@@ -32,6 +32,30 @@ class ProductService extends Service {
     return reviews;
   }
 
+  // async filterProducts(filter, meta) {
+  //   this._checkModel();
+  //   const { filters, ...rest } = filter;
+
+  //   const categoryIds = filters.categories?.length
+  //     ? await CategoryModel.find({ name: { $in: filters.categories } }).select('_id')
+  //     : [];
+  //   const categoryIdList = categoryIds.map((cat) => cat._id);
+
+  //   const priceQuery = filters.price.map((p) => ({ price: rest.priceRanges[p] }));
+  //   const query = {
+  //     ...(filters.price ? { $or: priceQuery } : {}),
+  //     ...(filters.categories ? { category: { $in: categoryIdList } } : {}),
+  //     ...(filters.rating ? { averageRating: { $gte: filters.rating } } : {}),
+  //     ...(filter.categorySearch ? { name: { $regex: filter.categorySearch, $options: 'i' } } : {}),
+  //   };
+  
+  //   console.log('Final Query:', query);
+  
+  //   this.query = this.model.find(query);
+  //   return this.paginate(meta).exec();
+  // }
+  
+
   async filterProducts(filter, meta) {
     this._checkModel();
     const { filters, ...rest } = filter;
@@ -53,6 +77,7 @@ class ProductService extends Service {
     return this.paginate(meta).exec();
     
   }
+  
 
   async getCategoryId(name) {
     const category = await CategoryModel.findOne({ name });
