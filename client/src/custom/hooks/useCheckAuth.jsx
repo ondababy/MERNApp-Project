@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useLogoutAction } from './useLogout';
 
-const isDev = import.meta.env.VITE_CLIENT_ENV === 'development';
+const isDev = import.meta.env.VITE_CLIENT_ENV === 'development' && false;
 
 export const useGetAuth = () => {
   const { userInfo, accessToken, role } = useSelector((state) => state.auth);

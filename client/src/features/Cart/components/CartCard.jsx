@@ -24,7 +24,7 @@ export function CartCard({ item = itemDefault, onRemove = () => { }, onSelect = 
       id: cartItem.id,
       product: product.id,
       quantity: value,
-      total: product.price * value,
+      total: (product.price * value).toFixed(2),
     }
     updateItem(payload).then((updatedItem) => {
       setCartItem((prev) => ({
@@ -60,7 +60,7 @@ export function CartCard({ item = itemDefault, onRemove = () => { }, onSelect = 
             <div className="flex text-sm gap-2">
               <span className="text-gray-600">Price: </span>
               <span className=" font-semibold">
-                {product.currency || 'PHP'} {product.price}
+                {product.currency || 'PHP'} {product?.price?.toFixed(2) || 0}
               </span>
             </div>
             <div className="flex text-sm gap-2">

@@ -7,9 +7,11 @@
     "server": "npm run dev --prefix server --loglevel=warn",
     "client": "npm run dev --prefix client --loglevel=warn",
     "lint": "npm run lint --prefix server && npm run lint --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "dev": "git pull --quiet | clear && concurrently \"npm run server\" \"npm run client\""
   },
-  "keywords": [],
+  "keywords": [
+    "sheesh"
+  ],
   "author": "",
   "license": "ISC",
   "description": "",

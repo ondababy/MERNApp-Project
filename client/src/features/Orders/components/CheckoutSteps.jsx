@@ -19,7 +19,7 @@ const initialSteps = [
   { label: 'Cart', isActive: true, },
   { label: 'Order Info', },
   { label: 'Shipping', },
-  { label: 'Payment', },
+  // { label: 'Payment', },
   { label: 'Complete', },
 ];
 export default function CheckoutSteps() {
@@ -101,7 +101,7 @@ export default function CheckoutSteps() {
     <CartList />,
     <UserForm noAvatar={true} id={userInfo.id} action="edit" fields={getInfoFields()} altFields={getInfoFields()} />,
     <CheckoutShipping onSelect={handleShipping} />,
-    <span>payment</span>,
+    // <span>payment</span>,
     <OrderSummary onConfirm={handleCheckout} />,
   ]
 
