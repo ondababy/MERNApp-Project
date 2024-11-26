@@ -54,7 +54,7 @@ class OrderService extends Service {
     
     const message = `Your order ${order.id} has been placed!`;
     const title = 'Order Confirmation';
-    const altMessage = this.makeAltMessage(data);
+    const altMessage = this.makeAltMessage(order);
 
     sendEmail({
       email: user.email,
