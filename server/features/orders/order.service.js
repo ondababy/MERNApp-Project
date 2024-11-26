@@ -1,5 +1,5 @@
 import EmailTemplate from '#common/lib/email-template';
-import { CartModel, NotificationService, OrderResource, ProductModel, ProductService, UserService } from '#features';
+import { CartModel, NotificationService, ProductModel, ProductService, UserService } from '#features';
 import { sendEmail } from '#utils';
 
 import { Service } from '#lib';
@@ -39,7 +39,7 @@ class OrderService extends Service {
   
     
 
-    const order = await this.model.create({
+    const order = this.model.create({
       ...orderData,
       user,
       products,
