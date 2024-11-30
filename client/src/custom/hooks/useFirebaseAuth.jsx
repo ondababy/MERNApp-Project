@@ -12,6 +12,7 @@ import {
   signOut
 } from 'firebase/auth';
 import { useEffect, useState } from 'react';
+// import useFirebaseAuth from './useFirebaseAuth';
 
 export default function useFirebaseAuth() {
   const [user, setUser] = useState(null);
@@ -62,7 +63,9 @@ export default function useFirebaseAuth() {
     setLoading(true);
     const provider = new GoogleAuthProvider();
     return signInWithPopup(firebaseAuth, provider)
+
       .then((res) => {
+        console.log(res);
         setLoading(false);
         return res;
       })
